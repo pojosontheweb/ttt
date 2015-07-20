@@ -10,13 +10,6 @@
     </parent>
     <artifactId>ttt-testprj</artifactId>
     <packaging>jar</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>com.pojosontheweb</groupId>
-            <artifactId>ttt-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -24,7 +17,6 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.4.0</version>
                 <executions>
-
                     <execution>
                         <id>compile-templates</id>
                         <goals>
@@ -41,9 +33,10 @@
                             </arguments>
                         </configuration>
                     </execution>
-
                 </executions>
-
+                <configuration>
+                    <includePluginDependencies>true</includePluginDependencies>
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>com.pojosontheweb</groupId>
@@ -71,7 +64,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>
