@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 class CompilationContext {
 
-    public static void log(String msg) {
-        System.out.println(msg);
-    }
+//    public static void log(String msg) {
+//        System.out.println(msg);
+//    }
 
     private enum State {
         Text, Expr
@@ -233,15 +233,10 @@ class CompilationContext {
         return new String[]{packageName, className};
     }
 
-    private void exit() {
-        log("Done");
-    }
-
     private void textOrExpr() {
         char c = read();
         switch (c) {
             case EOF:
-                exit();
                 break;
             case '<':
                 exprPercent();
@@ -258,7 +253,6 @@ class CompilationContext {
         switch (c) {
             case EOF:
                 handleText(State.Text, '<');
-                exit();
                 break;
             case '%':
                 char c2 = read();
@@ -283,11 +277,10 @@ class CompilationContext {
     }
 
     private void startCode() {
-        log("startCode");
+        // TODO
     }
 
     private void startExpr() {
-        log("startExpr");
         expression();
     }
 
@@ -304,7 +297,7 @@ class CompilationContext {
                         error("Expression started but not closed");
                         break;
                     case '>':
-                        endExpr();
+                        textOrExpr();
                         break;
                     default:
                         handleText(State.Expr, '%', c2);
@@ -317,11 +310,6 @@ class CompilationContext {
                 expression();
                 break;
         }
-    }
-
-    private void endExpr() {
-        log("endExpr");
-        textOrExpr();
     }
 
     private void error(String s) {

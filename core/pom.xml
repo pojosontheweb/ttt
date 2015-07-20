@@ -10,8 +10,12 @@
     </parent>
     <artifactId>ttt-core</artifactId>
     <packaging>jar</packaging>
-    <name>ttt-core</name>
     <dependencies>
+        <dependency>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+            <version>4.9</version>
+        </dependency>
     </dependencies>
     <build>
     </build>
