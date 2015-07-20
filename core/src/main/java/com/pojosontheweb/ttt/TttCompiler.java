@@ -95,7 +95,10 @@ public class TttCompiler {
                     return super.visitFile(file, attrs);
                 }
             });
+
+            log.write("Templates compiled.\n");
         }
+
 
 
 //        CompilationArgs args = new CompilationArgs(in, out, fqn)

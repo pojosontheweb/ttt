@@ -1,0 +1,4 @@
+<%(foo: com.xyz.myapp.Foo)%>
+<div class="foo">
+    <%= foo.getBar() %>
+</div>

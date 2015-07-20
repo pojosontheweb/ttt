@@ -30,13 +30,13 @@ The generated Java class for a template extends a `com.pojosontheweb.ttt.Templat
 base class. It defines one constructor with all required parameters, from the 
 template signature. 
 
+Ttt is inspired from Play! 2 Scala Templates.
+
 ## Writing templates
 
 The signature must appear first, enclosed by `<%(` and `)%>`.
 
 The rest is pretty much like JSP scriptlets and expressions.
-
-## Example
 
 Here's a simple example - `com/xyz/myapp/MyTemplate.ttt` :
 
@@ -44,9 +44,22 @@ Here's a simple example - `com/xyz/myapp/MyTemplate.ttt` :
 	<div class="foo">
 		<%= foo.getBar() %> 	
 	</div>
+
+### Compiling templates
 	
-The compiler will generate a `com.xyz.myapp.MyTemplate` class with one constructor
-that you can use in your Java code :
+Before you build your app the way you usually do, you need to 
+compile the templates to Java code. This can be done in several
+ways (see the last section).
+	
+For the example above, the compiler will generate a `com.xyz.myapp.MyTemplate` 
+class with one constructor that accepts the args as defined in the 
+template's signature, and a `render` method :
+
+
+
+### Rendering templates
+
+Compiled templates are regular Java classes that you can use anywhere:
 
 	Foo foo = ... ;
 	try (Writer out = new PrintWriter(System.out)) {
@@ -78,5 +91,14 @@ Here's how you'd render the whole thing :
 	try (Writer out = new PrintWriter(System.out)) {
 		new MyWrapper("hey there", new MyTemplate(foo)).render(out);
 	}
+	
+## Build integration
+
+### Java API
+
+### Command line
+
+### Maven
+
 
 	

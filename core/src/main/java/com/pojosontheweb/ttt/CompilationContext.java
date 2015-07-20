@@ -332,8 +332,17 @@ class CompilationContext {
         state = newState;
         try {
             for (char c : chars) {
-                if (c=='\n') {
-                    out.write("\\n");
+                if (state == State.Text) {
+                    switch (c) {
+                        case '\n' :
+                            out.write("\\n");
+                            break;
+                        case '"' :
+                            out.write("\\\"");
+                            break;
+                        default:
+                            out.write(c);
+                    }
                 } else {
                     out.write(c);
                 }
