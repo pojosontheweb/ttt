@@ -42,4 +42,9 @@ public class TttCompilerTest {
         assertNoErrors(compile("/OneAttrMultiLine.ttt", "com.xyz.OneAttrMultiLine"));
     }
 
+    @Test
+    public void testOneAttrScript() {
+        assertNoErrors(compile("/OneAttrScript.ttt", "com.xyz.OneAttrScript"));
+    }
+
 }

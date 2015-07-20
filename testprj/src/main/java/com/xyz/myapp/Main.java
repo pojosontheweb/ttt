@@ -3,6 +3,7 @@ package com.xyz.myapp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.Arrays;
 
 public class Main {
 
@@ -19,6 +20,8 @@ public class Main {
             new OneAttrMultiLine(f).render(out);
             sep(out);
             new Wrapper("hello there", oneAttr).render(out);
+            sep(out);
+            new OneAttrScript(f, Arrays.asList("hey", "there")).render(out);
         }
     }
 }

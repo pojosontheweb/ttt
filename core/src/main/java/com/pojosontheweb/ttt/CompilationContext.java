@@ -13,7 +13,7 @@ class CompilationContext {
 //    }
 
     private enum State {
-        Text, Expr
+        Text, Expr, Script
     }
 
     private final static char EOF = (char) -1;
@@ -108,10 +108,16 @@ class CompilationContext {
 
         textOrExpr();
 
-        if (state==State.Text) {
-            write("\"");
+        switch (state) {
+            case Text:
+                write("\" );");
+                break;
+            case Expr:
+                write(" );");
+                break;
+            default:
+                break;
         }
-        write(");");
 
         write("\n\t}\n");
 
@@ -259,12 +265,12 @@ class CompilationContext {
                 switch (c2) {
                     case '=':
                         // it's an expression start
-                        startExpr();
+                        expression();
                         break;
                     default:
                         // not an expression start, it's
                         // code...
-                        startCode();
+                        script();
                         break;
                 }
                 break;
@@ -276,12 +282,32 @@ class CompilationContext {
         }
     }
 
-    private void startCode() {
-        // TODO
-    }
-
-    private void startExpr() {
-        expression();
+    private void script() {
+        char c = read();
+        switch (c) {
+            case EOF:
+                error("Script started but not closed");
+                break;
+            case '%':
+                char c2 = read();
+                switch (c2) {
+                    case EOF:
+                        error("Script started but not closed");
+                        break;
+                    case '>':
+                        textOrExpr();
+                        break;
+                    default:
+                        handleText(State.Script, '%', c2);
+                        script();
+                        break;
+                }
+                break;
+            default:
+                handleText(State.Script, c);
+                script();
+                break;
+        }
     }
 
     private void expression() {
@@ -319,14 +345,30 @@ class CompilationContext {
     private void handleText(State newState, char... chars) {
         if (state != newState) {
             if (state != null) {
-                if (state==State.Text) {
-                    write("\"");
+                // closing previous
+                switch (state) {
+                    case Text :
+                        write("\" );\n");
+                        break;
+                    case Expr:
+                        write(" );\n");
+                        break;
+                    default:
+                        write("\n"); // Script
                 }
-                write(" );\n");
             }
-            write("\t\twrite(out, ");
-            if (newState == State.Text) {
-                write("\"");
+            switch (newState) {
+                // opening new
+                case Text:
+                    write("\t\twrite(out, \"");
+                    break;
+                case Expr:
+                    write("\t\twrite(out, ");
+                    break;
+                default:
+                    write("\n\t\t");
+                    break;
+
             }
         }
         state = newState;
@@ -334,10 +376,10 @@ class CompilationContext {
             for (char c : chars) {
                 if (state == State.Text) {
                     switch (c) {
-                        case '\n' :
+                        case '\n':
                             out.write("\\n");
                             break;
-                        case '"' :
+                        case '"':
                             out.write("\\\"");
                             break;
                         default:
@@ -347,7 +389,7 @@ class CompilationContext {
                     out.write(c);
                 }
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

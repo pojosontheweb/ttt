@@ -1,0 +1,14 @@
+<%(foo: com.xyz.myapp.Foo, myList: java.util.List<String>)%>
+<div class="foo" bar="<%=foo.getBar()%>">
+<% if (true) { %>
+    yep
+<% } else { %>
+    nope
+<% } %>
+</div>
+<ul>
+<% for (String s : myList) { %>
+    <li><%=s%></li>
+<% } %>
+</ul>
+<span class="<%=true ? "yes" : "no"%>"/>
