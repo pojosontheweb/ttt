@@ -13,11 +13,12 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Foo f = new Foo();
         try (Writer out = new PrintWriter(System.out)) {
-            new OneAttr(f).render(out);
+            OneAttr oneAttr = new OneAttr(f);
+            oneAttr.render(out);
             sep(out);
             new OneAttrMultiLine(f).render(out);
             sep(out);
-            new Wrapper("hello there", new OneAttr(f)).render(out);
+            new Wrapper("hello there", oneAttr).render(out);
         }
     }
 }

@@ -1,4 +1,4 @@
-<%( title: String, body: com.pojosontheweb.ttt.Template )%>
+<%( title: String, body: com.xyz.myapp.OneAttr )%>
 Title: <%=title%> !
 ----
 <%=body%>

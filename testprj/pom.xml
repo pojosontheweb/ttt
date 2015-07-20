@@ -42,17 +42,6 @@
                         </configuration>
                     </execution>
 
-                    <execution>
-                        <id>fill-templates</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <mainClass>com.xyz.myapp.Main</mainClass>
-                        </configuration>
-                    </execution>
-
                 </executions>
 
                 <dependencies>
