@@ -1,19 +1,20 @@
-// Define a grammar called Hello
 grammar Ttt;
 
-r : args WS* ( expr | .(.)*? )* WS*;
+r 		: args? part* ;
+args 	: '<%(' text ')%>' ;
+id		: LETTER (LETTER | DIGIT)* ;
 
-arg : WS* ID WS* ':' WS* className WS*;
+part	: expr | code | text;
+expr 	: '<%=' escText '%>' ;
+code 	: '<%' escText '%>' ;
+text	: CHAR+ ;
+escText	: text ( ESCAPE text)* ;
 
-className : ID ( '.' ID )* ;
-
-args : '<%(' arg (',' arg)* ')%>' ;
-
-expr : '<%=' ( ESCAPE | .*? ) '%>' ;
-
-ID : LETTER (LETTER | DIGIT)* ;
-LETTER : 'A'..'Z' | 'a'..'z' | '_' ;
-DIGIT : '0'..'9' ;
+CHAR 	: . ;
+DIGIT 	: '0'..'9' ;
+LETTER 	: 'A'..'Z'
+		| 'a'..'z'
+		| '_'
+		;
 WS : [ \t\r\n]+ ;
-
 ESCAPE	:  '\\%>' ;

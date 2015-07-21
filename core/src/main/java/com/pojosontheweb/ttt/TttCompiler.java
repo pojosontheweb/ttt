@@ -150,6 +150,18 @@ public class TttCompiler {
         }
     }
 
+    @FunctionalInterface
+    interface RunnableThrowingException {
+        void run() throws Exception;
+    }
+
+    public static void convertExceptions(RunnableThrowingException r) {
+        try {
+            r.run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
 

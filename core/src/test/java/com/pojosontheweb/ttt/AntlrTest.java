@@ -6,43 +6,49 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.Test;
 
-import javax.swing.*;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.Assert.assertEquals;
 
 public class AntlrTest {
 
     @Test
-    public void doTest() throws Exception{
+    public void parseVariousTemplates() throws Exception {
 
-        String s = "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text";
-        ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
-        TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
-        CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
-        TttParser parser = new TttParser(tokens);
-        ParseTree tree = parser.r(); // begin parsing at init rule
-        System.out.println(s); // print LISP-style tree
-        System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+        AtomicInteger nbFails = new AtomicInteger(0);
+        for (String s : Arrays.asList(
+            "TXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
+            "TXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
+            "<%(com.xyz.Bar foo1)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
+            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template",
+            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression\n<%=foo bar%>",
+            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression including an escape\n<%=foo \\%> bar%>",
+            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text",
+            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text <% System.out.println(\"zobi\"); %>\noh yeah"
+        )) {
+            TttCompiler.convertExceptions(() -> {
+
+                System.out.println("parsing template :");
+                System.out.println(s);
+                System.out.println("----");
+
+                ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
+                TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
+                CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
+                TttParser parser = new TttParser(tokens);
+                ParseTree tree = parser.r(); // begin parsing at init rule
+                System.out.println(tree.toStringTree(parser)); // print LISP-style tree
+                if (parser.getNumberOfSyntaxErrors() > 0) {
+                    System.out.println("TEMPLATE HAS ERRORS !");
+                    nbFails.incrementAndGet();
+                }
+
+                System.out.println("");
+            });
+        }
+        assertEquals("Failures found", 0, nbFails.get());
     }
 
-//    public static void main(String[] args) throws Exception {
-//        String s = "<%( foo : com.xyz.Foo )%>";
-//        ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
-//        TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
-//        CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
-//        TttParser parser = new TttParser(tokens);
-//        ParseTree tree = parser.r(); // begin parsing at init rule
-//
-//        //show AST in GUI
-//        JFrame frame = new JFrame("Antlr AST");
-//        JPanel panel = new JPanel();
-//        TreeViewer viewr = new TreeViewer(Arrays.asList(
-//            parser.getRuleNames()),tree);
-//        viewr.setScale(1.5);//scale a little
-//        panel.add(viewr);
-//        frame.add(panel);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(200,200);
-//        frame.setVisible(true);
-//    }
 }
