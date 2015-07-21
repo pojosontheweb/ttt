@@ -1,9 +1,9 @@
 // Define a grammar called Hello
 grammar Ttt;
 
-r : args ( text | expression )*;
+r : args WS* ( expr | .(.)*? )* WS*;
 
-arg : identifier ':' className ;
+arg : WS* identifier WS* ':' WS* className WS*;
 
 className : identifier ( '.' identifier )* ;
 
@@ -13,13 +13,6 @@ identifier : LETTER (LETTER | DIGIT)* ;
 
 LETTER : 'A'..'Z' | 'a'..'z' ;
 DIGIT : '0'..'9' ;
-WS : [ \t\r\n]+ -> skip;
+WS : [ \t\r\n]+ ;
 
-expression : '<%=' text '%>' ;
-
-text : .+ ;
-
-
-//r  : 'hello' ID ;         // match keyword hello followed by an identifier
-//ID : [a-z]+ ;             // match lower-case identifiers
-//WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
+expr : '<%=' .*? '%>' ;
