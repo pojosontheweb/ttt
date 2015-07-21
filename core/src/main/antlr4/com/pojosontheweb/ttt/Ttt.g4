@@ -11,7 +11,7 @@ args : '<%(' arg (',' arg)* ')%>' ;
 
 identifier : LETTER (LETTER | DIGIT)* ;
 
-LETTER : 'A'..'Z' | 'a'..'z' ;
+LETTER : 'A'..'Z' | 'a'..'z' | '_' ;
 DIGIT : '0'..'9' ;
 WS : [ \t\r\n]+ ;
 
