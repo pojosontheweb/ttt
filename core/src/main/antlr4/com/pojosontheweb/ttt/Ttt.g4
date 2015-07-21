@@ -1,7 +1,7 @@
 // Define a grammar called Hello
 grammar Ttt;
 
-r : args ;
+r : args ( text | expression )*;
 
 arg : identifier ':' className ;
 
@@ -14,6 +14,10 @@ identifier : LETTER (LETTER | DIGIT)* ;
 LETTER : 'A'..'Z' | 'a'..'z' ;
 DIGIT : '0'..'9' ;
 WS : [ \t\r\n]+ -> skip;
+
+expression : '<%=' text '%>' ;
+
+text : .+ ;
 
 
 //r  : 'hello' ID ;         // match keyword hello followed by an identifier

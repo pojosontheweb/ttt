@@ -15,7 +15,7 @@ public class AntlrTest {
     @Test
     public void doTest() throws Exception{
 
-        String s = "<%( foo1:com.xyz.Bar, x: int )%>";
+        String s = "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template";
         ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
         TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
         CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
