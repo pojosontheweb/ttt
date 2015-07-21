@@ -3,16 +3,17 @@ grammar Ttt;
 
 r : args WS* ( expr | .(.)*? )* WS*;
 
-arg : WS* identifier WS* ':' WS* className WS*;
+arg : WS* ID WS* ':' WS* className WS*;
 
-className : identifier ( '.' identifier )* ;
+className : ID ( '.' ID )* ;
 
 args : '<%(' arg (',' arg)* ')%>' ;
 
-identifier : LETTER (LETTER | DIGIT)* ;
+expr : '<%=' ( ESCAPE | .*? ) '%>' ;
 
+ID : LETTER (LETTER | DIGIT)* ;
 LETTER : 'A'..'Z' | 'a'..'z' | '_' ;
 DIGIT : '0'..'9' ;
 WS : [ \t\r\n]+ ;
 
-expr : '<%=' .*? '%>' ;
+ESCAPE	:  '\\%>' ;
