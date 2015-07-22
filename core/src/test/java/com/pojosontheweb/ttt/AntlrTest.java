@@ -3,9 +3,12 @@ package com.pojosontheweb.ttt;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.Test;
 
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -50,6 +53,23 @@ public class AntlrTest {
             });
         }
         assertEquals("Failures found", 0, nbFails.get());
+    }
+
+    @Test
+    public void listener() throws Exception {
+        try (Writer out = new PrintWriter(System.out)) {
+            TttListener l = new TttListener(out, "com.xyz.myapp.MyTemplate");
+
+            String s = "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3";
+            ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
+            TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
+            CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
+            TttParser parser = new TttParser(tokens);
+            ParseTree tree = parser.r(); // begin parsing at init rule
+            assertEquals(0, parser.getNumberOfSyntaxErrors());
+            ParseTreeWalker w = new ParseTreeWalker();
+            w.walk(l, tree);
+        }
     }
 
 }
