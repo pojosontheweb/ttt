@@ -18,14 +18,15 @@ public class AntlrTest {
 
         AtomicInteger nbFails = new AtomicInteger(0);
         for (String s : Arrays.asList(
-            "TXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
-            "TXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
-            "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
-            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template",
-            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression\n<%=foo bar%>",
-            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression including an escape\n<%=foo \\%> bar%>",
-            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text",
-            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text <% System.out.println(\"zobi\"); %>\noh yeah"
+            "<%(foo1:com.xyz.Bar)%>",
+            "<%( foo1  :com.xyz.Bar )%>",
+            "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
+            "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3"
+//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template",
+//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression\n<%=foo bar%>",
+//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression including an escape\n<%=foo \\%> bar%>",
+//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text",
+//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text <% System.out.println(\"zobi\"); %>\noh yeah"
         )) {
             TttCompiler.convertExceptions(() -> {
 
