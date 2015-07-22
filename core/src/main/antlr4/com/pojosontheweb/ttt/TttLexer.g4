@@ -8,13 +8,13 @@ TEXT
 	: .+?
 	;
 
-//EXPRESSION
-//	: '<%=' .*? '%>'
-//	;
-//
-//SCRIPTLET
-//	: '<%' ~[=(] .*? '%>'
-//	;
+EXPRESSION
+	: '<%=' .*? '%>'
+	;
+
+SCRIPTLET
+	: '<%' ~[=(] .*? '%>'
+	;
 
 mode SIGNATURE;
 
