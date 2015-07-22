@@ -21,16 +21,23 @@ public class AntlrTest {
 
         AtomicInteger nbFails = new AtomicInteger(0);
         for (String s : Arrays.asList(
-            "<%(foo1:com.xyz.Bar)%>",
-            "<%( foo1  :com.xyz.Bar )%>",
-            "<%( foo1  :com.xyz.Bar )%>\nsome text",
-            "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
-            "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3"
-//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template",
-//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression\n<%=foo bar%>",
-//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression including an escape\n<%=foo \\%> bar%>",
-//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text",
-//            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template\n<%=foo \\%> bar%> more text <% System.out.println(\"zobi\"); %>\noh yeah"
+            "<%(List<Bar> foo1)%>",
+            "<%(java.util.List<Bar> foo1)%>",
+            "<%(com.xyz.Bar foo1)%>",
+            "<%( com.xyz.Bar foo1 )%>",
+            "<%( com.xyz.Bar foo1 )%>\nsome text",
+            "<%(com.xyz.Bar foo1)%>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
+            "<%(com.xyz.Bar foo1 )%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
+            "<%(String title, com.xyz.myapp.OneAttr body)%>\n" +
+                "Title: <%=title%> !\n" +
+                "----\n" +
+                "<%=body%>\n" +
+                "----",
+            "<%(Bar foo1, int x)%>\nthis is a template",
+            "<%(Bar foo1, int x)%>\nthis is a template with an expression\n<%=foo bar%>",
+            "<%(Bar foo1, int x)%>\nthis is a template with an expression including an escape\n<%=foo \\%> bar%>",
+            "<%(Bar foo1, int x)%>\nthis is a template\n<%=foo \\%> bar%> more text",
+            "<%(Bar foo1, int x, char c)%>\nthis is a template\n<%=foo \\%> bar%> more text <% System.out.println(\"zobi\"); %>\noh yeah"
         )) {
             TttCompiler.convertExceptions(() -> {
 
@@ -60,7 +67,7 @@ public class AntlrTest {
         try (Writer out = new PrintWriter(System.out)) {
             TttListener l = new TttListener(out, "com.xyz.myapp.MyTemplate");
 
-            String s = "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3";
+            String s = "<%(com.xyz.Bar bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3";
             ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
             TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
             CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer

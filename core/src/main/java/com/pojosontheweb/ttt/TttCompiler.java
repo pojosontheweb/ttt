@@ -3,6 +3,10 @@ package com.pojosontheweb.ttt;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.*;
 import java.nio.file.*;
@@ -13,10 +17,6 @@ import java.util.stream.Collectors;
 
 public class TttCompiler {
 
-    public static CompilationResult compile(CompilationArgs args) {
-        CompilationContext cc = new CompilationContext(args);
-        return cc.compile();
-    }
 
     public static void main(String[] args) throws Exception {
         OptionParser parser = new OptionParser();
@@ -94,11 +94,7 @@ public class TttCompiler {
 
                         try (FileReader in = new FileReader(file.toFile())) {
                             try (FileWriter out = new FileWriter(outFile)) {
-
-                                CompilationArgs args = new CompilationArgs(in, out, fqn);
-                                CompilationContext cc = new CompilationContext(args);
-                                cc.compile();
-
+                                compile(in, out, fqn);
                             }
                         }
 
@@ -113,6 +109,17 @@ public class TttCompiler {
 
 
 //        CompilationArgs args = new CompilationArgs(in, out, fqn)
+    }
+
+    public static void compile(Reader in, Writer out, String fqn) throws IOException {
+        TttListener l = new TttListener(out, fqn);
+        ANTLRInputStream input = new ANTLRInputStream(in); // create a lexer that feeds off of input CharStream
+        TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
+        CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
+        TttParser parser = new TttParser(tokens);
+        ParseTree tree = parser.r(); // begin parsing at init rule
+        ParseTreeWalker w = new ParseTreeWalker();
+        w.walk(l, tree);
     }
 
     private static void delete(File file)

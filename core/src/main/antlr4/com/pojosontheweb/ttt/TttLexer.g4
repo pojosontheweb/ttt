@@ -8,12 +8,16 @@ TEXT
 	: .+?
 	;
 
-EXPRESSION
-	: '<%=' .*? '%>'
+EXPRESSION_START
+	: '<%='
 	;
 
-SCRIPTLET
-	: '<%' ~[=(] .*? '%>'
+SCRIPTLET_START
+	: '<%' ~[=(]
+	;
+
+CLOSER
+	: '%>'
 	;
 
 mode SIGNATURE;
@@ -30,8 +34,12 @@ ID
 	: LETTER ( LETTER | DIGIT )*
 	;
 
+GENERIC
+	: '<' ID '>'
+	;
+
 TYPE
-	: ID ('.' ID)*
+	: (ID '.')* ID GENERIC?
 	;
 
 LETTER
@@ -44,8 +52,4 @@ DIGIT
 
 COMMA
 	: ','
-	;
-
-COLON
-	: ':'
 	;

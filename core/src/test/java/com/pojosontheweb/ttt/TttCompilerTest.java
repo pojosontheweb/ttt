@@ -1,35 +1,22 @@
 package com.pojosontheweb.ttt;
 
-import static org.junit.Assert.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
 
-@Ignore
 public class TttCompilerTest {
 
-    private static void assertNoErrors(CompilationResult res) {
-        assertTrue(res.getErrors().size()==0);
-    }
-
-    private CompilationResult compile(
+    private void compile (
         String resourceName,
         String className) {
         try {
-
-
             Reader in = new InputStreamReader(getClass().getResourceAsStream(resourceName));
-            StringWriter out = new StringWriter();
-            CompilationArgs args = new CompilationArgs(in, out, className);
-            CompilationResult result = TttCompiler.compile(args);
-
-            System.out.println("Generated\n--------------------");
-            System.out.println(out);
-
-            return result;
-
+            try (StringWriter out = new StringWriter()) {
+                TttCompiler.compile(in, out, className);
+                System.out.println("Generated\n--------------------");
+                System.out.println(out);
+            }
         } catch(Exception e) {
             throw new RuntimeException(e);
         }
@@ -37,17 +24,17 @@ public class TttCompilerTest {
 
     @Test
     public void testOneAttr() {
-        assertNoErrors(compile("/OneAttr.ttt", "com.xyz.OneAttr"));
+        compile("/OneAttr.ttt", "com.xyz.OneAttr");
     }
 
     @Test
     public void testOneAttrMultiLine() {
-        assertNoErrors(compile("/OneAttrMultiLine.ttt", "com.xyz.OneAttrMultiLine"));
+        compile("/OneAttrMultiLine.ttt", "com.xyz.OneAttrMultiLine");
     }
 
     @Test
     public void testOneAttrScript() {
-        assertNoErrors(compile("/OneAttrScript.ttt", "com.xyz.OneAttrScript"));
+        compile("/OneAttrScript.ttt", "com.xyz.OneAttrScript");
     }
 
 }

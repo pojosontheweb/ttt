@@ -1,4 +1,4 @@
-<%(foo: com.xyz.myapp.Foo, myList: java.util.List<String>)%>
+<%( com.xyz.myapp.Foo foo, List<String> myList )%>
 <div class="foo" bar="<%=foo.getBar()%>">
 <% if (true) { %>
     yep
@@ -7,7 +7,9 @@
 <% } %>
 </div>
 <ul>
-<% for (String s : myList) { %>
+<%
+    for (String s : myList) {
+%>
     <li><%=s%></li>
 <% } %>
 </ul>

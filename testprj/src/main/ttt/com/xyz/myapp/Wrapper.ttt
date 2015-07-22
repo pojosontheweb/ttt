@@ -1,4 +1,4 @@
-<%( title: String, body: com.xyz.myapp.OneAttr )%>
+<%( String title, com.xyz.myapp.OneAttr body )%>
 Title: <%=title%> !
 ----
 <%=body%>

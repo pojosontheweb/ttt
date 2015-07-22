@@ -1,7 +1,5 @@
 package com.pojosontheweb.ttt;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -42,8 +40,8 @@ public class TttListener extends TttParserBaseListener {
     // collect arguments
     @Override
     public void exitArg(TttParser.ArgContext ctx) {
-        String name = ctx.ID().getText();
-        String className = ctx.TYPE().getText();
+        String name = ctx.argName().getText();
+        String className = ctx.argType().getText();
         args.add(new Arg(name, className));
         super.exitArg(ctx);
     }
@@ -56,10 +54,14 @@ public class TttListener extends TttParserBaseListener {
     @Override
     public void exitSignature(TttParser.SignatureContext ctx) {
 
-        // write pkg and class declaration
+        // write pkg, imports and class declaration
         if (pkg!=null) {
             write("package ", pkg, ";\n\n");
         }
+
+        write("import java.io.*;\n");
+        write("import java.util.*;\n\n");
+
         write("public class ", className, " extends com.pojosontheweb.ttt.Template {\n\n");
 
         // write template args as private final fields
@@ -83,39 +85,34 @@ public class TttListener extends TttParserBaseListener {
     @Override
     public void enterParts(TttParser.PartsContext ctx) {
         write("\t@Override\n");
-        write("\tpublic void render(java.io.Writer out) throws java.io.IOException {\n");
+        write("\tpublic void render(Writer out) throws IOException {\n");
         super.enterParts(ctx);
     }
 
     // close render method and generated class
     @Override
     public void exitParts(TttParser.PartsContext ctx) {
-        write("\t}\n}");
+        write("\t}\n}\n");
         super.exitParts(ctx);
     }
 
     @Override
-    public void exitPart(TttParser.PartContext ctx) {
-        TerminalNode n = ctx.EXPRESSION();
-        if (n!=null) {
-            // expression
-            write("\t\twrite(out, ", n.getText(), ");\n");
-        } else {
-            n = ctx.SCRIPTLET();
-            if (n!=null) {
-                // script
-                write("\t\t", n.getText(), "\n");
-            } else {
-                // text
-                List<TerminalNode> nodes = ctx.TEXT();
-                write("\t\twrite(out, \"");
-                for(TerminalNode node : nodes) {
-                    write(escape(node.getText())); // TODO \n and "
-                }
-                write("\");\n");
-            }
-        }
-        super.exitPart(ctx);
+    public void exitScript(TttParser.ScriptContext ctx) {
+        write("\t\t", ctx.getText(), "\n");
+        super.exitScript(ctx);
+    }
+
+    @Override
+    public void exitExpr(TttParser.ExprContext ctx) {
+        write("\t\twrite(out, ", ctx.getText(), " );\n");
+        super.exitExpr(ctx);
+    }
+
+
+    @Override
+    public void exitText(TttParser.TextContext ctx) {
+        write("\t\twrite(out, \"", escape(ctx.getText()), "\" );\n");
+        super.exitText(ctx);
     }
 
     private static String escape(String text) {

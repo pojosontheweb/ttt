@@ -1,2 +1,2 @@
-<%(foo: com.xyz.myapp.Foo)%>
+<%( com.xyz.myapp.Foo foo )%>
 this is a <%= foo.getBar() %> template

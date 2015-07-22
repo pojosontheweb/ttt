@@ -15,7 +15,16 @@ args
 	;
 
 arg
-	: ID COLON TYPE
+	: argType argName
+	;
+
+argName
+	: ID
+	;
+
+argType
+	: ID
+	| TYPE
 	;
 
 parts
@@ -23,5 +32,24 @@ parts
 	;
 
 part
-	: TEXT+ | SCRIPTLET | EXPRESSION
+	: text | scriptlet | expression
+	;
+
+text
+	: TEXT+
+	;
+
+scriptlet
+	: SCRIPTLET_START script CLOSER
+	;
+
+script
+	: .*?
+	;
+
+expression
+	: EXPRESSION_START expr CLOSER;
+
+expr
+	: .*?
 	;
