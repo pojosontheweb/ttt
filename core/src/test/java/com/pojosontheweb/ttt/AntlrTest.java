@@ -1,6 +1,5 @@
 package com.pojosontheweb.ttt;
 
-import org.antlr.v4.gui.TreeViewer;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -21,7 +20,7 @@ public class AntlrTest {
         for (String s : Arrays.asList(
             "TXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
             "TXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
-            "<%(com.xyz.Bar foo1)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
+            "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
             "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template",
             "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression\n<%=foo bar%>",
             "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template with an expression including an escape\n<%=foo \\%> bar%>",

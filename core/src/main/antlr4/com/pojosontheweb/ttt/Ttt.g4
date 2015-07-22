@@ -2,8 +2,6 @@ grammar Ttt;
 
 r 		: args? part* ;
 args 	: '<%(' text ')%>' ;
-id		: LETTER (LETTER | DIGIT)* ;
-
 part	: expr | code | text;
 expr 	: '<%=' escText '%>' ;
 code 	: '<%' escText '%>' ;
