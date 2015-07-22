@@ -20,6 +20,7 @@ public class AntlrTest {
         for (String s : Arrays.asList(
             "<%(foo1:com.xyz.Bar)%>",
             "<%( foo1  :com.xyz.Bar )%>",
+            "<%( foo1  :com.xyz.Bar )%>\nsome text",
             "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
             "<%(foo1:com.xyz.Bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3"
 //            "<%( foo1:com.xyz.Bar, x: int )%>\nthis is a template",

@@ -3,7 +3,7 @@ parser grammar TttParser;
 options { tokenVocab=TttLexer; }
 
 r
-	: signature rest
+	: signature part*
 	;
 
 signature
@@ -18,6 +18,6 @@ arg
 	: ID COLON TYPE
 	;
 
-rest
-	: TEXT*
+part
+	: TEXT+ | SCRIPTLET | EXPRESSION
 	;
