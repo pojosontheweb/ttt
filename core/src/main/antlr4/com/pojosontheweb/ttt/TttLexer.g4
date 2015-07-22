@@ -27,7 +27,7 @@ WS
 	;
 
 SIGNATURE_CLOSE
-	: ')%>' -> popMode
+	: ')%>' WS* -> popMode
 	;
 
 ID

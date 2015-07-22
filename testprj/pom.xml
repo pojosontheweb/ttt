@@ -13,54 +13,16 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
+                <groupId>com.pojosontheweb</groupId>
+                <artifactId>ttt-maven-plugin</artifactId>
+                <version>${project.version}</version>
                 <executions>
                     <execution>
-                        <id>compile-templates</id>
+                        <id>ttt-compile</id>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>java</goal>
+                            <goal>ttt</goal>
                         </goals>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <mainClass>com.pojosontheweb.ttt.TttCompiler</mainClass>
-                            <arguments>
-                                <argument>-src</argument>
-                                <argument>${project.basedir}/src/main/ttt</argument>
-                                <argument>-target</argument>
-                                <argument>${project.build.directory}/generated-sources/ttt</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <includePluginDependencies>true</includePluginDependencies>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.pojosontheweb</groupId>
-                        <artifactId>ttt-core</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/ttt</source>
-                            </sources>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
