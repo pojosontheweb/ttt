@@ -1,0 +1,20 @@
+{
+  parserClass="com.pojosontheweb.ttt.parser.TttParser"
+ 
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+ 
+  psiClassPrefix="Ttt"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.pojosontheweb.ttt.psi"
+  psiImplPackage="com.pojosontheweb.ttt.psi.impl"
+ 
+  elementTypeHolderClass="com.pojosontheweb.ttt.psi.TttTypes"
+  elementTypeClass="com.pojosontheweb.ttt.psi.TttElementType"
+  tokenTypeClass="com.pojosontheweb.ttt.psi.TttTokenType"
+}
+ 
+simpleFile ::= item_*
+ 
+private item_ ::= (property|COMMENT|CRLF)
+ 
+property ::= (KEY? SEPARATOR VALUE?) | KEY
