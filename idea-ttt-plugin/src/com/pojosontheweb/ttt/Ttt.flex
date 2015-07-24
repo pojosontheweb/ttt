@@ -34,7 +34,7 @@ ARG_SEP=","
 	{TYPE}			{ yybegin(SIGNATURE); return TttTypes.TYPE; }
 	{WHITE_SPACE}	{ yybegin(SIGNATURE); return com.intellij.psi.TokenType.WHITE_SPACE; }
 	{ARG_SEP}		{ yybegin(SIGNATURE); return TttTypes.ARG_SEP; }
-//	[^] 			{ yybegin(SIGNATURE); return com.intellij.psi.TokenType.BAD_CHARACTER; }
+	[^] 			{ yybegin(SIGNATURE); return com.intellij.psi.TokenType.BAD_CHARACTER; }
 }
 
 //CRLF= \n|\r|\r\n

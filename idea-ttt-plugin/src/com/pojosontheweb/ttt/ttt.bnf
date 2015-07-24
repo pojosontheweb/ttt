@@ -17,7 +17,7 @@ template ::= signature
 
 signature ::= SIG_START args SIG_END
 args ::= arg (ARG_SEP arg)*
-arg ::= TYPE ID
+arg ::= (TYPE | ID) ID
 
 //simpleFile ::= item_*
 //

@@ -1,8 +1,8 @@
 <idea-plugin version="2">
-    <id>com.yourcompany.unique.plugin.id</id>
-    <name>Plugin display name here</name>
+    <id>com.pojosontheweb.ttt</id>
+    <name>ttt-idea</name>
     <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="remi@rvkb.com" url="http://www.pojosontheweb.com">pojonsontheweb</vendor>
     <depends>com.intellij.modules.lang</depends>
 
     <description><![CDATA[

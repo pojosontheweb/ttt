@@ -11,14 +11,16 @@ import java.io.StringReader;
 
 public class LexerTest extends UsefulTestCase {
 
-//    public static void main(String[] args) throws Exception {
-//        String txt = "<%( java.lang.String foo, int bar )%>";
-//        TttLexer l = new TttLexer(new StringReader(txt));
-//        IElementType et;
-//        while ((et = l.advance()) != null) {
-//            System.out.println(et);
-//        }
-//    }
+    public void testError() {
+        doTest(
+            "<%((((",
+            new String[]{
+                "TttToken:SIG_START", "<%(",
+                "BAD_CHARACTER", "(",
+                "BAD_CHARACTER", "(",
+                "BAD_CHARACTER", "("
+            });
+    }
 
     public void testEmptySignature() {
         doTest(
