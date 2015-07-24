@@ -155,6 +155,86 @@ public class LexerTest extends UsefulTestCase {
             });
     }
 
+    public void testComplex() {
+        doTest(
+            "<%(java.lang.String foo, int bar)%>\n" +
+            "Hello, <%=foo%> !\n" +
+            "<% for (int i=0; i<bar; i++) { %>\n" +
+            "\ti=<%=i%>\n" +
+            "<% } %>",
+            new String[]{
+                "TttToken:SIG_START", "<%(",
+                "TttToken:TYPE", "java.lang.String",
+                "WHITE_SPACE", " ",
+                "TttToken:ID", "foo",
+                "TttToken:ARG_SEP", ",",
+                "WHITE_SPACE", " ",
+                "TttToken:ID", "int",
+                "WHITE_SPACE", " ",
+                "TttToken:ID", "bar",
+                "TttToken:SIG_END", ")%>",
+                "TttToken:CHAR", "\n",
+                "TttToken:CHAR", "H",
+                "TttToken:CHAR", "e",
+                "TttToken:CHAR", "l",
+                "TttToken:CHAR", "l",
+                "TttToken:CHAR", "o",
+                "TttToken:CHAR", ",",
+                "TttToken:CHAR", " ",
+                "TttToken:EXPR_START", "<%=",
+                "TttToken:CHAR", "f",
+                "TttToken:CHAR", "o",
+                "TttToken:CHAR", "o",
+                "TttToken:EXPR_END", "%>",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "!",
+                "TttToken:CHAR", "\n",
+                "TttToken:SCRIPT_START", "<%",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "f",
+                "TttToken:CHAR", "o",
+                "TttToken:CHAR", "r",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "(",
+                "TttToken:CHAR", "i",
+                "TttToken:CHAR", "n",
+                "TttToken:CHAR", "t",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "i",
+                "TttToken:CHAR", "=",
+                "TttToken:CHAR", "0",
+                "TttToken:CHAR", ";",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "i",
+                "TttToken:CHAR", "<",
+                "TttToken:CHAR", "b",
+                "TttToken:CHAR", "a",
+                "TttToken:CHAR", "r",
+                "TttToken:CHAR", ";",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "i",
+                "TttToken:CHAR", "+",
+                "TttToken:CHAR", "+",
+                "TttToken:CHAR", ")",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "{",
+                "TttToken:CHAR", " ",
+                "TttToken:SCRIPT_END", "%>",
+                "TttToken:CHAR", "\n\t",
+                "TttToken:CHAR", "i",
+                "TttToken:CHAR", "=",
+                "TttToken:EXPR_START", "<%=",
+                "TttToken:CHAR", "i",
+                "TttToken:EXPR_END", "%>",
+                "TttToken:CHAR", "\n",
+                "TttToken:SCRIPT_START", "<%",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "}",
+                "TttToken:CHAR", " ",
+                "TttToken:SCRIPT_END", "%>"
+            });
+    }
+
     private static Lexer newLexer(String text) {
         Lexer lexer = new FlexAdapter(new TttLexer(new StringReader(text)));
         lexer.start(text);
