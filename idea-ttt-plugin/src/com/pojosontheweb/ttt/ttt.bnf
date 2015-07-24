@@ -7,6 +7,7 @@
   psiImplClassSuffix="Impl"
   psiPackage="com.pojosontheweb.ttt.psi"
   psiImplPackage="com.pojosontheweb.ttt.psi.impl"
+  psiImplUtilClass="com.pojosontheweb.ttt.psi.impl.TttPsiImplUtil"
  
   elementTypeHolderClass="com.pojosontheweb.ttt.psi.TttTypes"
   elementTypeClass="com.pojosontheweb.ttt.psi.TttElementType"
@@ -17,7 +18,9 @@ template ::= signature part*
 
 signature ::= SIG_START args SIG_END
 args ::= arg (ARG_SEP arg)*
-arg ::= (TYPE | ID) ID
+arg ::= argType argName
+argType ::= (TYPE | ID)
+argName ::= ID
 
 expression ::= EXPR_START exprBody EXPR_END
 exprBody ::= CHAR*

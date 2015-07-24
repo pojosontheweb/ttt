@@ -32,6 +32,7 @@
         <lang.syntaxHighlighterFactory key="Ttt"
                                        implementationClass="com.pojosontheweb.ttt.TttSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="com.pojosontheweb.ttt.TttColorSettingsPage"/>
+        <lang.psiStructureViewFactory language="Ttt" implementationClass="com.pojosontheweb.ttt.TttStructureViewFactory"/>
     </extensions>
 
     <application-components>
