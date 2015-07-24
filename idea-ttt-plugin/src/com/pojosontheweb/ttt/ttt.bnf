@@ -23,9 +23,3 @@ expression ::= EXPR_START exprBody EXPR_END
 exprBody ::= CHAR*
 
 part ::= expression | CHAR*
-
-//simpleFile ::= item_*
-//
-//private item_ ::= (property|COMMENT|CRLF)
-//
-//property ::= (KEY? SEPARATOR VALUE?) | KEY
