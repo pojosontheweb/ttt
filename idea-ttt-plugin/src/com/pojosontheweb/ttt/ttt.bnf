@@ -13,11 +13,16 @@
   tokenTypeClass="com.pojosontheweb.ttt.psi.TttTokenType"
 }
 
-template ::= signature
+template ::= signature part*
 
 signature ::= SIG_START args SIG_END
 args ::= arg (ARG_SEP arg)*
 arg ::= (TYPE | ID) ID
+
+expression ::= EXPR_START exprBody EXPR_END
+exprBody ::= CHAR*
+
+part ::= expression | CHAR*
 
 //simpleFile ::= item_*
 //

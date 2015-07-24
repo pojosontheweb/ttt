@@ -33,7 +33,10 @@ public class TttSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        if (tokenType.equals(TttTypes.SIG_START) || tokenType.equals(TttTypes.SIG_END)) {
+        if (tokenType.equals(TttTypes.SIG_START)
+            || tokenType.equals(TttTypes.SIG_END)
+            || tokenType.equals(TttTypes.EXPR_START)
+            || tokenType.equals(TttTypes.EXPR_END)) {
             return KEYWORD_KEYS;
         } else {
             return EMPTY_KEYS;

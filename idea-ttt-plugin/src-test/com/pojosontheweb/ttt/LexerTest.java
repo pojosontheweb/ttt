@@ -98,6 +98,40 @@ public class LexerTest extends UsefulTestCase {
             });
     }
 
+    public void testSigAndExpr() {
+        doTest(
+            "<%(java.lang.String foo)%><%= foo %>",
+            new String[]{
+                "TttToken:SIG_START", "<%(",
+                "TttToken:TYPE", "java.lang.String",
+                "WHITE_SPACE", " ",
+                "TttToken:ID", "foo",
+                "TttToken:SIG_END", ")%>",
+                "TttToken:EXPR_START", "<%=",
+                "TttToken:CHAR", " ",
+                "TttToken:CHAR", "f",
+                "TttToken:CHAR", "o",
+                "TttToken:CHAR", "o",
+                "TttToken:CHAR", " ",
+                "TttToken:EXPR_END", "%>"
+            });
+    }
+
+    public void testSigAndText() {
+        doTest(
+            "<%(java.lang.String foo)%>\nbar",
+            new String[]{
+                "TttToken:SIG_START", "<%(",
+                "TttToken:TYPE", "java.lang.String",
+                "WHITE_SPACE", " ",
+                "TttToken:ID", "foo",
+                "TttToken:SIG_END", ")%>",
+                "TttToken:CHAR", "\n",
+                "TttToken:CHAR", "b",
+                "TttToken:CHAR", "a",
+                "TttToken:CHAR", "r",
+            });
+    }
 
     private static Lexer newLexer(String text) {
         Lexer lexer = new FlexAdapter(new TttLexer(new StringReader(text)));
