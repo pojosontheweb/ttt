@@ -22,4 +22,7 @@ arg ::= (TYPE | ID) ID
 expression ::= EXPR_START exprBody EXPR_END
 exprBody ::= CHAR*
 
-part ::= expression | CHAR*
+script ::= SCRIPT_START scriptBody SCRIPT_END
+scriptBody ::= CHAR*
+
+part ::= expression | script | CHAR*

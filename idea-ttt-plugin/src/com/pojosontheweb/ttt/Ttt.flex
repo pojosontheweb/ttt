@@ -17,6 +17,7 @@ import com.intellij.psi.TokenType;
 
 SIG_START="<%("
 EXPR_START="<%="
+SCRIPT_START="<%"
 EOL="\r"|"\n"|"\r\n"
 LINE_WS=[\ \t\f]
 WHITE_SPACE=({LINE_WS}|{EOL})+
@@ -30,11 +31,15 @@ ARG_SEP=","
 
 %state EXPRESSION
 EXPR_END="%>"
+
+%state SCRIPT
+SCRIPT_END="%>"
 %%
 
 <YYINITIAL> {
 	{SIG_START}		{ yybegin(SIGNATURE); return TttTypes.SIG_START; }
 	{EXPR_START}	{ yybegin(EXPRESSION); return TttTypes.EXPR_START; }
+	{SCRIPT_START}	{ yybegin(SCRIPT); return TttTypes.SCRIPT_START; }
 	{CHAR}			{ yybegin(YYINITIAL); return TttTypes.CHAR; }
 }
 <SIGNATURE> {
@@ -48,4 +53,8 @@ EXPR_END="%>"
 <EXPRESSION> {
 	{EXPR_END} 		{ yybegin(YYINITIAL); return TttTypes.EXPR_END; }
 	{CHAR}			{ yybegin(EXPRESSION); return TttTypes.CHAR; }
+}
+<SCRIPT> {
+	{SCRIPT_END} 	{ yybegin(YYINITIAL); return TttTypes.SCRIPT_END; }
+	{CHAR}			{ yybegin(SCRIPT); return TttTypes.CHAR; }
 }

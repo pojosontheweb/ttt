@@ -11,8 +11,9 @@ import com.intellij.psi.tree.IElementType;
 import com.pojosontheweb.ttt.psi.TttTypes;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.io.Reader;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
@@ -30,13 +31,19 @@ public class TttSyntaxHighlighter extends SyntaxHighlighterBase {
         return new FlexAdapter(new TttLexer((Reader) null));
     }
 
+    private static final List<IElementType> KW_TYPES = Arrays.asList(
+        TttTypes.SIG_START,
+        TttTypes.SIG_END,
+        TttTypes.EXPR_START,
+        TttTypes.EXPR_END,
+        TttTypes.SCRIPT_START,
+        TttTypes.SCRIPT_END
+    );
+
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        if (tokenType.equals(TttTypes.SIG_START)
-            || tokenType.equals(TttTypes.SIG_END)
-            || tokenType.equals(TttTypes.EXPR_START)
-            || tokenType.equals(TttTypes.EXPR_END)) {
+        if (KW_TYPES.contains(tokenType)) {
             return KEYWORD_KEYS;
         } else {
             return EMPTY_KEYS;
