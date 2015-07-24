@@ -110,18 +110,18 @@ public class TttStructureViewElement implements StructureViewTreeElement, Sortab
             TttFile f = (TttFile) element;
             return f.getName();
         } else if (element instanceof TttSignature) {
-            return "Signature";
+            return "Arguments";
         } else if (element instanceof TttArg) {
             TttArg arg = (TttArg)element;
             return arg.getArgName().getText() + " : " + arg.getArgType().getText();
         } else if (element instanceof TttPart) {
             TttPart p = (TttPart)element;
             if (p.getExpression()!=null) {
-                return "EXPR";
+                return "<%= ... %>";
             } else if (p.getScript()!=null) {
-                return "SCRIPT";
+                return "<% ... %>";
             } else {
-                return "TXT";
+                return "...";
             }
         }
         return element.toString();
@@ -136,6 +136,6 @@ public class TttStructureViewElement implements StructureViewTreeElement, Sortab
     @Nullable
     @Override
     public Icon getIcon(boolean b) {
-        return null;
+        return TttIcons.FILE;
     }
 }

@@ -25,6 +25,7 @@
             <groupId>net.sf.jopt-simple</groupId>
             <artifactId>jopt-simple</artifactId>
             <version>4.9</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     <build>

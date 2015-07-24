@@ -45,6 +45,11 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="com.pojosontheweb.ttt.TttCompileAction" class="com.pojosontheweb.ttt.TttCompileAction"
+                text="Ttt Compile" description="Compile TTT templates">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="shift meta T" second-keystroke="T"/>
+        </action>
     </actions>
 
 </idea-plugin>
