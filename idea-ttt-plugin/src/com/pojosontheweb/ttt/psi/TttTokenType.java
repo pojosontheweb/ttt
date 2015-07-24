@@ -12,6 +12,6 @@ public class TttTokenType extends IElementType {
 
     @Override
     public String toString() {
-        return "SimpleTokenType." + super.toString();
+        return "TttToken:" + super.toString();
     }
 }

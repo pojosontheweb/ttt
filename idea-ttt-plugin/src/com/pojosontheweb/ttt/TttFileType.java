@@ -16,19 +16,19 @@ public class TttFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "Simple file";
+        return "Ttt file";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Simple language file";
+        return "Ttt language file";
     }
 
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return "simple";
+        return "ttt";
     }
 
     @Nullable

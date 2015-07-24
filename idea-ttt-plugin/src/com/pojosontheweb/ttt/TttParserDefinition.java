@@ -22,7 +22,7 @@ import java.io.Reader;
 
 public class TttParserDefinition implements ParserDefinition{
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(TttTypes.COMMENT);
+//    public static final TokenSet COMMENTS = TokenSet.create(TttTypes.COMMENT);
 
     public static final IFileElementType FILE = new IFileElementType(Language.<TttLanguage>findInstance(TttLanguage.class));
 
@@ -39,7 +39,7 @@ public class TttParserDefinition implements ParserDefinition{
 
     @NotNull
     public TokenSet getCommentTokens() {
-        return COMMENTS;
+        return TokenSet.EMPTY;
     }
 
     @NotNull

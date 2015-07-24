@@ -12,9 +12,15 @@
   elementTypeClass="com.pojosontheweb.ttt.psi.TttElementType"
   tokenTypeClass="com.pojosontheweb.ttt.psi.TttTokenType"
 }
- 
-simpleFile ::= item_*
- 
-private item_ ::= (property|COMMENT|CRLF)
- 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+
+template ::= signature
+
+signature ::= SIG_START args SIG_END
+args ::= arg (ARG_SEP arg)*
+arg ::= TYPE ID
+
+//simpleFile ::= item_*
+//
+//private item_ ::= (property|COMMENT|CRLF)
+//
+//property ::= (KEY? SEPARATOR VALUE?) | KEY

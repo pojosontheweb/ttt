@@ -41,18 +41,18 @@ public class TttSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        if (tokenType.equals(TttTypes.SEPARATOR)) {
-            return SEPARATOR_KEYS;
-        } else if (tokenType.equals(TttTypes.KEY)) {
-            return KEY_KEYS;
-        } else if (tokenType.equals(TttTypes.VALUE)) {
-            return VALUE_KEYS;
-        } else if (tokenType.equals(TttTypes.COMMENT)) {
-            return COMMENT_KEYS;
-        } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
-            return BAD_CHAR_KEYS;
-        } else {
+//        if (tokenType.equals(TttTypes.SEPARATOR)) {
+//            return SEPARATOR_KEYS;
+//        } else if (tokenType.equals(TttTypes.KEY)) {
+//            return KEY_KEYS;
+//        } else if (tokenType.equals(TttTypes.VALUE)) {
+//            return VALUE_KEYS;
+//        } else if (tokenType.equals(TttTypes.COMMENT)) {
+//            return COMMENT_KEYS;
+//        } else if (tokenType.equals(TokenType.BAD_CHARACTER)) {
+//            return BAD_CHAR_KEYS;
+//        } else {
             return EMPTY_KEYS;
-        }
+//        }
     }
 }
