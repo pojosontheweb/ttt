@@ -25,4 +25,6 @@ exprBody ::= CHAR*
 script ::= SCRIPT_START scriptBody SCRIPT_END
 scriptBody ::= CHAR*
 
-part ::= expression | script | CHAR*
+templateTxt ::= CHAR*
+
+part ::= expression | script | templateTxt
