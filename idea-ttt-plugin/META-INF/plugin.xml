@@ -37,11 +37,20 @@
 
     <application-components>
         <!-- Add your application components here -->
+        <component>
+            <implementation-class>com.pojosontheweb.ttt.TttApplicationComponent</implementation-class>
+        </component>
     </application-components>
 
     <project-components>
         <!-- Add your project components here -->
     </project-components>
+
+    <module-components>
+        <component>
+            <implementation-class>com.pojosontheweb.ttt.TttModuleComponent</implementation-class>
+        </component>
+    </module-components>
 
     <actions>
         <!-- Add your actions here -->

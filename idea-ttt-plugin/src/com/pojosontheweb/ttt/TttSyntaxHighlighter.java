@@ -28,7 +28,7 @@ public class TttSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new FlexAdapter(new TttLexer((Reader) null));
+        return new FlexAdapter(new TttIdeaLexer((Reader) null));
     }
 
     private static final List<IElementType> KW_TYPES = Arrays.asList(

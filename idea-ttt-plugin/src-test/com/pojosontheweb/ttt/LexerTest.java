@@ -236,7 +236,7 @@ public class LexerTest extends UsefulTestCase {
     }
 
     private static Lexer newLexer(String text) {
-        Lexer lexer = new FlexAdapter(new TttLexer(new StringReader(text)));
+        Lexer lexer = new FlexAdapter(new TttIdeaLexer(new StringReader(text)));
         lexer.start(text);
         return lexer;
     }

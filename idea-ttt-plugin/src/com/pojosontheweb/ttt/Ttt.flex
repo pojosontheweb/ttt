@@ -7,7 +7,7 @@ import com.intellij.psi.TokenType;
 
 %%
 
-%class TttLexer
+%class TttIdeaLexer
 %implements FlexLexer
 %unicode
 %function advance

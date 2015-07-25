@@ -14,6 +14,17 @@ import java.util.stream.Collectors;
 
 public class TttCompiler {
 
+    public static void generateTemplateBaseClass(File target) throws IOException {
+        // write out the base Template class source file
+        File templateBase = new File(
+            Arrays.asList(target.getAbsolutePath(), "com", "pojosontheweb", "ttt", "Template.java")
+                .stream()
+                .collect(Collectors.joining(File.separator))
+        );
+        templateBase.getParentFile().mkdirs();
+        Files.copy(TttCompiler.class.getResourceAsStream("/com/pojosontheweb/ttt/Template.java"), templateBase.toPath());
+    }
+
     public static void compile(Path srcDir, Path targetDir, boolean clean) throws Exception {
 
         File target = targetDir.toFile();
@@ -26,13 +37,7 @@ public class TttCompiler {
         }
 
         // write out the base Template class source file
-        File templateBase = new File(
-            Arrays.asList(target.getAbsolutePath(), "com", "pojosontheweb", "ttt", "Template.java")
-                .stream()
-                .collect(Collectors.joining(File.separator))
-        );
-        templateBase.getParentFile().mkdirs();
-        Files.copy(TttCompiler.class.getResourceAsStream("/com/pojosontheweb/ttt/Template.java"), templateBase.toPath());
+        generateTemplateBaseClass(target);
 
         final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*.ttt");
         Files.walkFileTree(srcDir, new SimpleFileVisitor<Path>() {

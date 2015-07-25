@@ -29,7 +29,7 @@ public class TttParserDefinition implements ParserDefinition{
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new FlexAdapter(new TttLexer((Reader) null));
+        return new FlexAdapter(new TttIdeaLexer((Reader) null));
     }
 
     @NotNull
