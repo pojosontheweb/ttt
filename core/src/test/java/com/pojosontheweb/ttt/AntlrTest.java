@@ -81,9 +81,6 @@ public class AntlrTest {
         System.out.println(actual);
         assertEquals("package com.xyz.myapp;\n" +
             "\n" +
-            "import java.io.*;\n" +
-            "import java.util.*;\n" +
-            "\n" +
             "public class MyTemplate extends com.pojosontheweb.ttt.Template {\n" +
             "\n" +
             "\tprivate final com.xyz.Bar bar;\n" +
@@ -93,7 +90,7 @@ public class AntlrTest {
             "\t}\n" +
             "\n" +
             "\t@Override\n" +
-            "\tpublic void render(Writer out) throws IOException {\n" +
+            "\tpublic void render(java.io.Writer out) throws java.io.IOException {\n" +
             "\t\twrite(out, \"TXT \" );\n" +
             "\t\twrite(out,  EXPR  );\n" +
             "\t\twrite(out, \" TXT 2 \" );\n" +
