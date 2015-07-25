@@ -2,9 +2,9 @@ package ttt.tests;
 
 public class Test1 extends com.pojosontheweb.ttt.Template {
 
-	private final Foo foo;
+	private final com.xyz.myapp.Foo foo;
 
-	public Test1(Foo foo) {
+	public Test1(com.xyz.myapp.Foo foo) {
 		this.foo = foo;
 	}
 
