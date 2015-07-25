@@ -16,6 +16,8 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
+import com.intellij.openapi.wm.StatusBar;
+import com.intellij.openapi.wm.WindowManager;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -33,20 +35,18 @@ public class TttCompileAction extends AnAction {
         // super("Text _Boxes","Item description",IconLoader.getIcon("/Mypackage/icon.png"));
     }
 
-    private interface Callback {
-        void execute(Module module);
-    }
-
     public void actionPerformed(AnActionEvent event) {
-        Application app = ApplicationManager.getApplication();
         // compile all ttt files in project
         Project project = event.getData(PlatformDataKeys.PROJECT);
+        compileTemplates(project);
+    }
+
+    public static void compileTemplates(Project project) {
         if (project!=null) {
             Module[] modules = ModuleManager.getInstance(project).getModules();
-            for (int mIndex=0; mIndex<modules.length ; mIndex++) {
-                Module m = modules[mIndex];
+            for (Module m : modules) {
                 TttModuleComponent tttModuleComponent = m.getComponent(TttModuleComponent.class);
-                if (tttModuleComponent!=null && tttModuleComponent.isEnabled()) {
+                if (tttModuleComponent != null && tttModuleComponent.isEnabled()) {
                     // get target gen path
                     String target = tttModuleComponent.getTargetPath();
                     if (target == null) {
@@ -73,17 +73,18 @@ public class TttCompileAction extends AnAction {
 
                     final VirtualFile td = targetDir;
 
-                    if (td!=null) {
+                    if (td != null) {
 
                         // generate base class
                         try {
                             TttCompiler.generateTemplateBaseClass(new File(targetDir.getPath()));
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             // TODO handle error ?
                             throw new RuntimeException(e);
                         }
 
                         // now visit the source roots
+                        List<File> generatedFiles = new ArrayList<>();
                         for (VirtualFile srcRoot : rootsToVisit) {
                             final String srcRootPath = srcRoot.getPath();
                             // find all ".ttt" files under this...
@@ -109,27 +110,33 @@ public class TttCompileAction extends AnAction {
                                                 .replace(".ttt", "");
                                             try {
                                                 TttCompiler.compile(in, out, fqn);
+                                                generatedFiles.add(f);
                                             } finally {
                                                 out.close();
                                             }
                                             System.out.println(file.getPath());
-                                        } catch(Exception e) {
-                                            // TODO error message !
-                                            e.printStackTrace();
+                                        } catch (Exception e) {
+                                            // TODO handle error
+                                            throw new RuntimeException(e);
                                         }
                                     }
                                     return true;
                                 }
                             });
                         }
+
+                        td.refresh(true, true, () -> {
+                            String msg = generatedFiles.size() + " file(s) generated to " + td.getPath();
+                            final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
+                            if (statusBar != null) {
+                                statusBar.setInfo(msg);
+                            }
+                        });
                     }
 
                 }
             }
         }
-
-//        String txt= Messages.showInputDialog(project, "What is your name?", "Input your name", Messages.getQuestionIcon());
-//        Messages.showMessageDialog(project, "Hello, " + txt + "!\n I am glad to see you.", "Tools", Messages.getInformationIcon());
     }
 
 }

@@ -1,26 +1,9 @@
 package com.pojosontheweb.ttt;
 
-import com.intellij.javaee.artifact.JavaeeArtifactUtil;
-import com.intellij.javaee.web.WebRoot;
-import com.intellij.javaee.web.artifact.WebArtifactUtil;
-import com.intellij.javaee.web.facet.WebFacet;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleType;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.module.StdModuleTypes;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.*;
-import com.intellij.openapi.wm.StatusBar;
-import com.intellij.openapi.wm.WindowManager;
-import com.intellij.packaging.artifacts.Artifact;
-import com.intellij.packaging.artifacts.ArtifactManager;
-import com.intellij.packaging.artifacts.ArtifactType;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by vankeisb on 25/07/15.
@@ -35,41 +18,47 @@ class TttCompileOnSaveListener implements VirtualFileListener {
 
     @Override
     public void propertyChanged(@NotNull VirtualFilePropertyEvent virtualFilePropertyEvent) {
-
     }
 
     @Override
     public void contentsChanged(@NotNull VirtualFileEvent event) {
+        onUpdatingEvent(event.getFile());
+    }
+
+    private void onUpdatingEvent(VirtualFile file) {
+        if (file==null || file.getName().endsWith(".ttt")) {
+            Project[] projects = projectManager.getOpenProjects();
+            for (Project p : projects) {
+                TttCompileAction.compileTemplates(p);
+            }
+        }
     }
 
     @Override
     public void fileCreated(@NotNull VirtualFileEvent virtualFileEvent) {
-
     }
 
     @Override
     public void fileDeleted(@NotNull VirtualFileEvent virtualFileEvent) {
-
+        onUpdatingEvent(virtualFileEvent.getFile());
     }
 
     @Override
     public void fileMoved(@NotNull VirtualFileMoveEvent virtualFileMoveEvent) {
-
+        onUpdatingEvent(virtualFileMoveEvent.getFile());
     }
 
     @Override
     public void fileCopied(@NotNull VirtualFileCopyEvent virtualFileCopyEvent) {
-
+        onUpdatingEvent(virtualFileCopyEvent.getFile());
     }
 
     @Override
     public void beforePropertyChange(@NotNull VirtualFilePropertyEvent virtualFilePropertyEvent) {
-
     }
 
     @Override
     public void beforeContentsChange(@NotNull VirtualFileEvent virtualFileEvent) {
-
     }
 
     @Override
