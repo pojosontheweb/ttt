@@ -1,4 +1,4 @@
-# Typed Text Templates
+# Typed Text Templates (aka TTT)
 
 Static-typed text templates for Java.
 
@@ -7,98 +7,91 @@ Static-typed text templates for Java.
 Most text templating libs do not provide strong, static typing. 
 
 JSP, for instance, can be statically typed and checked at compile-type, 
-but they don't provide any "signature". Same applies to Groovy templates
-and others. 
-
-Also, we need easy composition of nested templates.
+but they don't provide any signature. Therefore, you have no context, 
+and no way to know what the page arguments can be. You usually get
+values from a non typed structure, like a Map<String,Object>. Same applies to Groovy 
+templates and others.
+ 
+Also, we'd like to be able to compose templates easily. And again, in 
+a fully static, compile-time checked fashion.
 
 ## The idea
 
 Ttt is a simple templating language, and a compiler.
  
-Templates are text files (usually with a .ttt extension) that 
-use script and/or expression blocks, like JSPs. Inside expressions 
-and scripts is Java code.
+You write templates using a subset of the JSP syntax (see next section). 
+Templates can use script and/or expression blocks.
 
-Most importantly, templates define their signature. Like a function, 
-the signature defines the variables available inside the template.
+Most importantly, templates define their signature, as typed argyments, just like a function would. 
+The signature defines the variables available inside the template.
 
-The compiler transforms templates into Java classes, which can 
-then be used from any Java program in a static-typed fashion.
+Templates are compiled to .java source files at design or build-time.  
 
-The generated Java class for a template extends a `com.pojosontheweb.ttt.Template` 
-base class. It defines one constructor with all required parameters, from the 
-template signature. 
+You can then use the Java classes from your code, in a static-typed fashion.
 
 Ttt is inspired from Play! 2 Scala Templates.
 
 ## Writing templates
 
-The signature must appear first, enclosed by `<%(` and `)%>`.
+Here's a simple template example from file `Foo.ttt` :
 
-The rest is pretty much like JSP scriptlets and expressions.
-
-Here's a simple example - `com/xyz/myapp/MyTemplate.ttt` :
-
-	<%(foo: com.xyz.myapp.Foo)%>
-	<div class="foo">
-		<%= foo.getBar() %> 	
-	</div>
-
-### Compiling templates
+	<%!
+		String foo;
+		int bar;
+	%>
+	<ul class="foo">
+	<% for (int i = 0 ; i < bar ; i++) { %>
+		<div class="blah">
+			hey, <%= foo %>
+		</div>
+		<li>
+			<span>
+				<%= i %>
+			</span>
+		</li>
+	<% } %>
+	</ul>
 	
-Before you build your app the way you usually do, you need to 
-compile the templates to Java code. This can be done in several
-ways (see the last section).
+First declaration block is the template's signature, between `<%!` and `%>`. Arguments are declared like you declare local variables for a JSP. You don't need to set a value.
+
+Following is some text, with some scriptlets and expressions, again, just like a regular JSP.
+
+TODO link to full language reference
+
+### Nested Templates (composition)
+
+TODO
+
+## Compiling templates
 	
-For the example above, the compiler will generate a `com.xyz.myapp.MyTemplate` 
-class with one constructor that accepts the args as defined in the 
-template's signature, and a `render` method :
+`.ttt` files are compiled to Java source code. You use your own IDE/build system in order to compile those sources
+to Java bytecode. 
 
+> Just like for any generated source code, you should put the generated sources into a specific folder, and will probably not even commit them into your VCS.
+	
+Templates can be compiled in several ways :
+ * command-line
+ * maven
+ * IntelliJ IDEA plugin
 
+Those are detailed below.
 
-### Rendering templates
+The generated Java class is an immutable class with :
+ * a unique constructor which has the signature defined in the template
+ * a `void render(Writer out)` method that spits out the template to a writer
+ 
+## Rendering templates
 
 Compiled templates are regular Java classes that you can use anywhere:
 
-	Foo foo = ... ;
-	try (Writer out = new PrintWriter(System.out)) {
-		new MyTemplate(foo).render(out);
-	}
-	
-## Composition	
+    TODO
 
-Here's a wrapper template using the previous example - `com.xyz.myapp.MyWrapper` :
+## Build
+
+### CLI
  
-	<%( title: String, body: com.xyz.myapp.MyTemplate )%>
-	<html>
-	<head>
-		<title><%= title %></title>
-	</head>
-	<body>
-		<%= body %>
-	</body>
-	</html>
-	
-As you see, the signature defines two parameters :
-
- * title : a String title
- * body : the body of the page : a Template itself. Can be one of your own templates, or the base class `com.pojosontheweb.ttt.Template`.
-
-Here's how you'd render the whole thing :
-
-	Foo foo = ...;
-	try (Writer out = new PrintWriter(System.out)) {
-		new MyWrapper("hey there", new MyTemplate(foo)).render(out);
-	}
-	
-## Build integration
-
-### Java API
-
-### Command line
-
-### Maven
-
+### Maven plugin
+ 
+### IntelliJ IDEA Plugin
 
 	
