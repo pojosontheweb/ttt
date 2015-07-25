@@ -19,7 +19,7 @@ public class Main {
             sep(out);
             new OneAttrMultiLine(f).render(out);
             sep(out);
-//            new Wrapper("hello there", oneAttr).render(out);
+            new Wrapper("hello there", oneAttr).render(out);
             sep(out);
             new OneAttrScript(f, Arrays.asList("hey", "there")).render(out);
         }

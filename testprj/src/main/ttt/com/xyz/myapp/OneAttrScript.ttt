@@ -1,4 +1,5 @@
-<%( com.xyz.myapp.Foo foo, List<String> myList )%>
+<%@ page import="java.util.List" %>
+<%! com.xyz.myapp.Foo foo; List<String> myList; %>
 <div class="foo" bar="<%=foo.getBar()%>">
 <% if (true) { %>
     yep
