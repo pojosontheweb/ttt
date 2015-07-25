@@ -1,0 +1,6 @@
+<%@ page import="com.xyz.myapp.Foo" %>
+<%!
+    Foo foo;
+    int bar;
+%>
+this is a <%= foo.getBar() %> template
