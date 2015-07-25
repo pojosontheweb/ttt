@@ -19,8 +19,7 @@ directiveExtends
 	;
 
 directiveValue
-	: ID
-	| TYPE
+	: ( ID | TYPE ) DOT_STAR?
 	;
 
 declaration

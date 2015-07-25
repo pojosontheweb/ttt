@@ -43,6 +43,10 @@ EXTENDS
 	: 'extends'
 	;
 
+DOT_STAR
+	: '.*'
+	;
+
 EQ
 	: '='
 	;
