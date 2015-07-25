@@ -124,13 +124,16 @@ public class TttCompileAction extends AnAction {
                             });
                         }
 
-                        td.refresh(true, true, () -> {
+
+                        Application app = ApplicationManager.getApplication();
+                        app.invokeLater(() -> td.refresh(true, true, () -> {
                             String msg = generatedFiles.size() + " file(s) generated to " + td.getPath();
                             final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
                             if (statusBar != null) {
                                 statusBar.setInfo(msg);
                             }
-                        });
+                        }));
+
                     }
 
                 }
