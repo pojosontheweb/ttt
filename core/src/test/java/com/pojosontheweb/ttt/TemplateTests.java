@@ -27,6 +27,16 @@ public class TemplateTests {
         doTest("Test2");
     }
 
+    @Test
+    public void test3() throws Exception {
+        doTest("Test3");
+    }
+
+    @Test
+    public void test4() throws Exception {
+        doTest("Test4");
+    }
+
     private static String toString(InputStream is) throws Exception {
         int nRead;
         byte[] data = new byte[2048];

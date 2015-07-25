@@ -1,0 +1,19 @@
+package ttt.tests;
+
+import com.xyz.myapp.Foo;
+
+public class Test3 extends com.pojosontheweb.ttt.Template implements java.io.Serializable {
+
+	private final Foo foo;
+
+	public Test3(Foo foo) {
+		this.foo = foo;
+	}
+
+	@Override
+	public void render(java.io.Writer out) throws java.io.IOException {
+		write(out, "this is a " );
+		write(out,  foo.getBar()  );
+		write(out, " template" );
+	}
+}
