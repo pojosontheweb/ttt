@@ -114,7 +114,6 @@ public class TttCompileAction extends AnAction {
                                             } finally {
                                                 out.close();
                                             }
-                                            System.out.println(file.getPath());
                                         } catch (Exception e) {
                                             // TODO handle error
                                             throw new RuntimeException(e);
