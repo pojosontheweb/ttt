@@ -3,6 +3,7 @@ package com.pojosontheweb.ttt;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,6 +21,8 @@ public class TttListener extends TttParserBaseListener {
     }
 
     private final List<Arg> args = new ArrayList<>();
+    private final List<String> importList = new ArrayList<>();
+    private final List<String> extendsList = new ArrayList<>();
 
     private final Writer out;
     private final String pkg;
@@ -46,6 +49,20 @@ public class TttListener extends TttParserBaseListener {
         super.exitArg(ctx);
     }
 
+    // collect imports
+    @Override
+    public void exitDirectiveImport(TttParser.DirectiveImportContext ctx) {
+        importList.add(ctx.directiveValue().getText());
+        super.exitDirectiveImport(ctx);
+    }
+
+    // collect extends
+    @Override
+    public void exitDirectiveExtends(TttParser.DirectiveExtendsContext ctx) {
+        extendsList.add(ctx.directiveValue().getText());
+        super.exitDirectiveExtends(ctx);
+    }
+
     private Stream<Arg> args() {
         return args.stream();
     }
@@ -59,10 +76,16 @@ public class TttListener extends TttParserBaseListener {
             write("package ", pkg, ";\n\n");
         }
 
-        write("import java.io.*;\n");
-        write("import java.util.*;\n\n");
+        for (String imp : importList) {
+            write("import ", imp, ";\n\n");
+        }
 
-        write("public class ", className, " extends com.pojosontheweb.ttt.Template {\n\n");
+        String implementsClause = "";
+        if (extendsList.size()>0) {
+            implementsClause = "implements " + extendsList.stream().collect(Collectors.joining(", ")) + " ";
+        }
+
+        write("public class ", className, " extends com.pojosontheweb.ttt.Template ", implementsClause, "{\n\n");
 
         // write template args as private final fields
         args().forEach(a -> write("\tprivate final ", a.type, " ", a.name, ";\n"));
@@ -80,7 +103,7 @@ public class TttListener extends TttParserBaseListener {
 
 
         write("\t@Override\n");
-        write("\tpublic void render(Writer out) throws IOException {\n");
+        write("\tpublic void render(java.io.Writer out) throws java.io.IOException {\n");
         super.enterParts(ctx);
     }
 

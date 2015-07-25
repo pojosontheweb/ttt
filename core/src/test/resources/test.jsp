@@ -1,4 +1,6 @@
 <%@ page import="java.util.List"%>
+<%@ page extends="Number" %>
+<%@ page extends="java.util.Collection<String>" %>
 <%!
     List l;
 %>

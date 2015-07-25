@@ -56,21 +56,24 @@ public class AntlrTest {
         assertEquals("Failures found", 0, nbFails.get());
     }
 
+    private static void walk(String s, TttListener l) throws Exception {
+        ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
+        TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
+        CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
+        TttParser parser = new TttParser(tokens);
+        ParseTree tree = parser.r(); // begin parsing at init rule
+        assertEquals(0, parser.getNumberOfSyntaxErrors());
+        ParseTreeWalker w = new ParseTreeWalker();
+        w.walk(l, tree);
+    }
+
     @Test
     public void listener() throws Exception {
         StringWriter sw = new StringWriter();
         try {
             TttListener l = new TttListener(sw, "com.xyz.myapp.MyTemplate");
-
             String s = "<%! com.xyz.Bar bar; %>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3";
-            ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
-            TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
-            CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
-            TttParser parser = new TttParser(tokens);
-            ParseTree tree = parser.r(); // begin parsing at init rule
-            assertEquals(0, parser.getNumberOfSyntaxErrors());
-            ParseTreeWalker w = new ParseTreeWalker();
-            w.walk(l, tree);
+            walk(s, l);
         } finally {
             sw.close();
         }
@@ -91,6 +94,76 @@ public class AntlrTest {
             "\n" +
             "\t@Override\n" +
             "\tpublic void render(Writer out) throws IOException {\n" +
+            "\t\twrite(out, \"TXT \" );\n" +
+            "\t\twrite(out,  EXPR  );\n" +
+            "\t\twrite(out, \" TXT 2 \" );\n" +
+            "\t\tCODE \n" +
+            "\t\twrite(out, \" TXT3\" );\n" +
+            "\t}\n" +
+            "}\n", actual);
+
+    }
+
+    @Test
+    public void listenerImports() throws Exception {
+        StringWriter sw = new StringWriter();
+        try {
+            TttListener l = new TttListener(sw, "com.xyz.myapp.MyTemplate");
+            String s = "<%@ page import=\"java.util.Collection\" %>\n<%! Collection bar; %>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3";
+            walk(s, l);
+        } finally {
+            sw.close();
+        }
+        String actual = sw.toString();
+        System.out.println(actual);
+        assertEquals("package com.xyz.myapp;\n" +
+            "\n" +
+            "import java.util.Collection;\n" +
+            "\n" +
+            "public class MyTemplate extends com.pojosontheweb.ttt.Template {\n" +
+            "\n" +
+            "\tprivate final Collection bar;\n" +
+            "\n" +
+            "\tpublic MyTemplate(Collection bar) {\n" +
+            "\t\tthis.bar = bar;\n" +
+            "\t}\n" +
+            "\n" +
+            "\t@Override\n" +
+            "\tpublic void render(java.io.Writer out) throws java.io.IOException {\n" +
+            "\t\twrite(out, \"TXT \" );\n" +
+            "\t\twrite(out,  EXPR  );\n" +
+            "\t\twrite(out, \" TXT 2 \" );\n" +
+            "\t\tCODE \n" +
+            "\t\twrite(out, \" TXT3\" );\n" +
+            "\t}\n" +
+            "}\n", actual);
+
+    }
+
+    @Test
+    public void listenerExtends() throws Exception {
+        StringWriter sw = new StringWriter();
+        try {
+            TttListener l = new TttListener(sw, "com.xyz.myapp.MyTemplate");
+            String s = "<%@ page extends=\"java.util.Collection\" %>\n<%! String bar; %>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3";
+            walk(s, l);
+        } finally {
+            sw.close();
+        }
+        String actual = sw.toString();
+        System.out.println(actual);
+        assertEquals("package com.xyz.myapp;\n" +
+            "\n" +
+            "public class MyTemplate extends com.pojosontheweb.ttt.Template implements java.util.Collection {\n" +
+            "\n" +
+            "\tprivate final String bar;\n" +
+            "\n" +
+            "\tpublic MyTemplate(String bar) {\n" +
+            "\t\tthis.bar = bar;\n" +
+            "\t}\n" +
+            "\n" +
+            "\t@Override\n" +
+            "\tpublic void render(java.io.Writer out) throws java.io.IOException {\n" +
             "\t\twrite(out, \"TXT \" );\n" +
             "\t\twrite(out,  EXPR  );\n" +
             "\t\twrite(out, \" TXT 2 \" );\n" +
