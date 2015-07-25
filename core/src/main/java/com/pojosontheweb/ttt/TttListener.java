@@ -50,9 +50,9 @@ public class TttListener extends TttParserBaseListener {
         return args.stream();
     }
 
-    // write class header
+    // write render method declaration
     @Override
-    public void exitSignature(TttParser.SignatureContext ctx) {
+    public void enterParts(TttParser.PartsContext ctx) {
 
         // write pkg, imports and class declaration
         if (pkg!=null) {
@@ -78,12 +78,7 @@ public class TttListener extends TttParserBaseListener {
         args().forEach(a -> write("\t\tthis.", a.name, " = ", a.name, ";\n"));
         write("\t}\n\n");
 
-        super.exitSignature(ctx);
-    }
 
-    // write render method declaration
-    @Override
-    public void enterParts(TttParser.PartsContext ctx) {
         write("\t@Override\n");
         write("\tpublic void render(Writer out) throws IOException {\n");
         super.enterParts(ctx);

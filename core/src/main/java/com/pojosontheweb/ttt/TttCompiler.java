@@ -80,14 +80,14 @@ public class TttCompiler {
     }
 
     public static void compile(Reader in, Writer out, String fqn) throws IOException {
-        TttListener l = new TttListener(out, fqn);
-        ANTLRInputStream input = new ANTLRInputStream(in); // create a lexer that feeds off of input CharStream
-        TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
-        CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
-        TttParser parser = new TttParser(tokens);
-        ParseTree tree = parser.r(); // begin parsing at init rule
-        ParseTreeWalker w = new ParseTreeWalker();
-        w.walk(l, tree);
+//        TttListener l = new TttListener(out, fqn);
+//        ANTLRInputStream input = new ANTLRInputStream(in); // create a lexer that feeds off of input CharStream
+//        TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
+//        CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
+//        TttParser parser = new TttParser(tokens);
+//        ParseTree tree = parser.r(); // begin parsing at init rule
+//        ParseTreeWalker w = new ParseTreeWalker();
+//        w.walk(l, tree);
     }
 
     private static void delete(File file)

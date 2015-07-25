@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,23 +22,16 @@ public class AntlrTest {
 
         AtomicInteger nbFails = new AtomicInteger(0);
         for (String s : Arrays.asList(
-            "<%(List<Bar> foo1)%>",
-            "<%(java.util.List<Bar> foo1)%>",
-            "<%(com.xyz.Bar foo1)%>",
-            "<%( com.xyz.Bar foo1 )%>",
-            "<%( com.xyz.Bar foo1 )%>\nsome text",
-            "<%(com.xyz.Bar foo1)%>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3",
-            "<%(com.xyz.Bar foo1 )%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3",
-            "<%(String title, com.xyz.myapp.OneAttr body)%>\n" +
-                "Title: <%=title%> !\n" +
-                "----\n" +
-                "<%=body%>\n" +
-                "----",
-            "<%(Bar foo1, int x)%>\nthis is a template",
-            "<%(Bar foo1, int x)%>\nthis is a template with an expression\n<%=foo bar%>",
-            "<%(Bar foo1, int x)%>\nthis is a template with an expression including an escape\n<%=foo \\%> bar%>",
-            "<%(Bar foo1, int x)%>\nthis is a template\n<%=foo \\%> bar%> more text",
-            "<%(Bar foo1, int x, char c)%>\nthis is a template\n<%=foo \\%> bar%> more text <% System.out.println(\"zobi\"); %>\noh yeah"
+            "<%@ page import=\"com.xyz.Bar\" %>",
+            "<%@ page extends=\"com.xyz.Bar\" %>",
+            "<%@ page import=\"com.xyz.Bar\" %>\n<%@ page extends=\"com.xyz.Bar\" %>",
+            "  <%@ page import=\"com.xyz.Bar\" %>\n <%@ page extends=\"com.xyz.Bar\" %>",
+            "  <%@ page import=\"com.xyz.Bar\" %>\n <%@ page extends=\"com.xyz.Bar\" %><%@page import=\"com.xyz.Bar2\"%>",
+            "<%@ page import=\"com.xyz.Bar\" %>\nsome text",
+            "<%@ page import=\"com.xyz.Bar\" %>\n<%! Foo bar; %>\nsome text",
+            "<%@ page import=\"com.xyz.Bar\" %>\n<%!\n\tFoo bar;\n\tcom.xyz.Blah b;\n%>\nsome text",
+            "<%@ page import=\"com.xyz.Bar\" %>\n<% foo %>",
+            "<%@ page import=\"com.xyz.Bar\" %>\nHello <%= foo %>, <% bar %> !"
         )) {
             TttCompiler.convertExceptions(() -> {
 
@@ -64,10 +58,11 @@ public class AntlrTest {
 
     @Test
     public void listener() throws Exception {
-        try (Writer out = new PrintWriter(System.out)) {
-            TttListener l = new TttListener(out, "com.xyz.myapp.MyTemplate");
+        StringWriter sw = new StringWriter();
+        try {
+            TttListener l = new TttListener(sw, "com.xyz.myapp.MyTemplate");
 
-            String s = "<%(com.xyz.Bar bar)%>\nTXT <%= EXPR %> TXT 2 <% CO\\%>DE %> TXT3";
+            String s = "<%! com.xyz.Bar bar; %>\nTXT <%= EXPR %> TXT 2 <% CODE %> TXT3";
             ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
             TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
             CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
@@ -76,7 +71,34 @@ public class AntlrTest {
             assertEquals(0, parser.getNumberOfSyntaxErrors());
             ParseTreeWalker w = new ParseTreeWalker();
             w.walk(l, tree);
+        } finally {
+            sw.close();
         }
+        String actual = sw.toString();
+        System.out.println(actual);
+        assertEquals("package com.xyz.myapp;\n" +
+            "\n" +
+            "import java.io.*;\n" +
+            "import java.util.*;\n" +
+            "\n" +
+            "public class MyTemplate extends com.pojosontheweb.ttt.Template {\n" +
+            "\n" +
+            "\tprivate final com.xyz.Bar bar;\n" +
+            "\n" +
+            "\tpublic MyTemplate(com.xyz.Bar bar) {\n" +
+            "\t\tthis.bar = bar;\n" +
+            "\t}\n" +
+            "\n" +
+            "\t@Override\n" +
+            "\tpublic void render(Writer out) throws IOException {\n" +
+            "\t\twrite(out, \"TXT \" );\n" +
+            "\t\twrite(out,  EXPR  );\n" +
+            "\t\twrite(out, \" TXT 2 \" );\n" +
+            "\t\tCODE \n" +
+            "\t\twrite(out, \" TXT3\" );\n" +
+            "\t}\n" +
+            "}\n", actual);
+
     }
 
 }
