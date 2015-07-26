@@ -1,0 +1,19 @@
+<%@ page import="com.xyz.myapp.Foo" %>
+<%--
+    JSP comment can span
+    appear anywhere
+    and are ignored when template gets compiled
+--%>
+<%@ page extends="java.io.Serializable" %>
+<%!
+    Foo foo;
+    int bar;
+%>
+<div class="foo">
+    <span><%= foo.getBar() %></span>
+    <ul>
+    <% for(int i = 0; i < bar; i++) { %>
+        <li>i equals <%= i %> </li>
+    <% } %>
+    </ul>
+</div>

@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-public class TemplateTests {
+public class TemplateTest {
 
     @Test
     public void test1() throws Exception {
@@ -37,6 +37,31 @@ public class TemplateTests {
         doTest("Test4");
     }
 
+    @Test
+    public void test5() throws Exception {
+        doTest("Test5");
+    }
+
+    @Test
+    public void test6() throws Exception {
+        doTest("Test6");
+    }
+
+    @Test
+    public void test7() throws Exception {
+        doTest("Test7");
+    }
+
+    @Test
+    public void test8() throws Exception {
+        doTest("Test8");
+    }
+
+    @Test
+    public void test9() throws Exception {
+        doTest("Test9");
+    }
+
     private static String toString(InputStream is) throws Exception {
         int nRead;
         byte[] data = new byte[2048];
@@ -51,7 +76,7 @@ public class TemplateTests {
     private static void doTest(String name) throws Exception {
         String templateText = null;
         try {
-            templateText = toString(TemplateTests.class.getResourceAsStream("/ttt/tests/" + name + ".ttt"));
+            templateText = toString(TemplateTest.class.getResourceAsStream("/ttt/tests/" + name + ".ttt"));
         } catch (Exception e) {
             fail("No such template : " + "/ttt/tests/" + name + ".ttt");
         }
@@ -66,7 +91,7 @@ public class TemplateTests {
         String compiled = sw.toString();
         String expected = null;
         try {
-            expected = toString(TemplateTests.class.getResourceAsStream("/ttt/tests/" + name + ".expected"));
+            expected = toString(TemplateTest.class.getResourceAsStream("/ttt/tests/" + name + ".expected"));
         } catch (Exception e) {
             fail("Ref not found : " + "/ttt/tests/" + name + ".expected");
         }

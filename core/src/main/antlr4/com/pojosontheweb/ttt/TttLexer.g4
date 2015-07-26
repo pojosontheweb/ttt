@@ -8,6 +8,10 @@ TEXT
 	: .+?
 	;
 
+JSP_COMMENT_START
+	: '<%--' -> pushMode(JSP_COMMENT)
+	;
+
 DIRECTIVE_START
 	: '<%@' -> pushMode(DIRECTIVE)
 	;
@@ -24,6 +28,19 @@ SCRIPTLET_START
 	: '<%' ~[=(!] -> pushMode(SCRIPTLET)
 	;
 
+mode JSP_COMMENT;
+
+JSP_COMMENT_END
+	: '--%>' -> popMode
+	;
+
+JSP_COMMENT_WS
+	: [ \t\r\n]
+	;
+
+JSP_COMMENT_TEXT
+	: .+?
+	;
 
 mode DIRECTIVE;
 

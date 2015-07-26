@@ -1,0 +1,28 @@
+<%--
+    #1
+--%>
+<%@ page import="com.xyz.myapp.Foo" %>
+<%--
+    #2
+--%>
+<%@ page extends="java.io.Serializable" %>
+<%--
+    #3
+--%>
+<%!
+    Foo foo;
+    int bar;
+%>
+<%--
+    #4
+--%>
+<div class="foo">
+    <span><%= foo.getBar() %></span>
+    <%-- #5 --%>
+    <ul>
+    <% for(int i = 0; i < bar; i++) { %>
+        <li>i equals <%= i %> </li>
+    <% } %>
+    </ul>
+</div>
+<%-- #6 --%>

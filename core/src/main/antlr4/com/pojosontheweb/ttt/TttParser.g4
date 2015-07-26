@@ -7,7 +7,15 @@ r
 	;
 
 directives
-	: WS* directiveImport* directiveExtends? directiveImport*
+	: WS* (jspComment | directiveImport | directiveExtends)*
+	;
+
+jspComment
+	: JSP_COMMENT_START jspCommentValue JSP_COMMENT_END WS*
+	;
+
+jspCommentValue
+	: (JSP_COMMENT_WS | JSP_COMMENT_TEXT)*
 	;
 
 directiveImport
@@ -47,7 +55,7 @@ parts
 	;
 
 part
-	: text | expression | scriptlet
+	: text | expression | scriptlet | jspComment
 	;
 
 text
