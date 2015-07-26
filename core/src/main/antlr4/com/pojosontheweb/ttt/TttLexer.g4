@@ -126,6 +126,21 @@ DECLARATION_END
 	: '%>' -> popMode
 	;
 
+DEC_LINE_COMMENT_START
+	: '//' -> pushMode(LINE_COMMENT_START)
+	;
+
+
+mode LINE_COMMENT_START;
+
+LINE_COMMENT_TEXT
+	: ~('\r' | '\n')+
+	;
+
+LINE_COMMENT_END
+	: '\n' -> popMode
+	;
+
 mode EXPRESSION;
 
 EXPRESSION_TEXT

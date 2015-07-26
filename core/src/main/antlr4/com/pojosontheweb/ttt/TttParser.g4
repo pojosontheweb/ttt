@@ -35,7 +35,15 @@ declaration
 	;
 
 args
-	: arg*
+	: (lineComment | arg) *
+	;
+
+lineComment
+	: DEC_LINE_COMMENT_START lineCommentText LINE_COMMENT_END
+	;
+
+lineCommentText
+	: LINE_COMMENT_TEXT*
 	;
 
 arg
@@ -77,53 +85,3 @@ expression
 expr
 	: EXPRESSION_TEXT*
 	;
-
-
-//
-//signature
-//	: SIGNATURE_START args SIGNATURE_CLOSE
-//	;
-//
-//args
-//	: arg (COMMA arg)*
-//	;
-//
-//arg
-//	: argType argName
-//	;
-//
-//argName
-//	: ID
-//	;
-//
-//argType
-//	: ID
-//	| TYPE
-//	;
-//
-//parts
-//	: part*
-//	;
-//
-//part
-//	: text | scriptlet | expression
-//	;
-//
-//text
-//	: TEXT+
-//	;
-//
-//scriptlet
-//	: SCRIPTLET_START script CLOSER
-//	;
-//
-//script
-//	: .*?
-//	;
-//
-//expression
-//	: EXPRESSION_START expr CLOSER;
-//
-//expr
-//	: .*?
-//	;
