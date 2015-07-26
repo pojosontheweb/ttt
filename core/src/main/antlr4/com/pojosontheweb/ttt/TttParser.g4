@@ -35,15 +35,23 @@ declaration
 	;
 
 args
-	: (lineComment | arg) *
+	: (decLineComment | decMultilineComment | arg) *
 	;
 
-lineComment
-	: DEC_LINE_COMMENT_START lineCommentText LINE_COMMENT_END
+decLineComment
+	: DEC_LINE_COMMENT_START decLineCommentText LINE_COMMENT_END
 	;
 
-lineCommentText
+decLineCommentText
 	: LINE_COMMENT_TEXT*
+	;
+
+decMultilineComment
+	: DEC_MULTI_LINE_COMMENT_START decMultilineCommentText MULTI_LINE_COMMENT_END
+	;
+
+decMultilineCommentText
+	: MULTI_LINE_COMMENT_TEXT*
 	;
 
 arg
