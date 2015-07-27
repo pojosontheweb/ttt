@@ -1,0 +1,32 @@
+<%@ page import="com.xyz.myapp.Foo" %>
+<%@ page extends="java.io.Serializable" %>
+<%!
+    /* multi line comments are skipped */
+
+    Foo foo;
+
+    /*
+        real multi !
+     */
+    int bar;
+
+    /* no shit
+     */
+%>
+<div class="foo">
+    <span><%= foo.getBar() %></span>
+    <ul>
+    <%
+        // comment in script block
+        for(int i = 0; i < bar; i++) { /* multi comment in script block */
+    %>
+        <li>i equals <%= i // in scriptlet %> </li>
+    <%
+        }
+        /* multi
+        on several
+        rows
+         */
+    %>
+    </ul>
+</div>

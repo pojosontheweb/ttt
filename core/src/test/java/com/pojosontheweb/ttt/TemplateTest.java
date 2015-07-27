@@ -82,6 +82,11 @@ public class TemplateTest {
         doTest("Test13");
     }
 
+    @Test
+    public void test14() throws Exception {
+        doTest("Test14");
+    }
+
     private static String toString(InputStream is) throws Exception {
         int nRead;
         byte[] data = new byte[2048];
