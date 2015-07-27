@@ -1,18 +1,23 @@
 <idea-plugin version="2">
     <id>com.pojosontheweb.ttt</id>
     <name>ttt-idea</name>
-    <version>1.0</version>
-    <vendor email="remi@rvkb.com" url="http://www.pojosontheweb.com">pojonsontheweb</vendor>
+    <version>0.1-alpha</version>
+    <vendor email="remi@rvkb.com" url="http://www.pojosontheweb.com">POJOs on the Web</vendor>
     <depends>com.intellij.modules.lang</depends>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      A plugin for the <a href="https://github.com/pojosontheweb/ttt">Typed Text Templates framework</a>.
+      Provides
+      <ul>
+      <li>Compile action for generating the Java sources from the templates</li>
+      <li>Detect .ttt file change and re-gen template Java sources transparently</li>
+      </ul>
+      No language support is bundled with the plugin. We recommend associating .ttt
+      files to JSP Editor for the best UX (completion etc).
     ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      Initial version.
     ]]>
     </change-notes>
 
