@@ -1,29 +1,31 @@
 package com.pojosontheweb.ttt;
 
+import com.intellij.notification.*;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.openapi.wm.StatusBar;
 import com.intellij.openapi.wm.WindowManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TttCompileAction extends AnAction {
+
+    private final static Logger LOG = Logger.getInstance(TttApplicationComponent.class.getName());
 
     // If you register the action from Java code, this constructor is used to set the menu item name
     // (optionally, you can specify the menu description and an icon to display next to the menu item).
@@ -38,7 +40,12 @@ public class TttCompileAction extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         // compile all ttt files in project
         Project project = event.getData(PlatformDataKeys.PROJECT);
-        compileTemplates(project);
+        if (project!=null) {
+            LOG.info("Compiling all templates in project " + project.getName());
+            compileTemplates(project);
+        } else {
+            LOG.info("No project available, nothing done.");
+        }
     }
 
     public static void compileTemplates(Project project) {
@@ -46,6 +53,7 @@ public class TttCompileAction extends AnAction {
             Module[] modules = ModuleManager.getInstance(project).getModules();
             for (Module m : modules) {
                 TttModuleComponent tttModuleComponent = m.getComponent(TttModuleComponent.class);
+                LOG.info("Compiling templates in module " + m.getName());
                 if (tttModuleComponent != null && tttModuleComponent.isEnabled()) {
                     // get target gen path
                     String target = tttModuleComponent.getTargetPath();
@@ -53,6 +61,7 @@ public class TttCompileAction extends AnAction {
                         target = "ttt-gen";
                     }
                     String fullTarget = project.getBasePath() + File.separator + target;
+                    LOG.info("Full target " + fullTarget);
                     // rm previously generated code and collect
                     // source roots to be visited
                     VirtualFile[] srcRoots = ModuleRootManager.getInstance(m).getSourceRoots();
@@ -72,14 +81,26 @@ public class TttCompileAction extends AnAction {
                     }
 
                     final VirtualFile td = targetDir;
+                    Application app = ApplicationManager.getApplication();
 
-                    if (td != null) {
+                    if (td == null) {
+                        Notifications.Bus.notify(
+                            new Notification(
+                                TttModuleComponent.TTT_GROUP,
+                                "Unable to compile TTT templates",
+                                "No target dir found at " + fullTarget + ".\n"
+                                + "Please create the folder and mark it as a \n"
+                                + "generated source dir.",
+                                    NotificationType.ERROR)
+                        );
+
+                    } else {
 
                         // generate base class
                         try {
                             TttCompiler.generateTemplateBaseClass(new File(targetDir.getPath()));
                         } catch (Exception e) {
-                            // TODO handle error ?
+                            LOG.error("unable to generate template base class/intf", e);
                             throw new RuntimeException(e);
                         }
 
@@ -90,7 +111,7 @@ public class TttCompileAction extends AnAction {
                             // find all ".ttt" files under this...
                             VfsUtilCore.visitChildrenRecursively(srcRoot, new VirtualFileVisitor() {
                                 @Override
-                                public boolean visitFile(VirtualFile file) {
+                                public boolean visitFile(@NotNull VirtualFile file) {
                                     if (file.getName().endsWith(".ttt")) {
                                         try {
                                             Reader in = new InputStreamReader(file.getInputStream());
@@ -124,8 +145,6 @@ public class TttCompileAction extends AnAction {
                             });
                         }
 
-
-                        Application app = ApplicationManager.getApplication();
                         app.invokeLater(() -> td.refresh(true, true, () -> {
                             String msg = generatedFiles.size() + " file(s) generated to " + td.getPath();
                             final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
