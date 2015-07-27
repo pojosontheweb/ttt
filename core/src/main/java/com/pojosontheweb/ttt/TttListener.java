@@ -3,9 +3,11 @@ package com.pojosontheweb.ttt;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class TttListener extends TttParserBaseListener {
@@ -13,10 +15,24 @@ public class TttListener extends TttParserBaseListener {
     private static class Arg {
         final String name;
         final String type;
+        final String javadoc;
 
-        public Arg(String name, String type) {
+        public Arg(String name, String type, String javadoc) {
             this.name = name;
             this.type = type;
+            this.javadoc = javadoc;
+        }
+
+        public List<String> computeJavaDocLines() {
+            String lines[] = javadoc.split("\\r?\\n");
+            List<String> res = new ArrayList<>();
+            for (String line : lines) {
+                String s = line.replaceFirst("\\*", "").trim();
+                if (!"".equals(s)) {
+                    res.add(s);
+                }
+            }
+            return res;
         }
     }
 
@@ -45,7 +61,15 @@ public class TttListener extends TttParserBaseListener {
     public void exitArg(TttParser.ArgContext ctx) {
         String name = ctx.argName().getText();
         String className = ctx.argType().getText();
-        args.add(new Arg(name, className));
+        TttParser.ArgJavaDocContext javaDocContext = ctx.argJavaDoc();
+        String javadoc = null;
+        if (javaDocContext != null) {
+            TttParser.JdocTextContext jdocText = javaDocContext.jdocText();
+            if (jdocText!=null) {
+                javadoc = jdocText.getText();
+            }
+        }
+        args.add(new Arg(name, className, javadoc));
         super.exitArg(ctx);
     }
 
@@ -72,7 +96,7 @@ public class TttListener extends TttParserBaseListener {
     public void enterParts(TttParser.PartsContext ctx) {
 
         // write pkg, imports and class declaration
-        if (pkg!=null) {
+        if (pkg != null) {
             write("package ", pkg, ";\n\n");
         }
 
@@ -81,7 +105,7 @@ public class TttListener extends TttParserBaseListener {
         }
 
         String implementsClause = "";
-        if (extendsList.size()>0) {
+        if (extendsList.size() > 0) {
             implementsClause = "implements " + extendsList.stream().collect(Collectors.joining(", ")) + " ";
         }
 
@@ -89,6 +113,32 @@ public class TttListener extends TttParserBaseListener {
 
         // write template args as private final fields
         args().forEach(a -> write("\tprivate final ", a.type, " ", a.name, ";\n"));
+
+        // write ctor javadoc
+        write("\n\t/**");
+        write("\n\t * Creates an instance of this template.");
+        write("\n\t *");
+        args().forEach(arg -> {
+            // sanitize javadoc for @param : this
+            // should probably be handled by the parser itself...
+            String paramPrefix = "@param " + arg.name + "  ";
+            String spacer = IntStream.range(0, paramPrefix.length())
+                .mapToObj(operand -> " ")
+                .collect(Collectors.joining());
+            if (arg.javadoc != null) {
+                boolean first = true;
+                List<String> lines = arg.computeJavaDocLines();
+                for (String line : lines) {
+                    if (first) {
+                        write("\n\t * ", paramPrefix, line);
+                        first = false;
+                    } else {
+                        write("\n\t * ", spacer, line);
+                    }
+                }
+            }
+        });
+        write("\n\t */");
 
         // write constructor
         write("\n\tpublic ", className, "(");

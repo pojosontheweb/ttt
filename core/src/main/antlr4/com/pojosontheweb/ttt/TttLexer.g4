@@ -131,7 +131,11 @@ DEC_LINE_COMMENT_START
 	;
 
 DEC_MULTI_LINE_COMMENT_START
-	: '/*' -> pushMode(MULTI_LINE_COMMENT_START)
+	: '/*' ~'*' -> pushMode(MULTI_LINE_COMMENT_START)
+	;
+
+ARG_JDOC_START
+	: '/**' WS* -> pushMode(ARG_JDOC)
 	;
 
 mode LINE_COMMENT_START;
@@ -151,6 +155,16 @@ MULTI_LINE_COMMENT_TEXT
 	;
 
 MULTI_LINE_COMMENT_END
+	: '*/' -> popMode
+	;
+
+mode ARG_JDOC;
+
+JDOC_TEXT
+	: .+?
+	;
+
+JDOC_END
 	: '*/' -> popMode
 	;
 

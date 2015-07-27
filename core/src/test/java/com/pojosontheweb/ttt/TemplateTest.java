@@ -67,6 +67,16 @@ public class TemplateTest {
         doTest("Test10");
     }
 
+    @Test
+    public void test11() throws Exception {
+        doTest("Test11");
+    }
+
+    @Test
+    public void test12() throws Exception {
+        doTest("Test12");
+    }
+
     private static String toString(InputStream is) throws Exception {
         int nRead;
         byte[] data = new byte[2048];
@@ -110,6 +120,7 @@ public class TemplateTest {
         CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
         TttParser parser = new TttParser(tokens);
         ParseTree tree = parser.r(); // begin parsing at init rule
+        System.out.println(tree.toStringTree(parser));
         assertEquals(0, parser.getNumberOfSyntaxErrors());
         ParseTreeWalker w = new ParseTreeWalker();
         w.walk(l, tree);

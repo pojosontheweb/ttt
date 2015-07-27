@@ -4,6 +4,10 @@ public class Test1 extends com.pojosontheweb.ttt.Template {
 
 	private final com.xyz.myapp.Foo foo;
 
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
 	public Test1(com.xyz.myapp.Foo foo) {
 		this.foo = foo;
 	}

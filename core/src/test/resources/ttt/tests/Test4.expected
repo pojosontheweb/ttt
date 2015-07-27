@@ -7,6 +7,10 @@ public class Test4 extends com.pojosontheweb.ttt.Template implements java.io.Ser
 	private final Foo foo;
 	private final int bar;
 
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
 	public Test4(Foo foo, int bar) {
 		this.foo = foo;
 		this.bar = bar;

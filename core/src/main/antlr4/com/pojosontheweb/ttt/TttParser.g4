@@ -55,7 +55,15 @@ decMultilineCommentText
 	;
 
 arg
-	: argType argName DEC_EOL
+	: argJavaDoc? argType argName DEC_EOL
+	;
+
+argJavaDoc
+	: ARG_JDOC_START jdocText JDOC_END
+	;
+
+jdocText
+	: JDOC_TEXT*
 	;
 
 argType
