@@ -1,5 +1,7 @@
 package com.pojosontheweb.ttt;
 
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationsConfiguration;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
@@ -21,6 +23,7 @@ import javax.swing.*;
 public class TttModuleComponent implements ModuleComponent, Configurable, PersistentStateComponent<TttModuleComponent> {
 
     public static final String COMPONENT_NAME = "TttModuleComponent";
+    public static final String TTT_GROUP = "TttGroup";
 
     private boolean enabled;
     private String targetPath;
@@ -74,9 +77,12 @@ public class TttModuleComponent implements ModuleComponent, Configurable, Persis
         // nothing to do
     }
 
+
     @Override
     public void initComponent() {
-        // nothing to do
+        NotificationsConfiguration
+            .getNotificationsConfiguration()
+            .register(TTT_GROUP, NotificationDisplayType.STICKY_BALLOON);
     }
 
     @NotNull
