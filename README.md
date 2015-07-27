@@ -69,7 +69,7 @@ Following is some text, with some scriptlets and expressions, again, just like a
 ### Comments
 
 You may add a javadoc to the arguments of your template, it will be used in
-the generated classes. The Ttt compiler will use the javadocs just 
+the generated classes. The TTT compiler will use the javadocs just 
 before the arguments :
 
 	<%!
@@ -115,7 +115,7 @@ For example, here's an outer page template that "includes" a nested template (`W
 
 As you see, the `nested` arg of this template is of type 
 `com.pojosontheweb.ttt.ITemplate`. This is the base type 
-of all Ttt templates. 
+of all TTT templates. 
 
 When a template is passed to an *expression* (`<%= template %>`), it 
 is evaluated and spit out int the output, transparently.	
@@ -198,7 +198,7 @@ Compiled templates are regular Java classes with a constructor and a `render`met
 	// spit out the text into a writer 
 	t.render(out);
 
-Very easy, and again, fully ststic typed.
+Very easy, and again, fully static typed.
 
 ## Build
 
