@@ -117,11 +117,14 @@ As you see, the `nested` arg of this template is of type
 `com.pojosontheweb.ttt.ITemplate`. This is the base type 
 of all Ttt templates. 
 
+When a template is passed to an *expression* (`<%= template %>`), it 
+is evaluated and spit out int the output, transparently.	
+
 You can now pass any other template to 
 this "wrapper", and render the whole thing :
 
-	new Wrapper("My Title", new MyOtherTemplate(...)).render(out);
-
+	new Wrapper("My Title", new MyOtherTemplate1(...)).render(out);
+	new Wrapper("My Title", new MyOtherTemplate2(...)).render(out);	
 
 ### Polymorphism
 
@@ -160,9 +163,6 @@ any template by using the `extends` page directive (`MyBodyTemplate.ttt`) :
 	
 The generated template class (`com.myco.myapp.MyBodyTemplate`) will implement 
 your `BodyTemplate` interface.
-
-When a template is passed to a scriptlet, the template is evaluated automatically
-and spit out int the output.	
 
 ## Compiling templates
 	
