@@ -27,12 +27,12 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <fileTypeFactory implementation="com.pojosontheweb.ttt.TttFileTypeFactory"/>
-        <lang.parserDefinition language="Ttt" implementationClass="com.pojosontheweb.ttt.TttParserDefinition"/>
-        <lang.syntaxHighlighterFactory key="Ttt"
-                                       implementationClass="com.pojosontheweb.ttt.TttSyntaxHighlighterFactory"/>
-        <colorSettingsPage implementation="com.pojosontheweb.ttt.TttColorSettingsPage"/>
-        <lang.psiStructureViewFactory language="Ttt" implementationClass="com.pojosontheweb.ttt.TttStructureViewFactory"/>
+        <!--<fileTypeFactory implementation="com.pojosontheweb.ttt.TttFileTypeFactory"/>-->
+        <!--<lang.parserDefinition language="Ttt" implementationClass="com.pojosontheweb.ttt.TttParserDefinition"/>-->
+        <!--<lang.syntaxHighlighterFactory key="Ttt"-->
+                                       <!--implementationClass="com.pojosontheweb.ttt.TttSyntaxHighlighterFactory"/>-->
+        <!--<colorSettingsPage implementation="com.pojosontheweb.ttt.TttColorSettingsPage"/>-->
+        <!--<lang.psiStructureViewFactory language="Ttt" implementationClass="com.pojosontheweb.ttt.TttStructureViewFactory"/>-->
     </extensions>
 
     <application-components>

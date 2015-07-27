@@ -1,3 +1,4 @@
+<%@ page extends="com.xyz.myapp.IMyTemplate" %>
 <%! com.xyz.myapp.Foo foo; %>
 <div class="foo">
     <%= foo.getBar() %>

@@ -1,0 +1,6 @@
+<%@ page import="com.xyz.myapp.Foo" %>
+<%@ page extends="java.io.Serializable" %>
+<%!
+    Foo foo;
+%>
+this is a <%= foo.getBar() %> template

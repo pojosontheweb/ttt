@@ -114,7 +114,6 @@ public class TttCompileAction extends AnAction {
                                             } finally {
                                                 out.close();
                                             }
-                                            System.out.println(file.getPath());
                                         } catch (Exception e) {
                                             // TODO handle error
                                             throw new RuntimeException(e);
@@ -125,13 +124,16 @@ public class TttCompileAction extends AnAction {
                             });
                         }
 
-                        td.refresh(true, true, () -> {
+
+                        Application app = ApplicationManager.getApplication();
+                        app.invokeLater(() -> td.refresh(true, true, () -> {
                             String msg = generatedFiles.size() + " file(s) generated to " + td.getPath();
                             final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
                             if (statusBar != null) {
                                 statusBar.setInfo(msg);
                             }
-                        });
+                        }));
+
                     }
 
                 }

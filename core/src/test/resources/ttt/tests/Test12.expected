@@ -1,0 +1,35 @@
+package ttt.tests;
+
+import com.xyz.myapp.Foo;
+
+public class Test12 extends com.pojosontheweb.ttt.Template implements java.io.Serializable {
+
+	private final Foo foo;
+	private final int bar;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 * @param foo  javadoc for foo
+	 * @param bar  javadoc for bar
+	 */
+	public Test12(Foo foo, int bar) {
+		this.foo = foo;
+		this.bar = bar;
+	}
+
+	@Override
+	public void render(java.io.Writer out) throws java.io.IOException {
+		write(out, "<div class=\"foo\">\n    <span>" );
+		write(out,  foo.getBar()  );
+		write(out, "</span>\n    <ul>\n        " );
+		            for(int i = 0; i < bar; i++) {
+        
+		write(out, "\n        <li>i equals " );
+		write(out,  i  );
+		write(out, " </li>\n        " );
+		            }
+        
+		write(out, "\n    </ul>\n</div>" );
+	}
+}

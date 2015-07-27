@@ -1,0 +1,21 @@
+package ttt.tests;
+
+public class Test1 extends com.pojosontheweb.ttt.Template {
+
+	private final com.xyz.myapp.Foo foo;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
+	public Test1(com.xyz.myapp.Foo foo) {
+		this.foo = foo;
+	}
+
+	@Override
+	public void render(java.io.Writer out) throws java.io.IOException {
+		write(out, "this is a " );
+		write(out,  foo.getBar()  );
+		write(out, " template" );
+	}
+}
