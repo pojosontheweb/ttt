@@ -9,11 +9,13 @@
       A plugin for the <a href="https://github.com/pojosontheweb/ttt">Typed Text Templates framework</a>.
       Provides
       <ul>
+      <li>TTT paths (source and gen folders) can be configured from the modules settings page, via a new tab</li>
       <li>Compile action for generating the Java sources from the templates</li>
       <li>Detect .ttt file change and re-gen template Java sources transparently</li>
       </ul>
       No language support is bundled with the plugin. We recommend associating .ttt
       files to JSP Editor for the best UX (completion etc).
+      <br/>
     ]]></description>
 
     <change-notes><![CDATA[
