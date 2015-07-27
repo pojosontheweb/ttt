@@ -213,7 +213,9 @@ TTT Compiler provides a main class that can be used for CLI integration :
  
 ### Maven plugin
 
-The `ttt-compiler-plugin` can be used to compile templates as part of your maven build :
+The `ttt-compiler-plugin` can be used to compile templates as part of your maven build.
+
+Put your templates under `src/main/ttt`, and add this plugin def to your `pom.xml` :
 
 	<plugin>
 		<groupId>com.pojosontheweb</groupId>
