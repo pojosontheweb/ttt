@@ -85,6 +85,10 @@ public class AntlrTest {
             "\n" +
             "\tprivate final com.xyz.Bar bar;\n" +
             "\n" +
+            "\t/**\n" +
+            "\t * Creates an instance of this template.\n" +
+            "\t *\n" +
+            "\t */\n" +
             "\tpublic MyTemplate(com.xyz.Bar bar) {\n" +
             "\t\tthis.bar = bar;\n" +
             "\t}\n" +
@@ -121,6 +125,10 @@ public class AntlrTest {
             "\n" +
             "\tprivate final Collection bar;\n" +
             "\n" +
+            "\t/**\n" +
+            "\t * Creates an instance of this template.\n" +
+            "\t *\n" +
+            "\t */\n" +
             "\tpublic MyTemplate(Collection bar) {\n" +
             "\t\tthis.bar = bar;\n" +
             "\t}\n" +
@@ -155,6 +163,10 @@ public class AntlrTest {
             "\n" +
             "\tprivate final String bar;\n" +
             "\n" +
+            "\t/**\n" +
+            "\t * Creates an instance of this template.\n" +
+            "\t *\n" +
+            "\t */\n" +
             "\tpublic MyTemplate(String bar) {\n" +
             "\t\tthis.bar = bar;\n" +
             "\t}\n" +

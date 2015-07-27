@@ -34,4 +34,19 @@ public class MyTest {
             "</div>", out.toString());
     }
 
+    @Test
+    public void testMyTemplateExtends() throws Exception {
+        StringWriter out = new StringWriter();
+        IMyTemplate mt = new MyTemplateExtends(new Foo());
+        try {
+            mt.render(out);
+        } finally {
+            out.close();
+        }
+        assertEquals("<div class=\"foo\">\n" +
+            "    baz\n" +
+            "    <span>ZERO</span>\n" +
+            "</div>", out.toString());
+    }
+
 }

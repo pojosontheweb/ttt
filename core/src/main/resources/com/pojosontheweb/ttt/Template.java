@@ -3,17 +3,15 @@ package com.pojosontheweb.ttt;
 import java.io.IOException;
 import java.io.Writer;
 
-public abstract class Template {
-
-    public abstract void render(Writer out) throws IOException;
+public abstract class Template implements ITemplate {
 
     protected void write(Writer out, Object o) {
         try {
             if (o == null) {
                 out.write("null");
             } else {
-                if (o instanceof Template) {
-                    ((Template) o).render(out);
+                if (o instanceof ITemplate) {
+                    ((ITemplate) o).render(out);
                 } else if (o instanceof String) {
                     out.write((String) o);
                 } else {
@@ -24,6 +22,5 @@ public abstract class Template {
             throw new RuntimeException(e);
         }
     }
-
 
 }
