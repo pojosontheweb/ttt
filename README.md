@@ -198,7 +198,7 @@ Compiled templates are regular Java classes with a constructor and a `render`met
 	// spit out the text into a writer 
 	t.render(out);
 
-Very easy, and again, fully ststic typed.
+Very easy, and again, fully static typed.
 
 ## Build
 
