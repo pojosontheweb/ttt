@@ -6,6 +6,7 @@ public class TttConfigForm {
     private JPanel panel1;
     private JCheckBox compileOnSaveCheckBox;
     private JTextField genTttTextField;
+    private JTextPane directoryWhereJavaSourcesTextPane;
 
     public JComponent getRoot() {
         return panel1;
