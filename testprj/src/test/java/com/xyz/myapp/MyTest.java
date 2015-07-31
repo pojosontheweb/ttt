@@ -11,7 +11,9 @@ public class MyTest {
     public void testMyTemplate() throws Exception {
         StringWriter out = new StringWriter();
         try {
-            new MyTemplate(new Foo()).render(out);
+            MyTemplate t = new MyTemplate(new Foo());
+            assertEquals("text/html", t.getContentType());
+            t.render(out);
         } finally {
             out.close();
         }

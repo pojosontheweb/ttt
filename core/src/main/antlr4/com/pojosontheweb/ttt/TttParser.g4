@@ -7,7 +7,7 @@ r
 	;
 
 directives
-	: WS* (jspComment | directiveImport | directiveExtends)*
+	: WS* (jspComment | directiveImport | directiveExtends)* directiveContentType? (jspComment | directiveImport | directiveExtends)*
 	;
 
 jspComment
@@ -26,8 +26,16 @@ directiveExtends
 	: DIRECTIVE_START PAGE EXTENDS EQ DBL_QUOTE directiveValue DBL_QUOTE DIRECTIVE_END WS*
 	;
 
+directiveContentType
+	: DIRECTIVE_START PAGE CONTENT_TYPE EQ DBL_QUOTE contentTypeValue DBL_QUOTE DIRECTIVE_END WS*
+	;
+
 directiveValue
 	: ( ID | TYPE ) DOT_STAR?
+	;
+
+contentTypeValue
+	: ID (SLASH ID)?
 	;
 
 declaration

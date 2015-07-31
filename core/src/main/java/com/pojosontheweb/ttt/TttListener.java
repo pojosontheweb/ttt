@@ -39,6 +39,7 @@ public class TttListener extends TttParserBaseListener {
     private final List<Arg> args = new ArrayList<>();
     private final List<String> importList = new ArrayList<>();
     private final List<String> extendsList = new ArrayList<>();
+    private String contentType;
 
     private final Writer out;
     private final String pkg;
@@ -65,7 +66,7 @@ public class TttListener extends TttParserBaseListener {
         String javadoc = null;
         if (javaDocContext != null) {
             TttParser.JdocTextContext jdocText = javaDocContext.jdocText();
-            if (jdocText!=null) {
+            if (jdocText != null) {
                 javadoc = jdocText.getText();
             }
         }
@@ -85,6 +86,13 @@ public class TttListener extends TttParserBaseListener {
     public void exitDirectiveExtends(TttParser.DirectiveExtendsContext ctx) {
         extendsList.add(ctx.directiveValue().getText());
         super.exitDirectiveExtends(ctx);
+    }
+
+    @Override
+    public void exitDirectiveContentType(TttParser.DirectiveContentTypeContext ctx) {
+        TttParser.ContentTypeValueContext contentTypeValue = ctx.contentTypeValue();
+        contentType = contentTypeValue != null ? contentTypeValue.getText() : null;
+        super.exitDirectiveContentType(ctx);
     }
 
     private Stream<Arg> args() {
@@ -151,6 +159,14 @@ public class TttListener extends TttParserBaseListener {
         args().forEach(a -> write("\t\tthis.", a.name, " = ", a.name, ";\n"));
         write("\t}\n\n");
 
+        // write content-type accessor if any
+        if (contentType != null) {
+            write("\t@Override");
+            write("\n\tpublic String getContentType() {");
+            write("\n\t\treturn \"", contentType, "\";");
+            write("\n\t}");
+            write("\n\n");
+        }
 
         write("\t@Override\n");
         write("\tpublic void render(java.io.Writer out) throws java.io.IOException {\n");
