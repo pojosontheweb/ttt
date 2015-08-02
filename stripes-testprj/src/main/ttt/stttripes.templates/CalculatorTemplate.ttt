@@ -1,0 +1,51 @@
+<%@ page import="com.pojosontheweb.ttt.stripes.Tags" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.Form" %>
+<%@ page import="stttripes.action.CalculatorActionBean" %>
+<%!
+    CalculatorActionBean actionBean;
+%>
+<%
+    Tags stripes = new Tags(out);
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>My First Stripe</title>
+    <style type="text/css">
+        input.error { background-color: yellow; }
+    </style>
+</head>
+<body>
+<h1>Stripes Calculator</h1>
+
+Hi, I'm the Stripes Calculator. I can only do addition. Maybe, some day, a nice programmer
+will come along and teach me how to do other things?
+
+<% try (Form f = stripes.form(CalculatorActionBean.class).build()) { %>
+
+    <%-- TODO form errors --%>
+    <table>
+        <tr>
+            <td>Number 1:</td>
+            <td><%= f.text("numberOne") %></td>
+        </tr>
+        <tr>
+            <td>Number 2:</td>
+            <td><%= f.text("numberTwo") %></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <%= f.submit("addition", "Add") %>
+                <%= f.submit("division", "Divide") %>
+            </td>
+        </tr>
+        <tr>
+            <td>Result:</td>
+            <td><%= actionBean.getResult() %></td>
+        </tr>
+    </table>
+
+
+<% } %>
+</body>
+</html>
