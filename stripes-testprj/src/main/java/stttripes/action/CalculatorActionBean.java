@@ -2,10 +2,7 @@ package stttripes.action;
 
 import com.pojosontheweb.ttt.stripes.TemplateResolution;
 import net.sourceforge.stripes.action.*;
-import net.sourceforge.stripes.validation.SimpleError;
-import net.sourceforge.stripes.validation.Validate;
-import net.sourceforge.stripes.validation.ValidationErrors;
-import net.sourceforge.stripes.validation.ValidationMethod;
+import net.sourceforge.stripes.validation.*;
 import stttripes.templates.CalculatorTemplate;
 
 /**
@@ -13,7 +10,7 @@ import stttripes.templates.CalculatorTemplate;
  * @author Tim Fennell
  */
 @UrlBinding("/calc")
-public class CalculatorActionBean implements ActionBean {
+public class CalculatorActionBean implements ActionBean, ValidationErrorHandler {
     private ActionBeanContext context;
     @Validate(required=true) private double numberOne;
     @Validate(required=true) private double numberTwo;
@@ -49,6 +46,11 @@ public class CalculatorActionBean implements ActionBean {
         return display();
     }
 
+    @Override
+    public Resolution handleValidationErrors(ValidationErrors errors) throws Exception {
+        return display();
+    }
+
     /**
      * An example of a custom validation that checks that division operations
      * are not dividing by zero.
@@ -59,4 +61,5 @@ public class CalculatorActionBean implements ActionBean {
             errors.add("numberTwo", new SimpleError("Dividing by zero is not allowed."));
         }
     }
+
 }
