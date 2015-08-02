@@ -8,13 +8,17 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class TttCompiler {
 
-    public static void compile(Path srcDir, Path targetDir, boolean clean) throws Exception {
+    public static List<File> compile(Path srcDir, Path targetDir, boolean clean) throws Exception {
+
+        List<File> res = new ArrayList<>();
 
         File target = targetDir.toFile();
         if (clean) {
@@ -55,6 +59,7 @@ public class TttCompiler {
                     try (FileReader in = new FileReader(file.toFile())) {
                         try (FileWriter out = new FileWriter(outFile)) {
                             compile(in, out, fqn);
+                            res.add(outFile);
                         }
                     }
 
@@ -63,6 +68,7 @@ public class TttCompiler {
             }
         });
 
+        return res;
     }
 
     public static void compile(Reader in, Writer out, String fqn) throws IOException {
