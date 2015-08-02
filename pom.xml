@@ -24,6 +24,7 @@
         <maven>3.0</maven>
     </prerequisites>
     <modules>
+        <module>runtime</module>
         <module>core</module>
         <module>mojo</module>
         <module>testprj</module>
