@@ -156,7 +156,7 @@ public class Form extends TagBase implements Tag<Form> {
         return new Submit(name, value, null);
     }
 
-    ActionBean getActionBean() {
+    public ActionBean getActionBean() {
         String binding = getActionBeanUrlBinding();
         HttpServletRequest request = getRequest();
         ActionBean bean = (ActionBean) request.getAttribute(binding);

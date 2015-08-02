@@ -1,6 +1,7 @@
 <%@ page import="com.pojosontheweb.ttt.stripes.Tags" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.Form" %>
 <%@ page import="stttripes.action.CalculatorActionBean" %>
+<%@ page import="net.sourceforge.stripes.validation.ValidationErrors" %>
 <%!
     CalculatorActionBean actionBean;
 %>
@@ -21,7 +22,20 @@
 Hi, I'm the Stripes Calculator. I can only do addition. Maybe, some day, a nice programmer
 will come along and teach me how to do other things?
 
-<% try (Form f = stripes.form(CalculatorActionBean.class).build()) { %>
+<%
+    try (Form f = stripes.form(CalculatorActionBean.class).build()) {
+        ValidationErrors errs = f.getActionBean().getContext().getValidationErrors();
+%>
+
+<%
+        if (errs.size()>0) {
+%>
+        <div class="errors">
+            ERRORS !
+        </div>
+<%
+        }
+%>
 
     <%-- TODO form errors --%>
     <table>

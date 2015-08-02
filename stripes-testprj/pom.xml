@@ -38,7 +38,7 @@
                 <executions>
                     <execution>
                         <id>ttt-compile</id>
-                        <phase>process-resources</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>ttt</goal>
                         </goals>
