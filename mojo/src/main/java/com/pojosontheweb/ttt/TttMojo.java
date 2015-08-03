@@ -11,6 +11,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mojo(
     name = "ttt",
@@ -35,8 +37,12 @@ public class TttMojo extends AbstractMojo {
         log.info("Ttt compiler starting :\n\t- src\t : " + sourceDirectory.getAbsolutePath() +
             "\n\t- dest : " + outputDirectory.getAbsolutePath() + "\n");
 
+        List<File> files;
         try {
-            TttCompiler.compile(sourceDirectory.toPath(), outputDirectory.toPath(), true);
+            files = TttCompiler.compile(sourceDirectory.toPath(), outputDirectory.toPath(), true);
+            for (File f : files) {
+                log.info(f.getAbsolutePath());
+            }
         } catch (Exception e) {
             throw new MojoExecutionException("unable to compile ttt", e);
         }
@@ -45,6 +51,6 @@ public class TttMojo extends AbstractMojo {
             project.addCompileSourceRoot(outputDirectory.getPath());
         }
 
-        log.info("Ttt templates compiled");
+        log.info(files.size() + " Ttt template(s) compiled");
     }
 }

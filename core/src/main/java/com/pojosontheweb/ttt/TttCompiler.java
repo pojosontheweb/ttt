@@ -8,32 +8,17 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class TttCompiler {
 
-    public static void generateTemplateBaseClass(File target) throws IOException {
-        // write out the base Template class source file
-        File templateIntf = new File(
-            Arrays.asList(target.getAbsolutePath(), "com", "pojosontheweb", "ttt", "ITemplate.java")
-                .stream()
-                .collect(Collectors.joining(File.separator))
-        );
-        templateIntf.getParentFile().mkdirs();
-        Files.copy(TttCompiler.class.getResourceAsStream("/com/pojosontheweb/ttt/ITemplate.java"), templateIntf.toPath());
+    public static List<File> compile(Path srcDir, Path targetDir, boolean clean) throws Exception {
 
-        File templateBase = new File(
-            Arrays.asList(target.getAbsolutePath(), "com", "pojosontheweb", "ttt", "Template.java")
-                .stream()
-                .collect(Collectors.joining(File.separator))
-        );
-        templateBase.getParentFile().mkdirs();
-        Files.copy(TttCompiler.class.getResourceAsStream("/com/pojosontheweb/ttt/Template.java"), templateBase.toPath());
-    }
-
-    public static void compile(Path srcDir, Path targetDir, boolean clean) throws Exception {
+        List<File> res = new ArrayList<>();
 
         File target = targetDir.toFile();
         if (clean) {
@@ -43,9 +28,6 @@ public class TttCompiler {
         if (!target.exists()) {
             target.mkdirs();
         }
-
-        // write out the base Template class source file
-        generateTemplateBaseClass(target);
 
         final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*.ttt");
         Files.walkFileTree(srcDir, new SimpleFileVisitor<Path>() {
@@ -77,6 +59,7 @@ public class TttCompiler {
                     try (FileReader in = new FileReader(file.toFile())) {
                         try (FileWriter out = new FileWriter(outFile)) {
                             compile(in, out, fqn);
+                            res.add(outFile);
                         }
                     }
 
@@ -85,6 +68,7 @@ public class TttCompiler {
             }
         });
 
+        return res;
     }
 
     public static void compile(Reader in, Writer out, String fqn) throws IOException {

@@ -8,13 +8,25 @@
         <artifactId>ttt-parent</artifactId>
         <version>0.1-alpha4</version>
     </parent>
-    <artifactId>ttt-testprj</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>ttt-stripes-testprj</artifactId>
+    <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>com.pojosontheweb</groupId>
-            <artifactId>ttt-runtime</artifactId>
+            <artifactId>ttt-stripes</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>
@@ -26,7 +38,7 @@
                 <executions>
                     <execution>
                         <id>ttt-compile</id>
-                        <phase>process-resources</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>ttt</goal>
                         </goals>

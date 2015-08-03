@@ -1,0 +1,9 @@
+<%!
+    String foo;
+    int bar;
+%>
+<html>
+<body>
+It Works : <%= foo %>
+</body>
+</html>

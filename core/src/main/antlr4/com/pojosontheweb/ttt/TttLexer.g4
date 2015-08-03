@@ -60,6 +60,14 @@ EXTENDS
 	: 'extends'
 	;
 
+CONTENT_TYPE
+	: 'contentType'
+	;
+
+SLASH
+	: '/'
+	;
+
 DOT_STAR
 	: '.*'
 	;

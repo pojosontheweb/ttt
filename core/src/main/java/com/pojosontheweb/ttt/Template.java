@@ -23,4 +23,9 @@ public abstract class Template implements ITemplate {
         }
     }
 
+    @Override
+    public String getContentType() {
+        return null;
+    }
+
 }

@@ -96,14 +96,6 @@ public class TttCompileAction extends AnAction {
 
                     } else {
 
-                        // generate base class
-                        try {
-                            TttCompiler.generateTemplateBaseClass(new File(targetDir.getPath()));
-                        } catch (Exception e) {
-                            LOG.error("unable to generate template base class/intf", e);
-                            throw new RuntimeException(e);
-                        }
-
                         // now visit the source roots
                         List<File> generatedFiles = new ArrayList<>();
                         for (VirtualFile srcRoot : rootsToVisit) {

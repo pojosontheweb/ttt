@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pojosontheweb</groupId>
     <artifactId>ttt-parent</artifactId>
-    <version>LATEST-SNAPSHOT</version>
+    <version>0.1-alpha4</version>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
@@ -24,9 +24,12 @@
         <maven>3.0</maven>
     </prerequisites>
     <modules>
+        <module>runtime</module>
         <module>core</module>
         <module>mojo</module>
         <module>testprj</module>
+        <module>stripes</module>
+        <module>stripes-testprj</module>
     </modules>
     <url>https://github.com/pojosontheweb/ttt</url>
     <description>Typed Text Templates</description>

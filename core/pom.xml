@@ -6,11 +6,16 @@
     <parent>
         <groupId>com.pojosontheweb</groupId>
         <artifactId>ttt-parent</artifactId>
-        <version>LATEST-SNAPSHOT</version>
+        <version>0.1-alpha4</version>
     </parent>
     <artifactId>ttt-core</artifactId>
     <packaging>jar</packaging>
     <dependencies>
+        <dependency>
+            <groupId>com.pojosontheweb</groupId>
+            <artifactId>ttt-runtime</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
