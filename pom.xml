@@ -28,6 +28,8 @@
         <module>core</module>
         <module>mojo</module>
         <module>testprj</module>
+        <module>stripes</module>
+        <module>stripes-testprj</module>
     </modules>
     <url>https://github.com/pojosontheweb/ttt</url>
     <description>Typed Text Templates</description>
