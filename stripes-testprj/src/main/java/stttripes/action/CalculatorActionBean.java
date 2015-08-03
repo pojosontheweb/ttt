@@ -46,6 +46,9 @@ public class CalculatorActionBean implements ActionBean, ValidationErrorHandler 
         return display();
     }
 
+    // TODO
+    // we need this otherwise _sourcePage is used and
+    // we have a infinite loop bug...
     @Override
     public Resolution handleValidationErrors(ValidationErrors errors) throws Exception {
         return display();

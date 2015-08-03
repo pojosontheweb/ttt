@@ -15,6 +15,8 @@ import net.sourceforge.stripes.util.CryptoUtil;
 import net.sourceforge.stripes.util.Log;
 import net.sourceforge.stripes.util.bean.BeanUtil;
 import net.sourceforge.stripes.util.bean.ExpressionException;
+import net.sourceforge.stripes.validation.ValidationError;
+import net.sourceforge.stripes.validation.ValidationErrors;
 import net.sourceforge.stripes.validation.ValidationMetadata;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class Text extends Template {
 
@@ -50,6 +54,11 @@ public class Text extends Template {
         // Figure out where to pull the value from
         if (v != null) {
             attributes.set("value", format(v, true));
+        }
+
+        // add the "error" css class to the field
+        if (getErrors().size()>0) {
+            attributes.set("class", "error");
         }
 
 //        set("maxlength", getEffectiveMaxlength());
@@ -200,4 +209,9 @@ public class Text extends Template {
         return value;
     }
 
+    public List<ValidationError> getErrors() {
+        ValidationErrors errs = form.getActionBean().getContext().getValidationErrors();
+        List<ValidationError> fieldErrs = errs.get(name);
+        return fieldErrs != null ? fieldErrs : Collections.emptyList();
+    }
 }
