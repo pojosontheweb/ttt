@@ -21,6 +21,7 @@ import java.util.Set;
 public class Form extends TagBase<Form> {
 
     private final Class<? extends ActionBean> beanClass;
+    private final boolean partial; // TODO handle partial form
 
 //    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
 
@@ -28,10 +29,12 @@ public class Form extends TagBase<Form> {
         Writer out,
         Class<? extends ActionBean> beanClass,
         boolean partial,
+        String method,
         Attributes attributes) {
 
         super(out, "form", attributes);
         this.beanClass = beanClass;
+        this.partial = partial;
 
         UrlBuilder urlBuilder =
             new UrlBuilder(getRequest().getLocale(), getActionBeanUrl(beanClass), false).setEvent(null);
@@ -51,7 +54,8 @@ public class Form extends TagBase<Form> {
         HttpServletResponse response = getResponse();
         action = response.encodeURL(action);
 
-        attributes().set("action", action);
+        set("action", action);
+        set("method", method != null ? method : "POST");
     }
 
     public Class<? extends ActionBean> getBeanClass() {
@@ -163,6 +167,7 @@ public class Form extends TagBase<Form> {
 
         private Attributes attributes = new Attributes();
         private boolean partial = false;
+        private String method;
 
         public Builder(Writer out, Class<? extends ActionBean> beanClass) {
             this.out = out;
@@ -179,8 +184,13 @@ public class Form extends TagBase<Form> {
             return this;
         }
 
+        public Builder setMethod(String method) {
+            this.method = method;
+            return this;
+        }
+
         public Form build() {
-            return new Form(out, beanClass, partial, attributes).open();
+            return new Form(out, beanClass, partial, method, attributes).open();
         }
     }
 }

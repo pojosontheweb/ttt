@@ -6,35 +6,28 @@
 <%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.Form" %>
 <%@ page import="stttripes.actions.CalculatorAction" %>
-<%@ page import="net.sourceforge.stripes.validation.ValidationErrors" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.Text" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="stttripes.templates.FieldErrorsTemplate" %>
 <%!
-    // template signature
+    // template signature : we only need the actionBean here
+    // because we want to access some of its props
 
     /**
-     * the calculator action, used to display
-     * the computed result
+     * the calc action bean (used to display result)
      */
     CalculatorAction actionBean;
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-<head>
-    <title>My First Stripe</title>
-    <style type="text/css">
-        input.error {
-            background-color: yellow;
-        }
-        .errors {
-            background-color: yellow;
-            border: 1px solid brown;
-            color: brown;
-        }
-    </style>
-</head>
-<body>
+<style type="text/css">
+    input.error {
+        background-color: yellow;
+    }
+    .errors {
+        color: brown;
+    }
+</style>
+
 <h1>Stripes Calculator</h1>
 
 Hi, I'm the Stripes Calculator. I can only do addition. Maybe, some day, a nice programmer
@@ -49,27 +42,30 @@ will come along and teach me how to do other things?
     // open form for the action bean
     try (Form f = stripes.form(CalculatorAction.class).build()) {
 
-        // create nested inputs and get any validation
-        // error
+        // create inputs and store refs...
         Text inputNumberOne = f.text("numberOne");
         Text inputNumberTwo = f.text("numberTwo");
-
-        // we have no tag for the errors yet, so we do it ourselves...
-        ValidationErrors errs = f.getActionBean().getContext().getValidationErrors();
-        if (errs.size()>0) {
-%>
-        <div class="errors">
-            Errors found !
-        </div>
-<%
-        }
 %>
 
     <table>
         <tr>
             <td>Number 1:</td>
             <td>
+                <%--
+                    input is a template itself,
+                    we only need to use a, expression :
+                --%>
                 <%= inputNumberOne %>
+                <%--
+                    ...and use the ref for anything else,
+                    like in this case, displaying errors
+                    aside the fields.
+
+                    Here we play a bit with Java8 streams,
+                    but this code can be easily factored out
+                    in a template of its own, and be reusable
+                    in a more "DRY" fashion... see below
+                --%>
                 <%=
                     inputNumberOne.getErrors().stream()
                         .map(e -> e.getMessage(locale))
@@ -81,26 +77,30 @@ will come along and teach me how to do other things?
             <td>Number 2:</td>
             <td>
                 <%= inputNumberTwo %>
-                <%=
-                    inputNumberTwo.getErrors().stream()
-                        .map(e -> e.getMessage(locale))
-                        .collect(Collectors.joining("<br/>"))
-                %>
+                <%= new FieldErrorsTemplate(inputNumberTwo, locale) %>
             </td>
         </tr>
         <tr>
             <td colspan="2">
+                <%--
+                    submit buttons that bind to different
+                    events on the action beans
+                 --%>
                 <%= f.submit("addition", "Add") %>
                 <%= f.submit("division", "Divide") %>
             </td>
         </tr>
         <tr>
             <td>Result:</td>
+            <%--
+                We have a ref to the action bean that was used
+                as a controller : it passed itself as an argument.
+                Therefore we can use its properties right here in
+                this page...
+            --%>
             <td><%= actionBean.getResult() %></td>
         </tr>
     </table>
 
 
 <% } %>
-</body>
-</html>

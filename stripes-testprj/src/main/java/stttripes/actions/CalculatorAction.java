@@ -33,13 +33,13 @@ public class CalculatorAction extends ActionBase implements ValidationErrorHandl
     /** An event handler method that adds number one to number two. */
     public Resolution addition() {
         result = numberOne + numberTwo;
-        return display();
+        return new RedirectResolution(getClass()).flash(this);
     }
 
     /** An event handler method that divides number one by number two. */
     public Resolution division() {
         result = numberOne / numberTwo;
-        return display();
+        return new RedirectResolution(getClass()).flash(this);
     }
 
     // TODO

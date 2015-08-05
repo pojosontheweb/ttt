@@ -6,6 +6,7 @@
 <%@ page import="stttripes.actions.CalculatorAction" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
 <%@ page import="stttripes.templates.LinkTemplate" %>
+<%@ page import="stttripes.actions.InputsAction" %>
 <%
     // get those tags...
     StripesTags s = new StripesTags(out);
@@ -58,4 +59,10 @@
             templated calculator
         <% } %>
     </li>
+    <li>
+        <% try (Link l = s.link(InputsAction.class).build()) { %>
+            various inputs
+        <% } %>
+    </li>
+
 </ul>
