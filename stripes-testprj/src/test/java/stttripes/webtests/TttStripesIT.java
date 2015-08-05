@@ -7,7 +7,7 @@ import org.junit.Test;
 import static com.pojosontheweb.selenium.Findrs.*;
 import static org.openqa.selenium.By.*;
 
-public class TttStripesWebTest extends ManagedDriverJunit4TestBase {
+public class TttStripesIT extends ManagedDriverJunit4TestBase {
 
     static final String BASE_URL = System.getProperty("webtests.base.url", "http://localhost:8080/sttt");
 
