@@ -113,3 +113,5 @@ very effective.
 More examples are available in the 
 [stripes-testprj](https://github.com/pojosontheweb/ttt/tree/master/stripes-testprj) 
 module.
+
+> If you're using IntelliJ IDEA you might find the [ttt-idea](https://github.com/pojosontheweb/ttt/tree/master/idea-ttt-plugin) plugin useful.
