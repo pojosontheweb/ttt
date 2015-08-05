@@ -8,7 +8,7 @@ and some test pages for the `StripesTags` Java helper API.
 
 Build :
 
-  mvn clean install -Pwebtests 
+    mvn clean install -Pwebtests 
   
 
 
