@@ -1,7 +1,7 @@
 package stttripes.actions;
 
 import com.pojosontheweb.ttt.ITemplate;
-import com.pojosontheweb.ttt.stripes.TemplateResolution;
+import com.pojosontheweb.ttt.stripes.TttResolution;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.action.Resolution;
@@ -22,7 +22,7 @@ public abstract class ActionBase implements ActionBean {
     }
 
     protected Resolution resolution(String pageTitle, ITemplate pageBody) {
-        return new TemplateResolution(
+        return new TttResolution(
             new PageTemplate(this, pageTitle, pageBody)
         );
     }
