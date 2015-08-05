@@ -3,7 +3,7 @@ package stttripes.actions;
 import net.sourceforge.stripes.action.*;
 import stttripes.templates.SimpleTemplate;
 
-@UrlBinding("/simple")
+@UrlBinding("/simple/{myProp}")
 public class SimpleAction extends ActionBase {
 
     private String myProp;

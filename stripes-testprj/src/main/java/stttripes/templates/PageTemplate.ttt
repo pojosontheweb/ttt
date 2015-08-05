@@ -1,7 +1,15 @@
 <%@ page import="com.pojosontheweb.ttt.ITemplate" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
+<%@ page import="stttripes.actions.HomeAction" %>
+<%@ page import="net.sourceforge.stripes.action.ActionBean" %>
 <%!
+    ActionBean actionBean;
     String title;
     ITemplate body;
+%>
+<%
+    StripesTags s = new StripesTags(out);
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,5 +19,16 @@
 </head>
 <body>
 <%= body %>
+<footer>
+    <hr/>
+    <%
+        // display link to home for all actions... but home !
+        if (!(actionBean instanceof HomeAction)) {
+    %>
+    Back to <% try (Link l = s.link(HomeAction.class).build() ) { %> home <% } %>
+    <%
+        }
+    %>
+</footer>
 </body>
 </html>

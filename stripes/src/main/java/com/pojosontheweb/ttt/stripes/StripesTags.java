@@ -23,6 +23,10 @@ public class StripesTags {
         return new Link.Builder(out, beanClass);
     }
 
+    public Link.Builder link(String url) {
+        return new Link.Builder(out, url);
+    }
+
     public static HttpServletRequest getRequest() {
         return ExecutionContext.currentContext().getActionBeanContext().getRequest();
     }

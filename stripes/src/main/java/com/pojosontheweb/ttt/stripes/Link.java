@@ -129,67 +129,6 @@ public class Link extends TagBase<Link> {
         }
     }
 
-    /**
-     * Similar to the {@link #getActionBeanType(Object)} method except that instead of
-     * returning the Class of ActionBean it returns the URL Binding of the ActionBean.
-     *
-     * @param nameOrClass either the String FQN of an ActionBean class, or a Class object
-     * @return the URL of the appropriate ActionBean class or null
-     */
-    protected String getActionBeanUrl(Object nameOrClass) {
-        Class<? extends ActionBean> beanType = getActionBeanType(nameOrClass);
-        if (beanType != null) {
-            return StripesFilter.getConfiguration().getActionResolver().getUrlBinding(beanType);
-        }
-        else {
-            return null;
-        }
-    }
-
-    /**
-     * Helper method that takes an attribute which may be either a String class name
-     * or a Class object and returns the Class representing the appropriate ActionBean.
-     * If for any reason the Class cannot be determined, or it is not an ActionBean, null
-     * will be returned instead.
-     *
-     * @param nameOrClass either the String FQN of an ActionBean class, or a Class object
-     * @return the appropriate ActionBean class or null
-     */
-    @SuppressWarnings("unchecked")
-    protected Class<? extends ActionBean> getActionBeanType(Object nameOrClass) {
-        Class result = null;
-
-        // Figure out if it's a String of Class (or something else?) and act appropriately
-        if (nameOrClass instanceof String) {
-            try {
-                result = ReflectUtil.findClass((String) nameOrClass);
-            }
-            catch (ClassNotFoundException cnfe) {
-                log.error(cnfe, "Could not find class of type: ", nameOrClass);
-                return null;
-            }
-        }
-        else if (nameOrClass instanceof Class) {
-            result = (Class) nameOrClass;
-        }
-        else {
-            log.error("The value supplied to getActionBeanType() was neither a String nor a " +
-                "Class. Cannot infer ActionBean type from value: " + nameOrClass);
-            return null;
-        }
-
-        // And for good measure, let's make sure it's an ActionBean implementation!
-        if (ActionBean.class.isAssignableFrom(result)) {
-            return result;
-        }
-        else {
-            log.error("Class '", result.getName(), "' specified in tag does not implement ",
-                "ActionBean.");
-            return null;
-        }
-    }
-
-
     public static class Builder {
 
         private final Writer out;

@@ -22,7 +22,7 @@ public class Form extends TagBase<Form> {
 
     private final Class<? extends ActionBean> beanClass;
 
-    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
+//    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
 
     public Form(
         Writer out,
@@ -56,16 +56,6 @@ public class Form extends TagBase<Form> {
 
     public Class<? extends ActionBean> getBeanClass() {
         return beanClass;
-    }
-
-    protected String getActionBeanUrl(Object nameOrClass) {
-        Class<? extends ActionBean> beanType = getActionBeanType(nameOrClass);
-        if (beanType != null) {
-            return StripesFilter.getConfiguration().getActionResolver().getUrlBinding(beanType);
-        }
-        else {
-            return null;
-        }
     }
 
     @Override

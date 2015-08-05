@@ -23,7 +23,7 @@ public abstract class ActionBase implements ActionBean {
 
     protected Resolution resolution(String pageTitle, ITemplate pageBody) {
         return new TemplateResolution(
-            new PageTemplate(pageTitle, pageBody)
+            new PageTemplate(this, pageTitle, pageBody)
         );
     }
 }

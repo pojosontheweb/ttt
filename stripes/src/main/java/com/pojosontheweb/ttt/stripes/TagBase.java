@@ -1,12 +1,15 @@
 package com.pojosontheweb.ttt.stripes;
 
 import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.controller.ActionResolver;
 import net.sourceforge.stripes.controller.ExecutionContext;
+import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.util.Log;
 import net.sourceforge.stripes.util.ReflectUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.Writer;
 import java.util.LinkedHashMap;
 
@@ -94,6 +97,23 @@ public abstract class TagBase<T extends TagBase<T>> implements Tag<T> {
         else {
             log.error("Class '", result.getName(), "' specified in tag does not implement ",
                 "ActionBean.");
+            return null;
+        }
+    }
+
+    /**
+     * Similar to the {@link #getActionBeanType(Object)} method except that instead of
+     * returning the Class of ActionBean it returns the URL Binding of the ActionBean.
+     *
+     * @param nameOrClass either the String FQN of an ActionBean class, or a Class object
+     * @return the URL of the appropriate ActionBean class or null
+     */
+    protected String getActionBeanUrl(Object nameOrClass) {
+        Class<? extends ActionBean> beanType = getActionBeanType(nameOrClass);
+        if (beanType != null) {
+            return StripesFilter.getConfiguration().getActionResolver().getUrlBinding(beanType);
+        }
+        else {
             return null;
         }
     }
