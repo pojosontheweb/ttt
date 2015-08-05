@@ -1,0 +1,68 @@
+<%--
+    A basic template, that uses s:link.
+--%>
+<%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
+<%@ page import="stttripes.actions.SimpleAction" %>
+<%@ page import="stttripes.actions.CalculatorAction" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
+<%@ page import="stttripes.templates.LinkTemplate" %>
+<%@ page import="stttripes.actions.InputsAction" %>
+<%
+    // get those tags...
+    StripesTags s = new StripesTags(out);
+%>
+<h1>
+    Stripes TTT test project
+</h1>
+<p>
+    This is a very simple project that showcases the
+    use of StripesTags. When using TTT templates with
+    Stripes, you cannot use the regular JSP tags : you
+    don't need/want JSPs with TTT, that's the whole point...
+    <br/>
+    Therefore, you can use the pure-Java version of those
+    tags, right in your templates.
+</p>
+
+<h2>s:link</h2>
+<ul>
+    <li>
+        <% try (Link l = s.link(SimpleAction.class).build()) { %>
+            simple template (beanclass, no param)
+        <% } %>
+    </li>
+    <li>
+        <% try (Link l = s.link(SimpleAction.class).setParameter("myProp", "hello_world").build()) { %>
+            simple template (beanclass, param)
+        <% } %>
+    </li>
+    <li>
+        <% try (Link l = s.link("/simple").build()) { %>
+            simple template (url, no param)
+        <% } %>
+    </li>
+    <li>
+        <% try (Link l = s.link("/simple").setParameter("myProp", "hello_world").build()) { %>
+            simple template (url, param)
+        <% } %>
+    </li>
+    <li>
+        <%-- using a custom "decorated" user-defined template --%>
+        <%= new LinkTemplate(SimpleAction.class, "A decorated", "simple") %>
+    </li>
+</ul>
+
+<h2>s:form</h2>
+<ul>
+    <li>
+        <% try (Link l = s.link(CalculatorAction.class).build()) { %>
+            templated calculator
+        <% } %>
+    </li>
+    <li>
+        <% try (Link l = s.link(InputsAction.class).build()) { %>
+            various inputs
+        <% } %>
+    </li>
+
+</ul>

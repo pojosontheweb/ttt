@@ -1,5 +1,7 @@
 package com.pojosontheweb.ttt.stripes;
 
+import net.sourceforge.stripes.util.HtmlUtil;
+
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
@@ -29,11 +31,7 @@ public class Attributes {
             .append("=\"");
         String val = attributes.get(name);
         if (val != null) {
-//            try {
-            sb.append(val); // TODO encode ?
-//            } catch (UnsupportedEncodingException e) {
-//                throw new RuntimeException(e);
-//            }
+            sb.append(HtmlUtil.encode(val));
         }
         sb.append("\"");
         return sb.toString();

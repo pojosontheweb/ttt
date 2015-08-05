@@ -1,0 +1,115 @@
+<%--
+    Template for the Calculator.
+    Shows how stripes "taglib" can be used in the templates,
+    the try-resource pattern etc.
+--%>
+<%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.Form" %>
+<%@ page import="stttripes.actions.CalculatorAction" %>
+<%@ page import="java.util.stream.Collectors" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.Text" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="stttripes.templates.FieldErrorsTemplate" %>
+<%@ page import="net.sourceforge.stripes.validation.ValidationError" %>
+<%@ page import="java.util.List" %>
+<%!
+    // template signature : we only need the actionBean here
+    // because we want to access some of its props
+
+    /**
+     * the calc action bean (used to display result)
+     */
+    CalculatorAction actionBean;
+%>
+<style type="text/css">
+    input.error {
+        background-color: yellow;
+    }
+    .errors {
+        color: brown;
+    }
+</style>
+
+<h1>Stripes Calculator</h1>
+
+Hi, I'm the Stripes Calculator. I can only do addition. Maybe, some day, a nice programmer
+will come along and teach me how to do other things?
+
+<%
+    Locale locale = actionBean.getContext().getLocale();
+
+    // init stripes tags
+    StripesTags stripes = new StripesTags(out);
+
+    // open form for the action bean
+    try (Form f = stripes.form(CalculatorAction.class).build()) {
+
+        // create inputs and store refs...
+        Text inputNumberOne = f.text("numberOne");
+        Text inputNumberTwo = f.text("numberTwo");
+%>
+
+    <table>
+        <tr>
+            <td>Number 1:</td>
+            <td class="number-one">
+                <%--
+                    input is a template itself,
+                    we only need to use a, expression :
+                --%>
+                <%= inputNumberOne %>
+                <%--
+                    ...and use the ref for anything else,
+                    like in this case, displaying errors
+                    aside the fields.
+
+                    Here we play a bit with Java8 streams,
+                    but this code can be easily factored out
+                    in a template of its own, and be reusable
+                    in a more "DRY" fashion... see below
+                --%>
+                <%
+                    List<ValidationError> errors = inputNumberOne.getErrors();
+                    if (errors.size()>0) {
+                %>
+                    <span class="errors">
+                    <%=
+                        inputNumberOne.getErrors().stream()
+                            .map(e -> e.getMessage(locale))
+                            .collect(Collectors.joining("<br/>"))
+                    %>
+                    </span>
+                <%  } %>
+            </td>
+        </tr>
+        <tr>
+            <td>Number 2:</td>
+            <td class="number-two">
+                <%= inputNumberTwo %>
+                <%= new FieldErrorsTemplate(inputNumberTwo, locale) %>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <%--
+                    submit buttons that bind to different
+                    events on the action beans
+                 --%>
+                <%= f.submit("addition", "Add") %>
+                <%= f.submit("division", "Divide") %>
+            </td>
+        </tr>
+        <tr>
+            <td>Result:</td>
+            <%--
+                We have a ref to the action bean that was used
+                as a controller : it passed itself as an argument.
+                Therefore we can use its properties right here in
+                this page...
+            --%>
+            <td class="result"><%= actionBean.getResult() %></td>
+        </tr>
+    </table>
+
+
+<% } %>

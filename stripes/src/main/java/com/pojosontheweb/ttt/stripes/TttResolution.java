@@ -7,11 +7,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-public class TemplateResolution extends StreamingResolution {
+public class TttResolution extends StreamingResolution {
 
-    public TemplateResolution(ITemplate template) {
-        // TODO use template.getContentType when available
-        super("text/html", asReader(template));
+    public TttResolution(ITemplate template) {
+        super(template.getContentType(), asReader(template));
     }
 
     private static Reader asReader(ITemplate template) {

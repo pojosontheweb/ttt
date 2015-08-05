@@ -4,40 +4,37 @@ import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.controller.ActionResolver;
 import net.sourceforge.stripes.controller.StripesConstants;
 import net.sourceforge.stripes.controller.StripesFilter;
-import net.sourceforge.stripes.tag.InputCheckBoxTag;
-import net.sourceforge.stripes.tag.InputSelectTag;
 import net.sourceforge.stripes.tag.PageOptionsTag;
 import net.sourceforge.stripes.util.CryptoUtil;
 import net.sourceforge.stripes.util.HtmlUtil;
-import net.sourceforge.stripes.util.StringUtil;
 import net.sourceforge.stripes.util.UrlBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Form extends TagBase implements Tag<Form> {
+public class Form extends TagBase<Form> {
 
     private final Class<? extends ActionBean> beanClass;
+    private final boolean partial; // TODO handle partial form
 
-    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
+//    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
 
     public Form(
         Writer out,
         Class<? extends ActionBean> beanClass,
         boolean partial,
+        String method,
         Attributes attributes) {
 
         super(out, "form", attributes);
         this.beanClass = beanClass;
+        this.partial = partial;
 
         UrlBuilder urlBuilder =
             new UrlBuilder(getRequest().getLocale(), getActionBeanUrl(beanClass), false).setEvent(null);
@@ -57,21 +54,12 @@ public class Form extends TagBase implements Tag<Form> {
         HttpServletResponse response = getResponse();
         action = response.encodeURL(action);
 
-        getAttributes().set("action", action);
+        set("action", action);
+        set("method", method != null ? method : "POST");
     }
 
     public Class<? extends ActionBean> getBeanClass() {
         return beanClass;
-    }
-
-    protected String getActionBeanUrl(Object nameOrClass) {
-        Class<? extends ActionBean> beanType = getActionBeanType(nameOrClass);
-        if (beanType != null) {
-            return StripesFilter.getConfiguration().getActionResolver().getUrlBinding(beanType);
-        }
-        else {
-            return null;
-        }
     }
 
     @Override
@@ -179,6 +167,7 @@ public class Form extends TagBase implements Tag<Form> {
 
         private Attributes attributes = new Attributes();
         private boolean partial = false;
+        private String method;
 
         public Builder(Writer out, Class<? extends ActionBean> beanClass) {
             this.out = out;
@@ -195,8 +184,13 @@ public class Form extends TagBase implements Tag<Form> {
             return this;
         }
 
+        public Builder setMethod(String method) {
+            this.method = method;
+            return this;
+        }
+
         public Form build() {
-            return new Form(out, beanClass, partial, attributes).open();
+            return new Form(out, beanClass, partial, method, attributes).open();
         }
     }
 }

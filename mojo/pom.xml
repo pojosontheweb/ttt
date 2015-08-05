@@ -4,7 +4,7 @@
     <parent>
         <artifactId>ttt-parent</artifactId>
         <groupId>com.pojosontheweb</groupId>
-        <version>0.1-alpha4</version>
+        <version>0.1-beta</version>
     </parent>
     <artifactId>ttt-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
