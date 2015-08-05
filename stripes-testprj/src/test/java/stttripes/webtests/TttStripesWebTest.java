@@ -47,14 +47,29 @@ public class TttStripesWebTest extends ManagedDriverJunit4TestBase {
         );
     }
 
+    private CalculatorPage calcPage() {
+        return new CalculatorPage(findr());
+    }
+
     @Test
     public void calculator() {
         clickLink("templated calculator");
-        new CalculatorPage(findr())
+        calcPage()
             .setNumberOne("11")
             .setNumberTwo("22")
             .clickAdd()
             .assertResult("33.0");
+
+        calcPage()
+            .setNumberOne(null)
+            .clickAdd()
+            .assertErrorNumberOne("Number One is a required field");
+
+        calcPage()
+            .setNumberTwo(null)
+            .clickDivide()
+            .assertErrorNumberOne("Number One is a required field")
+            .assertErrorNumberTwo("Number Two is a required field");
     }
 
     private void clickLinkAndAssertSimpleText(String linkLabel, String expectedSimpleText) {

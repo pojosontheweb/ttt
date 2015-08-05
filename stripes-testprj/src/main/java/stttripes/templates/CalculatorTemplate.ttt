@@ -10,6 +10,8 @@
 <%@ page import="com.pojosontheweb.ttt.stripes.Text" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="stttripes.templates.FieldErrorsTemplate" %>
+<%@ page import="net.sourceforge.stripes.validation.ValidationError" %>
+<%@ page import="java.util.List" %>
 <%!
     // template signature : we only need the actionBean here
     // because we want to access some of its props
@@ -50,7 +52,7 @@ will come along and teach me how to do other things?
     <table>
         <tr>
             <td>Number 1:</td>
-            <td>
+            <td class="number-one">
                 <%--
                     input is a template itself,
                     we only need to use a, expression :
@@ -66,16 +68,23 @@ will come along and teach me how to do other things?
                     in a template of its own, and be reusable
                     in a more "DRY" fashion... see below
                 --%>
-                <%=
-                    inputNumberOne.getErrors().stream()
-                        .map(e -> e.getMessage(locale))
-                        .collect(Collectors.joining("<br/>"))
+                <%
+                    List<ValidationError> errors = inputNumberOne.getErrors();
+                    if (errors.size()>0) {
                 %>
+                    <span class="errors">
+                    <%=
+                        inputNumberOne.getErrors().stream()
+                            .map(e -> e.getMessage(locale))
+                            .collect(Collectors.joining("<br/>"))
+                    %>
+                    </span>
+                <%  } %>
             </td>
         </tr>
         <tr>
             <td>Number 2:</td>
-            <td>
+            <td class="number-two">
                 <%= inputNumberTwo %>
                 <%= new FieldErrorsTemplate(inputNumberTwo, locale) %>
             </td>

@@ -4,6 +4,7 @@ import com.pojosontheweb.selenium.Findr;
 
 import static com.pojosontheweb.selenium.Findrs.attrEquals;
 import static com.pojosontheweb.selenium.Findrs.textEquals;
+import static org.openqa.selenium.By.className;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.tagName;
 
@@ -26,13 +27,17 @@ public class CalculatorPage {
 
     public CalculatorPage setNumberOne(String text) {
         numberOne().clear();
-        numberOne().sendKeys(text);
+        if (text != null) {
+            numberOne().sendKeys(text);
+        }
         return this;
     }
 
     public CalculatorPage setNumberTwo(String text) {
         numberTwo().clear();
-        numberTwo().sendKeys(text);
+        if (text != null) {
+            numberTwo().sendKeys(text);
+        }
         return this;
     }
 
@@ -61,6 +66,24 @@ public class CalculatorPage {
             .where(attrEquals("name", name))
             .whereElemCount(1)
             .at(0);
+    }
+
+    public CalculatorPage assertErrorNumberOne(String errorText) {
+        findr()
+            .elem(cssSelector("td.number-one"))
+            .elem(cssSelector("span.errors"))
+            .where(textEquals(errorText))
+            .eval();
+        return this;
+    }
+
+    public CalculatorPage assertErrorNumberTwo(String errorText) {
+        findr()
+            .elem(cssSelector("td.number-two"))
+            .elem(cssSelector("span.errors"))
+            .where(textEquals(errorText))
+            .eval();
+        return this;
     }
 
 }
