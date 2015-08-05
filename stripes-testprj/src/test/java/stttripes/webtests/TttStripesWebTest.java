@@ -1,6 +1,5 @@
 package stttripes.webtests;
 
-import com.pojosontheweb.selenium.Findr;
 import com.pojosontheweb.selenium.ManagedDriverJunit4TestBase;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +11,7 @@ public class TttStripesWebTest extends ManagedDriverJunit4TestBase {
 
     static final String BASE_URL = System.getProperty("webtests.base.url", "http://localhost:8080/sttt");
 
+    // navigate to home page before the test
     @Before
     public void navigateToHome() {
         get("/");
@@ -47,10 +47,6 @@ public class TttStripesWebTest extends ManagedDriverJunit4TestBase {
         );
     }
 
-    private CalculatorPage calcPage() {
-        return new CalculatorPage(findr());
-    }
-
     @Test
     public void calculator() {
         clickLink("templated calculator");
@@ -70,6 +66,22 @@ public class TttStripesWebTest extends ManagedDriverJunit4TestBase {
             .clickDivide()
             .assertErrorNumberOne("Number One is a required field")
             .assertErrorNumberTwo("Number Two is a required field");
+
+        calcPage()
+            .setNumberOne("123")
+            .setNumberTwo("0")
+            .clickDivide()
+            .assertErrorNumberTwo("Dividing by zero is not allowed.");
+
+        clickBackToHome();
+    }
+
+    //
+    // helper methods
+    //
+
+    private CalculatorPage calcPage() {
+        return new CalculatorPage(findr());
     }
 
     private void clickLinkAndAssertSimpleText(String linkLabel, String expectedSimpleText) {
