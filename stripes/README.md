@@ -11,7 +11,7 @@ on `ttt-stripes` :
         <dependency>
             <groupId>com.pojosontheweb</groupId>
             <artifactId>ttt-stripes</artifactId>
-            <version>XYZ</version>
+            <version>0.1-beta</version>
         </dependency>
         
 Then, add the TTT compiler plugin :
@@ -19,7 +19,7 @@ Then, add the TTT compiler plugin :
 		<plugin>
 			<groupId>com.pojosontheweb</groupId>
 			<artifactId>ttt-maven-plugin</artifactId>
-			<version>${project.version}</version>
+			<version>0.1-beta</version>
 			<executions>
 				<execution>
 					<id>ttt-compile</id>
@@ -113,3 +113,5 @@ very effective.
 More examples are available in the 
 [stripes-testprj](https://github.com/pojosontheweb/ttt/tree/master/stripes-testprj) 
 module.
+
+> If you're using IntelliJ IDEA you might find the [ttt-idea](https://github.com/pojosontheweb/ttt/tree/master/idea-ttt-plugin) plugin useful.
