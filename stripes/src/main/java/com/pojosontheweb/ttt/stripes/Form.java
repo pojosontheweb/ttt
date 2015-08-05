@@ -4,27 +4,21 @@ import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.controller.ActionResolver;
 import net.sourceforge.stripes.controller.StripesConstants;
 import net.sourceforge.stripes.controller.StripesFilter;
-import net.sourceforge.stripes.tag.InputCheckBoxTag;
-import net.sourceforge.stripes.tag.InputSelectTag;
 import net.sourceforge.stripes.tag.PageOptionsTag;
 import net.sourceforge.stripes.util.CryptoUtil;
 import net.sourceforge.stripes.util.HtmlUtil;
-import net.sourceforge.stripes.util.StringUtil;
 import net.sourceforge.stripes.util.UrlBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Form extends TagBase implements Tag<Form> {
+public class Form extends TagBase<Form> {
 
     private final Class<? extends ActionBean> beanClass;
 
@@ -57,7 +51,7 @@ public class Form extends TagBase implements Tag<Form> {
         HttpServletResponse response = getResponse();
         action = response.encodeURL(action);
 
-        getAttributes().set("action", action);
+        attributes().set("action", action);
     }
 
     public Class<? extends ActionBean> getBeanClass() {

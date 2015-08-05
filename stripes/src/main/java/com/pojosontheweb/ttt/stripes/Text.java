@@ -1,6 +1,5 @@
 package com.pojosontheweb.ttt.stripes;
 
-import com.pojosontheweb.ttt.Template;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.config.Configuration;
 import net.sourceforge.stripes.controller.ExecutionContext;
@@ -28,37 +27,36 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class Text extends Template {
+public class Text extends TemplatedBase<Text> {
 
     private static final Log log = Log.getInstance(Text.class);
 
     private final Form form;
     private final String name;
-    private final Attributes attributes;
 
     private String value;
     private String formatType;
     private String formatPattern;
 
     public Text(Form form, String name) {
+
         assert name != null && !"".equals(name);
         assert form != null;
         this.name = name;
         this.form = form;
-        this.attributes = new Attributes();
 
-        attributes.set("type", "text");
-        attributes.set("name", name);
+        set("type", "text");
+        set("name", name);
         Object v = getSingleOverrideValue();
 
         // Figure out where to pull the value from
         if (v != null) {
-            attributes.set("value", format(v, true));
+            set("value", format(v, true));
         }
 
         // add the "error" css class to the field
         if (getErrors().size()>0) {
-            attributes.set("class", "error");
+            set("class", "error");
         }
 
 //        set("maxlength", getEffectiveMaxlength());
@@ -72,7 +70,7 @@ public class Text extends Template {
         // format the value
         FormatterFactory factory = StripesFilter.getConfiguration().getFormatterFactory();
         Formatter formatter = factory.getFormatter(input.getClass(),
-            ExecutionContext.currentContext().getActionBeanContext().getRequest().getLocale(),
+            StripesTags.getRequest().getLocale(),
             this.formatType,
             this.formatPattern);
         String formatted = (formatter == null) ? String.valueOf(input) : formatter.format(input);
@@ -106,12 +104,6 @@ public class Text extends Template {
         }
     }
 
-
-
-    public Attributes getAttributes() {
-        return attributes;
-    }
-
     @Override
     public String getContentType() {
         return "text/html";
@@ -120,7 +112,7 @@ public class Text extends Template {
     @Override
     public void render(Writer out) throws IOException {
         write(out, "<input ");
-        write(out, attributes.attrsToString());
+        write(out, attrs().attrsToString());
         write(out, ">");
     }
 
@@ -182,7 +174,7 @@ public class Text extends Template {
     }
 
     protected String[] getValuesFromRequest() {
-        HttpServletRequest request = ExecutionContext.currentContext().getActionBeanContext().getRequest();
+        HttpServletRequest request = StripesTags.getRequest();
         String[] value = request.getParameterValues(name);
 
         /*

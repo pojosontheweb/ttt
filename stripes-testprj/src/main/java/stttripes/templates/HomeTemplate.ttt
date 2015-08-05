@@ -1,0 +1,26 @@
+<%--
+    A basic template, that uses s:link.
+--%>
+<%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
+<%@ page import="stttripes.actions.SimpleAction" %>
+<%@ page import="stttripes.actions.CalculatorAction" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
+<%
+    // get those tags...
+    StripesTags s = new StripesTags(out);
+%>
+<h1>
+    Stripes TTT test project
+</h1>
+<ul>
+    <li>
+        <% try (Link l = s.link(SimpleAction.class).build()) { %>
+            simple template
+        <% } %>
+    </li>
+    <li>
+        <% try (Link l = s.link(CalculatorAction.class).build()) { %>
+            templated calc
+        <% } %>
+    </li>
+</ul>

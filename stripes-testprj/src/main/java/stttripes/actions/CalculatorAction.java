@@ -1,16 +1,12 @@
-package stttripes.action;
+package stttripes.actions;
 
-import com.pojosontheweb.ttt.stripes.TemplateResolution;
 import net.sourceforge.stripes.action.*;
 import net.sourceforge.stripes.validation.*;
 import stttripes.templates.CalculatorTemplate;
 
-/**
- * A very simple calculator action.
- * @author Tim Fennell
- */
 @UrlBinding("/calc")
-public class CalculatorActionBean implements ActionBean, ValidationErrorHandler {
+public class CalculatorAction extends ActionBase implements ValidationErrorHandler {
+
     private ActionBeanContext context;
     @Validate(required=true) private double numberOne;
     @Validate(required=true) private double numberTwo;
@@ -31,7 +27,7 @@ public class CalculatorActionBean implements ActionBean, ValidationErrorHandler 
     @DefaultHandler
     @DontBind
     public Resolution display() {
-        return new TemplateResolution(new CalculatorTemplate(this));
+        return resolution("calculator", new CalculatorTemplate(this));
     }
 
     /** An event handler method that adds number one to number two. */

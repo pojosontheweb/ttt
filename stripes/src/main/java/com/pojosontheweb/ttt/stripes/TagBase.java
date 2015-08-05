@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.Writer;
 import java.util.LinkedHashMap;
 
-public abstract class TagBase {
+public abstract class TagBase<T extends TagBase<T>> implements Tag<T> {
 
     private static final Log log = Log.getInstance(TagBase.class);
 
@@ -24,8 +24,14 @@ public abstract class TagBase {
         this.attributes = attributes == null ? new Attributes() : attributes;
     }
 
-    public Attributes getAttributes() {
+    public Attributes attributes() {
         return attributes;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected T set(String name, String val) {
+        attributes.set(name, val);
+        return (T)this;
     }
 
     protected void write(String... strings) {
@@ -51,11 +57,11 @@ public abstract class TagBase {
     }
 
     protected HttpServletRequest getRequest() {
-        return ExecutionContext.currentContext().getActionBeanContext().getRequest();
+        return StripesTags.getRequest();
     }
 
     protected HttpServletResponse getResponse() {
-        return ExecutionContext.currentContext().getActionBeanContext().getResponse();
+        return StripesTags.getResponse();
     }
 
     @SuppressWarnings("unchecked")

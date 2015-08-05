@@ -3,14 +3,12 @@
     Shows how stripes "taglib" can be used in the templates,
     the try-resource pattern etc.
 --%>
-<%@ page import="com.pojosontheweb.ttt.stripes.Tags" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.Form" %>
-<%@ page import="stttripes.action.CalculatorActionBean" %>
+<%@ page import="stttripes.actions.CalculatorAction" %>
 <%@ page import="net.sourceforge.stripes.validation.ValidationErrors" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.Text" %>
-<%@ page import="java.util.List" %>
-<%@ page import="net.sourceforge.stripes.validation.ValidationError" %>
 <%@ page import="java.util.Locale" %>
 <%!
     // template signature
@@ -19,7 +17,7 @@
      * the calculator action, used to display
      * the computed result
      */
-    CalculatorActionBean actionBean;
+    CalculatorAction actionBean;
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -46,10 +44,10 @@ will come along and teach me how to do other things?
     Locale locale = actionBean.getContext().getLocale();
 
     // init stripes tags
-    Tags stripes = new Tags(out);
+    StripesTags stripes = new StripesTags(out);
 
     // open form for the action bean
-    try (Form f = stripes.form(CalculatorActionBean.class).build()) {
+    try (Form f = stripes.form(CalculatorAction.class).build()) {
 
         // create nested inputs and get any validation
         // error

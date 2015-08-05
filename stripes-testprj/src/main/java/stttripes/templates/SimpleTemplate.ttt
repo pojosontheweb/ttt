@@ -1,0 +1,14 @@
+<%!
+    String foo;
+%>
+<html>
+<body>
+<% if (foo == null) { %>
+<p>
+    Hey, you have not provided no param. Try '?myProp=bar'...
+</p>
+<% } else { %>
+    Cool ! this was bound : <%= foo %>
+<% } %>
+</body>
+</html>

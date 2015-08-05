@@ -42,6 +42,9 @@
                         <goals>
                             <goal>ttt</goal>
                         </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
