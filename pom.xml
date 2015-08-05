@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pojosontheweb</groupId>
     <artifactId>ttt-parent</artifactId>
-    <version>LATEST-SNAPSHOT</version>
+    <version>0.1-beta</version>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
