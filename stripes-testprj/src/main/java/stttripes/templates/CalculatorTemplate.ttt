@@ -98,7 +98,7 @@ will come along and teach me how to do other things?
                 Therefore we can use its properties right here in
                 this page...
             --%>
-            <td><%= actionBean.getResult() %></td>
+            <td class="result"><%= actionBean.getResult() %></td>
         </tr>
     </table>
 

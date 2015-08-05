@@ -24,7 +24,7 @@ public class TttStripesWebTest extends ManagedDriverJunit4TestBase {
     }
 
     @Test
-    public void link() {
+    public void simple() {
         clickLinkAndAssertSimpleText(
             "simple template (beanclass, no param)",
             "Hey, you have not provided no param. Try '?myProp=bar'..."
@@ -45,6 +45,16 @@ public class TttStripesWebTest extends ManagedDriverJunit4TestBase {
             "simple",
             "Hey, you have not provided no param. Try '?myProp=bar'..."
         );
+    }
+
+    @Test
+    public void calculator() {
+        clickLink("templated calculator");
+        new CalculatorPage(findr())
+            .setNumberOne("11")
+            .setNumberTwo("22")
+            .clickAdd()
+            .assertResult("33.0");
     }
 
     private void clickLinkAndAssertSimpleText(String linkLabel, String expectedSimpleText) {
