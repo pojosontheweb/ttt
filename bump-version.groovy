@@ -28,7 +28,7 @@ new File(".").eachFileRecurse { File f ->
     }
 }
 
-assert nbHandled == 51
+assert nbHandled == 8
 println "Replaced versions in $nbHandled files"
 
 println "Done. Version bumped from $oldVersion to $newVersion"
