@@ -4,7 +4,7 @@ The [ttt-idea](https://plugins.jetbrains.com/plugin/7880?pr=idea) plugin current
 * compile action
 * auto-compile TTT templates on save
 
-![shot](shots/ttt-file-type.png "TTT plugin")
+![shot](shots/ttt-main.png "TTT plugin")
 
 ## How To
 
