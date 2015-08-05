@@ -54,7 +54,7 @@ TTT-Stripes provides the same features as the JSP tags : `<s:form>`,
 The entry point for those helpers is the class `com.pojosontheweb.ttt.stripes.StripesTags`.
  
 Have a look at the templates in the 
-[stripes-testprj](https://github.com/pojosontheweb/ttt/tree/master/stripes-testprj/src/main/ttt/stttripes.templates) module
+[stripes-testprj](https://github.com/pojosontheweb/ttt/tree/master/stripes-testprj/src/main/java/stttripes/templates) module
 for examples.
 
 ## Rendering Templates
