@@ -18,10 +18,12 @@ Then, configure the plugin for the module paths in the `Module Settings` page, u
 
 Now, associate the `.ttt` files to the JSP editor :
 
-TODO shot
+![shot 1](shots/ttt-file-type.png "TTT tab")
 
 You're done. You can explicitly invoke the "Tools -> TTT Compile" action, or just compile
 on save.
+
+
 
 > NOTE : the plugin is still a bit shaky, and sometimes doesn't refresh the files correctly.
 > In that case you need to force the refresh manually (Synchronize action).
