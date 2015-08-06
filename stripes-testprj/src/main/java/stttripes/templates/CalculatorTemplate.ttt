@@ -39,10 +39,10 @@ will come along and teach me how to do other things?
     Locale locale = actionBean.getContext().getLocale();
 
     // init stripes tags
-    StripesTags stripes = new StripesTags(out);
+    StripesTags s = new StripesTags(out);
 
     // open form for the action bean
-    try (Form f = stripes.form(CalculatorAction.class).build()) {
+    try (Form f = s.form(CalculatorAction.class).build()) {
 
         // create inputs and store refs...
         Text inputNumberOne = f.text("numberOne");
@@ -107,7 +107,7 @@ will come along and teach me how to do other things?
                 Therefore we can use its properties right here in
                 this page...
             --%>
-            <td class="result"><%= actionBean.getResult() %></td>
+            <td class="result"><%= s.format(actionBean.getResult()) %></td>
         </tr>
     </table>
 

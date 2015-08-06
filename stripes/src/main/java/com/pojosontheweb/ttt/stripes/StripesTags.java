@@ -27,6 +27,10 @@ public class StripesTags {
         return new Link.Builder(out, url);
     }
 
+    public Format format(Object value) {
+        return new Format(value);
+    }
+
     public static HttpServletRequest getRequest() {
         return ExecutionContext.currentContext().getActionBeanContext().getRequest();
     }
