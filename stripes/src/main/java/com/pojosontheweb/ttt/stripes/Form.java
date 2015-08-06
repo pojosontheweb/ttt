@@ -22,7 +22,7 @@ public class Form extends HtmlTag.WithBody<Form> {
     private final Class<? extends ActionBean> beanClass;
     private final String method;
     private final String action;
-    private final boolean partial; // TODO handle partial form
+    private final boolean partial;
 
     // TODO handle url, wizzard...
 
@@ -62,9 +62,19 @@ public class Form extends HtmlTag.WithBody<Form> {
     }
 
     @Override
+    public Form open() {
+        if (!partial) {
+            return super.open();
+        }
+        return this;
+    }
+
+    @Override
     public void close() {
-        writeHiddenTags();
-        super.close();
+        if (!partial) {
+            writeHiddenTags();
+            super.close();
+        }
     }
 
     public Class<? extends ActionBean> getBeanClass() {
