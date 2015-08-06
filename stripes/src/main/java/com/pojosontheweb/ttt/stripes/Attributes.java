@@ -33,7 +33,11 @@ public class Attributes {
 
     public Attributes set(String name, String value) {
         LinkedHashMap<String,String> newMap = new LinkedHashMap<>(attributes);
-        newMap.put(name, value);
+        if (value==null) {
+            newMap.remove(name);
+        } else {
+            newMap.put(name, value);
+        }
         return new Attributes(newMap);
     }
 
@@ -81,5 +85,9 @@ public class Attributes {
 
     public static Attributes emptyAttrs() {
         return EMPTY_ATTRS;
+    }
+
+    public Attributes unset(String name) {
+        return set(name, null);
     }
 }

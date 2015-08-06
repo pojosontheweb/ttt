@@ -1,12 +1,9 @@
-<%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.Form" %>
 <%@ page import="stttripes.actions.InputsAction" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.Text" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="stttripes.templates.FieldErrorsTemplate" %>
 <%@ page import="net.sourceforge.stripes.action.Message" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.Password" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.*" %>
 <%!
     InputsAction actionBean;
 %>
@@ -43,6 +40,7 @@
 
         Text text = f.text("text");
         Password password = f.password("password");
+        Checkbox checkbox = f.checkbox("checkbox").setChecked(true);
 %>
 <table>
     <%-- s:text--%>
@@ -67,6 +65,18 @@
         </td>
         <td>
             <%= new FieldErrorsTemplate(password, locale) %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Checkbox
+        </td>
+        <td>
+            <%= checkbox %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(checkbox, locale) %>
         </td>
     </tr>
 

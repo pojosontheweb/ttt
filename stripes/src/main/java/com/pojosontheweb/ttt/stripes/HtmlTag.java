@@ -169,14 +169,14 @@ public abstract class HtmlTag extends Template {
 
         private static final Log log = Log.getInstance(InputDelegate.class);
 
-        private final String tag;
-        private final Form form;
-        private final String type;
-        private final String name;
-        private final String value;
-        private final String errorCssClass;
-        private final String formatType;
-        private final String formatPattern;
+        protected final String tag;
+        protected final Form form;
+        protected final String type;
+        protected final String name;
+        protected final String value;
+        protected final String errorCssClass;
+        protected final String formatType;
+        protected final String formatPattern;
 
         public InputDelegate(String tag, Form form, String type, String name) {
             this(tag, form, type, name, null, null, null, null);
@@ -210,7 +210,7 @@ public abstract class HtmlTag extends Template {
             return form.getErrors(name);
         }
 
-        protected String format() {
+        public String format() {
             Object v = getSingleOverrideValue();
             if (v != null) {
                 return format(v, true);
@@ -261,7 +261,7 @@ public abstract class HtmlTag extends Template {
         }
 
 
-        private Object getSingleOverrideValue() {
+        protected Object getSingleOverrideValue() {
             Object unknown = getOverrideValueOrValues();
             Object returnValue = null;
 
@@ -381,13 +381,48 @@ public abstract class HtmlTag extends Template {
             }
             return a;
         }
+
+        protected boolean isItemSelected() {
+            Object selected = getSingleOverrideValue();
+            // Since this is a checkbox, there could be more than one checked value, which means
+            // this could be a single value type, array or collection
+            if (selected != null) {
+                String stringValue = (value == null) ? "" : format(value, false);
+
+                if (selected.getClass().isArray()) {
+                    int length = Array.getLength(selected);
+                    for (int i=0; i<length; ++i) {
+                        Object item = Array.get(selected, i);
+                        if ( (format(item, false).equals(stringValue)) ) {
+                            return true;
+                        }
+                    }
+                }
+                else if (selected instanceof Collection<?>) {
+                    Collection<?> selectedIf = (Collection<?>) selected;
+                    for (Object item : selectedIf) {
+                        if ( (format(item, false).equals(stringValue)) ) {
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    if( format(selected, false).equals(stringValue) ) {
+                        return true;
+                    }
+                }
+            }
+
+            // If we got this far without returning, then this is not a selected item
+            return false;
+        }
     }
 
 
 
     public static abstract class InputWithoutBody extends WithoutBody {
 
-        private final InputDelegate delegate;
+        protected final InputDelegate delegate;
 
         public InputWithoutBody(InputDelegate delegate, Attributes attributes) {
 

@@ -9,6 +9,7 @@ public class InputsAction extends ActionBase {
 
     private String text;
     private String password;
+    private boolean checkbox;
 
     @DefaultHandler
     @DontBind
@@ -21,6 +22,7 @@ public class InputsAction extends ActionBase {
         messages.add(new SimpleMessage("Stuff's been done."));
         messages.add(new SimpleMessage("text=" + text));
         messages.add(new SimpleMessage("password=" + password));
+        messages.add(new SimpleMessage("checkbox=" + checkbox));
         return new RedirectResolution(InputsAction.class);
     }
 
@@ -38,5 +40,13 @@ public class InputsAction extends ActionBase {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean getCheckbox() {
+        return checkbox;
+    }
+
+    public void setCheckbox(boolean checkbox) {
+        this.checkbox = checkbox;
     }
 }

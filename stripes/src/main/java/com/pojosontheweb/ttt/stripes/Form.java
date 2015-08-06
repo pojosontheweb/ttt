@@ -211,4 +211,8 @@ public class Form extends HtmlTag.WithBody {
     public Password password(String name) {
         return new Password(this, name);
     }
+
+    public Checkbox checkbox(String name) {
+        return new Checkbox(this, name);
+    }
 }
