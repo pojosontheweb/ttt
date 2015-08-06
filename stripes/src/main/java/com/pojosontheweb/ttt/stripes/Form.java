@@ -23,6 +23,8 @@ public class Form extends TagBase<Form> {
     private final Class<? extends ActionBean> beanClass;
     private final boolean partial; // TODO handle partial form
 
+    // TODO handle url
+
 //    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
 
     public Form(
