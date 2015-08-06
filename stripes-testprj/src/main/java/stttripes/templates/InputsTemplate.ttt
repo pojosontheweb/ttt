@@ -40,7 +40,8 @@
 
         Text text = f.text("text");
         Password password = f.password("password");
-        Checkbox checkbox = f.checkbox("checkbox").setChecked(true);
+        Checkbox checkbox1 = f.checkbox("checkbox1");
+        Checkbox checkbox2 = f.checkbox("checkbox2").setChecked(true);
 %>
 <table>
     <%-- s:text--%>
@@ -70,19 +71,32 @@
 
     <tr>
         <td>
-            Checkbox
+            Checkbox1
         </td>
         <td>
-            <%= checkbox %>
+            <%= checkbox1 %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(checkbox, locale) %>
+            <%= new FieldErrorsTemplate(checkbox1, locale) %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Checkbox2 (checked by default)
+        </td>
+        <td>
+            <%= checkbox2 %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(checkbox2, locale) %>
         </td>
     </tr>
 
     <tr>
         <td colspan="3">
             <%= f.submit("doStuff") %>
+            <%= f.submit("reset", "Reset") %>
         </td>
     </tr>
 
