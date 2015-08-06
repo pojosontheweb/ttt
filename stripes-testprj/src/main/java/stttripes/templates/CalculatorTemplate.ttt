@@ -42,7 +42,9 @@ will come along and teach me how to do other things?
     StripesTags s = new StripesTags(out);
 
     // open form for the action bean
-    try (Form f = s.form(CalculatorAction.class).build()) {
+    s.form(CalculatorAction.class).open();
+
+    try (Form f = s.form(CalculatorAction.class)) {
 
         // create inputs and store refs...
         Text inputNumberOne = f.text("numberOne");

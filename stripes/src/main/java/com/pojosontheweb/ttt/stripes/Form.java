@@ -8,22 +8,23 @@ import net.sourceforge.stripes.tag.PageOptionsTag;
 import net.sourceforge.stripes.util.CryptoUtil;
 import net.sourceforge.stripes.util.HtmlUtil;
 import net.sourceforge.stripes.util.UrlBuilder;
+import net.sourceforge.stripes.validation.ValidationError;
+import net.sourceforge.stripes.validation.ValidationErrors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class Form extends TagBase<Form> {
+public class Form extends HtmlTag.WithBody<Form> {
 
     private final Class<? extends ActionBean> beanClass;
+    private final String method;
+    private final String action;
     private final boolean partial; // TODO handle partial form
 
-    // TODO handle url
+    // TODO handle url, wizzard...
 
 //    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
 
@@ -32,14 +33,15 @@ public class Form extends TagBase<Form> {
         Class<? extends ActionBean> beanClass,
         boolean partial,
         String method,
-        Attributes attributes) {
+        Map<String,String> attributes) {
 
         super(out, "form", attributes);
         this.beanClass = beanClass;
         this.partial = partial;
+        this.method = method;
 
         UrlBuilder urlBuilder =
-            new UrlBuilder(getRequest().getLocale(), getActionBeanUrl(beanClass), false).setEvent(null);
+            new UrlBuilder(getRequest().getLocale(), Url.getActionBeanUrl(beanClass), false).setEvent(null);
 
         String action = urlBuilder.toString();
         if (action.startsWith("/")) {
@@ -54,26 +56,23 @@ public class Form extends TagBase<Form> {
             }
         }
         HttpServletResponse response = getResponse();
-        action = response.encodeURL(action);
+        this.action = response.encodeURL(action);
+        attr("action", action);
+        attr("method", method != null ? method : "POST");
+    }
 
-        set("action", action);
-        set("method", method != null ? method : "POST");
+    @Override
+    public void close() {
+        writeHiddenTags();
+        super.close();
     }
 
     public Class<? extends ActionBean> getBeanClass() {
         return beanClass;
     }
 
-    @Override
-    public Form open() {
-        writeTagOpen();
-        return this;
-    }
-
-    @Override
-    public void close() {
-        writeHiddenTags();
-        writeTagClose();
+    private void write(String s, String... strs) {
+        write(out, s, strs);
     }
 
     protected void writeHiddenTags() {
@@ -138,12 +137,16 @@ public class Form extends TagBase<Form> {
         return CryptoUtil.encrypt(getRequest().getServletPath());
     }
 
-    public Text text(String field) {
-        return new Text(this, field);
-    }
+//    public Text text(String field) {
+//        return new Text(this, field);
+//    }
 
     public Submit submit(String name, String value) {
         return new Submit(name, value, null);
+    }
+
+    public Text text(String name) {
+        return new Text(this, name, null, null, null, null, null);
     }
 
     public ActionBean getActionBean() {
@@ -163,36 +166,14 @@ public class Form extends TagBase<Form> {
         return resolver.getUrlBinding(beanClass);
     }
 
-    public static class Builder {
-        private final Writer out;
-        private final Class<? extends ActionBean> beanClass;
-
-        private Attributes attributes = new Attributes();
-        private boolean partial = false;
-        private String method;
-
-        public Builder(Writer out, Class<? extends ActionBean> beanClass) {
-            this.out = out;
-            this.beanClass = beanClass;
-        }
-
-        public Builder partial(boolean partial) {
-            this.partial = partial;
-            return this;
-        }
-
-        public Builder set(String name, String value) {
-            attributes.set(name, value);
-            return this;
-        }
-
-        public Builder setMethod(String method) {
-            this.method = method;
-            return this;
-        }
-
-        public Form build() {
-            return new Form(out, beanClass, partial, method, attributes).open();
-        }
+    public List<ValidationError> getErrors(String fieldName) {
+        ValidationErrors errs = getActionBean().getContext().getValidationErrors();
+        List<ValidationError> fieldErrs = errs.get(fieldName);
+        return fieldErrs != null ? fieldErrs : Collections.emptyList();
     }
+
+    public boolean hasErrors(String fieldName) {
+        return getErrors(fieldName).size() > 0;
+    }
+
 }

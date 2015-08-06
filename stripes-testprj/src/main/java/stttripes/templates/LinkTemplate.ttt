@@ -1,20 +1,13 @@
-<%@ page import="net.sourceforge.stripes.action.ActionBean" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
-<%@ page import="net.sourceforge.stripes.util.HtmlUtil" %>
 <%!
     Class beanClass; // wildcards are not supported in generics
     String label;
     String text;
 %>
-<span class="my-link">
-    <%= label %>
 <%
     StripesTags s = new StripesTags(out);
-    try (Link l = s.link(beanClass).build()) {
 %>
-    <%= HtmlUtil.encode(text) %>
-<%
-    }
-%>
+<span class="my-link">
+    <%= label %>
+    <%= s.link(beanClass).setText(text) %>
 </span>

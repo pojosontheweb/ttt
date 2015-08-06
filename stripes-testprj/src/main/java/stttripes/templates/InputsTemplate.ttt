@@ -12,6 +12,3 @@
 <%
     StripesTags s = new StripesTags(out);
 %>
-<% try (Form f = s.form(InputsAction.class).build()) { %>
-
-<% } %>

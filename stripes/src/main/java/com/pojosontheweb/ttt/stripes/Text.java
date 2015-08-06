@@ -26,43 +26,42 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class Text extends TemplatedBase<Text> {
+public class Text extends HtmlTag.Input<Text> {
 
     private static final Log log = Log.getInstance(Text.class);
 
     private final Form form;
-    private final String name;
+    private final String value;
+    private final String formatType;
+    private final String formatPattern;
 
-    private String value;
-    private String formatType;
-    private String formatPattern;
-
-    public Text(Form form, String name) {
-
-        assert name != null && !"".equals(name);
-        assert form != null;
-        this.name = name;
+    public Text(Form form, String fieldName, Map<String, String> attributes, String value, String formatType, String formatPattern, String errorCssClass) {
+        super("text", fieldName, attributes);
         this.form = form;
+        this.value = value;
+        this.formatType = formatType;
+        this.formatPattern = formatPattern;
 
-        set("type", "text");
-        set("name", name);
         Object v = getSingleOverrideValue();
-
-        // Figure out where to pull the value from
         if (v != null) {
-            set("value", format(v, true));
+            attr("value", format(v, true));
         }
 
         // add the "error" css class to the field
-        if (getErrors().size()>0) {
-            set("class", "error");
+        if (errorCssClass != null && hasErrors()) {
+            attrCat("class", errorCssClass);
         }
 
 //        set("maxlength", getEffectiveMaxlength());
     }
 
-    protected String format(Object input, boolean forOutput) {
+    public boolean hasErrors() {
+        return form.hasErrors(getName());
+    }
+
+    private String format(Object input, boolean forOutput) {
         if (input == null) {
             return "";
         }
@@ -90,33 +89,21 @@ public class Text extends TemplatedBase<Text> {
         return formatted;
     }
 
-    protected ValidationMetadata getValidationMetadata() throws StripesJspException {
+    private ValidationMetadata getValidationMetadata() throws StripesJspException {
         // find the action bean class we're dealing with
         Class<? extends ActionBean> beanClass = form.getBeanClass();
 
         if (beanClass != null) {
             // check validation for encryption flag
             return StripesFilter.getConfiguration().getValidationMetadataProvider()
-                .getValidationMetadata(beanClass, new ParameterName(name));
+                .getValidationMetadata(beanClass, new ParameterName(getName()));
         }
         else {
             return null;
         }
     }
 
-    @Override
-    public String getContentType() {
-        return "text/html";
-    }
-
-    @Override
-    public void render(Writer out) throws IOException {
-        write(out, "<input ");
-        write(out, attrs().attrsToString());
-        write(out, ">");
-    }
-
-    protected Object getSingleOverrideValue() {
+    private Object getSingleOverrideValue() {
         Object unknown = getOverrideValueOrValues();
         Object returnValue = null;
 
@@ -136,7 +123,7 @@ public class Text extends TemplatedBase<Text> {
         return returnValue;
     }
 
-    protected Object getOverrideValueOrValues() {
+    private Object getOverrideValueOrValues() {
         // Look first for something that the user submitted in the current request
         Object v = getValuesFromRequest();
 
@@ -155,17 +142,17 @@ public class Text extends TemplatedBase<Text> {
 //        return StripesFilter.getConfiguration().getPopulationStrategy().getValue(this);
     }
 
-    protected Object getValueFromActionBean() {
+    private Object getValueFromActionBean() {
         ActionBean actionBean = form.getActionBean();
         Object value = null;
 
         if (actionBean != null) {
             try {
-                value = BeanUtil.getPropertyValue(name, actionBean);
+                value = BeanUtil.getPropertyValue(getName(), actionBean);
             }
             catch (ExpressionException ee) {
-                if (!StripesConstants.SPECIAL_URL_KEYS.contains(name)) {
-                    log.info("Could not find property [", name, "] on ActionBean.", ee);
+                if (!StripesConstants.SPECIAL_URL_KEYS.contains(getName())) {
+                    log.info("Could not find property [", getName(), "] on ActionBean.", ee);
                 }
             }
         }
@@ -173,9 +160,9 @@ public class Text extends TemplatedBase<Text> {
         return value;
     }
 
-    protected String[] getValuesFromRequest() {
+    private String[] getValuesFromRequest() {
         HttpServletRequest request = StripesTags.getRequest();
-        String[] value = request.getParameterValues(name);
+        String[] value = request.getParameterValues(getName());
 
         /*
          * If the value was pulled from a request parameter and the ActionBean property it would
@@ -187,7 +174,7 @@ public class Text extends TemplatedBase<Text> {
             if (beanClass != null) {
                 Configuration config = StripesFilter.getConfiguration();
                 ValidationMetadata validate = config.getValidationMetadataProvider()
-                    .getValidationMetadata(beanClass, new ParameterName(name));
+                    .getValidationMetadata(beanClass, new ParameterName(getName()));
                 if (validate != null && validate.encrypted()) {
                     String[] copy = new String[value.length];
                     for (int i = 0; i < copy.length; i++) {
@@ -202,8 +189,8 @@ public class Text extends TemplatedBase<Text> {
     }
 
     public List<ValidationError> getErrors() {
-        ValidationErrors errs = form.getActionBean().getContext().getValidationErrors();
-        List<ValidationError> fieldErrs = errs.get(name);
-        return fieldErrs != null ? fieldErrs : Collections.emptyList();
+        return form.getErrors(getName());
     }
+
+
 }

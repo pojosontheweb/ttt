@@ -23,6 +23,15 @@ public abstract class Template implements ITemplate {
         }
     }
 
+    protected void write(Writer out, Object first, Object... rest) {
+        write(out, first);
+        if (rest != null) {
+            for (Object o : rest) {
+                write(out, o);
+            }
+        }
+    }
+
     @Override
     public String getContentType() {
         return null;
