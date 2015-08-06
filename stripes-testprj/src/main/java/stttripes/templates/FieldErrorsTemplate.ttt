@@ -1,10 +1,10 @@
 <%@ page import="net.sourceforge.stripes.validation.ValidationError" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.Text" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.stream.Collectors" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.HtmlTag" %>
 <%!
-    Text input;
+    HtmlTag.InputWithoutBody input; // base class for inputs without body
     Locale locale;
 %>
 <%

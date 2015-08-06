@@ -208,4 +208,7 @@ public class Form extends HtmlTag.WithBody {
         return new Text(this, name);
     }
 
+    public Password password(String name) {
+        return new Password(this, name);
+    }
 }
