@@ -2,20 +2,31 @@ package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.Template;
 import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.config.Configuration;
+import net.sourceforge.stripes.controller.ParameterName;
 import net.sourceforge.stripes.controller.StripesConstants;
+import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.exception.StripesJspException;
+import net.sourceforge.stripes.exception.StripesRuntimeException;
+import net.sourceforge.stripes.format.*;
 import net.sourceforge.stripes.localization.LocalizationUtility;
-import net.sourceforge.stripes.tag.FormTag;
+import net.sourceforge.stripes.util.CryptoUtil;
 import net.sourceforge.stripes.util.HtmlUtil;
+import net.sourceforge.stripes.util.Log;
+import net.sourceforge.stripes.util.bean.BeanUtil;
+import net.sourceforge.stripes.util.bean.ExpressionException;
+import net.sourceforge.stripes.validation.ValidationError;
+import net.sourceforge.stripes.validation.ValidationMetadata;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspException;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
@@ -28,17 +39,16 @@ import static com.pojosontheweb.ttt.Util.toRtEx;
  *     <li>tags without body : {@link com.pojosontheweb.ttt.stripes.HtmlTag.WithoutBody}</li>
  *     <li>tags with an optional body : {@link com.pojosontheweb.ttt.stripes.HtmlTag.WithBody}</li>
  * </ul>
- * @param <T> used for typed chained calls
  */
-public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
+public abstract class HtmlTag extends Template {
 
     protected final String tag;
-    protected final Map<String,String> attributes;
+    protected Attributes attributes;
 
-    public HtmlTag(String tag, Map<String, String> attributes) {
+    HtmlTag(String tag, Attributes attributes) {
         assert tag != null;
         this.tag = tag;
-        this.attributes = attributes == null ? new HashMap<>() : attributes;
+        this.attributes = attributes != null ? attributes : Attributes.emptyAttrs();
     }
 
     protected void writeTagStart(Writer out) {
@@ -50,11 +60,6 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
 
     protected void writeClosingTag(Writer out) {
         write(out, "</", tag, ">");
-    }
-
-    @SuppressWarnings("unchecked")
-    protected T castThis() {
-        return (T)this;
     }
 
     private String encodeAttribute(String name) {
@@ -70,42 +75,9 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
     }
 
     public String attrsToString() {
-        return attributes.keySet().stream()
+        return StreamSupport.stream(attributes.names().spliterator(), false)
             .map(this::encodeAttribute)
             .collect(Collectors.joining(" "));
-    }
-
-    /**
-     * Set the value of an attribute (mutates the object).
-     * @param name the name of the attribute
-     * @param value the value of the attribute
-     * @return this (updated)
-     */
-    public T attr(String name, String value) {
-        if (value==null) {
-            attributes.remove(name);
-            return castThis();
-        }
-        attributes.put(name, value.trim());
-        return castThis();
-    }
-
-    public T attrCat(String name, String value) {
-        String newValue = value;
-        String existingValue = attributes.get(name);
-        if (existingValue != null) {
-            newValue = existingValue + " " + value;
-        }
-        return attr(name, newValue);
-    }
-
-    public T attrReplace(String name, String str, String replacement) {
-        String s = attributes.get(name);
-        if (s == null) {
-            // nothing to do
-            return castThis();
-        }
-        return attr(name, s.replace(str, replacement));
     }
 
     protected HttpServletRequest getRequest() {
@@ -120,11 +92,10 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
      * Base class for body-less (void elements) tags. Such tags can be passed
      * directly to an expression block.
      *
-     * @param <T> used for chained calls
      */
-    public static abstract class WithoutBody<T extends WithoutBody<T>> extends HtmlTag<T> {
+    public static abstract class WithoutBody extends HtmlTag {
 
-        public WithoutBody(String tag, Map<String, String> attributes) {
+        public WithoutBody(String tag, Attributes attributes) {
             super(tag, attributes);
         }
 
@@ -133,6 +104,7 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
             writeTagStart(out);
             write(out, "/>");
         }
+
     }
 
     /**
@@ -159,21 +131,20 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
      *     </pre>
      * </code>
      *
-     * @param <T> used for chained calls
      */
-    public static abstract class WithBody<T extends WithBody<T>> extends HtmlTag<T> implements AutoCloseable {
+    public static abstract class WithBody extends HtmlTag implements AutoCloseable {
 
         protected final Writer out;
 
-        public WithBody(Writer out, String tag, Map<String, String> attributes) {
+        public WithBody(Writer out, String tag, Attributes attributes) {
             super(tag, attributes);
             this.out = out;
         }
 
-        public T open() {
+        public WithBody open() {
             writeTagStart(out);
             write(out, ">");
-            return castThis();
+            return this;
         }
 
         @Override
@@ -193,34 +164,190 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
         }
     }
 
-    /**
-     * Base class for input tags, handles name and type attributes.
-     *
-     * @param <T> used for chained calls
-     */
-    public static abstract class Input<T extends WithoutBody<T>> extends WithoutBody<T> {
 
+    public static final class InputDelegate {
+
+        private static final Log log = Log.getInstance(InputDelegate.class);
+
+        private final String tag;
+        private final Form form;
         private final String type;
         private final String name;
-        private String formatType;
-        private String formatPattern;
+        private final String value;
+        private final String errorCssClass;
+        private final String formatType;
+        private final String formatPattern;
 
-        public Input(String tag, String type, String name, Map<String, String> attributes) {
-            super(tag, attributes);
+        public InputDelegate(String tag, Form form, String type, String name) {
+            this(tag, form, type, name, null, null, null, null);
+        }
+
+        public InputDelegate(
+            String tag,
+            Form form,
+            String type,
+            String name,
+            String value,
+            String errorCssClass,
+            String formatType,
+            String formatPattern) {
+
+            this.tag = tag;
+            this.value = value;
+            this.errorCssClass = errorCssClass;
             this.type = type;
-            attr("type", type);
             this.name = name;
-            attr("name", name);
-        }
-
-        public T setFormatType(String formatType) {
             this.formatType = formatType;
-            return castThis();
+            this.formatPattern = formatPattern;
+            this.form = form;
         }
 
-        public T setFormatPattern(String formatPattern) {
-            this.formatPattern = formatPattern;
-            return castThis();
+        public boolean hasErrors() {
+            return form.hasErrors(name);
+        }
+
+        public List<ValidationError> getErrors() {
+            return form.getErrors(name);
+        }
+
+        protected String format() {
+            Object v = getSingleOverrideValue();
+            if (v != null) {
+                return format(v, true);
+            }
+            return null;
+        }
+
+        private String format(Object input, boolean forOutput) {
+            if (input == null) {
+                return "";
+            }
+
+            // format the value
+            FormatterFactory factory = StripesFilter.getConfiguration().getFormatterFactory();
+            net.sourceforge.stripes.format.Formatter formatter = factory.getFormatter(input.getClass(),
+                StripesTags.getRequest().getLocale(),
+                this.getFormatType(),
+                this.getFormatPattern());
+            String formatted = (formatter == null) ? String.valueOf(input) : formatter.format(input);
+
+            // encrypt the formatted value if required
+            if (forOutput && formatted != null) {
+                try {
+                    ValidationMetadata validate = getValidationMetadata();
+                    if (validate != null && validate.encrypted())
+                        formatted = CryptoUtil.encrypt(formatted);
+                }
+                catch (JspException e) {
+                    throw new StripesRuntimeException(e);
+                }
+            }
+
+            return formatted;
+        }
+
+        private ValidationMetadata getValidationMetadata() throws StripesJspException {
+            // find the action bean class we're dealing with
+            Class<? extends ActionBean> beanClass = form.getBeanClass();
+
+            if (beanClass != null) {
+                // check validation for encryption flag
+                return StripesFilter.getConfiguration().getValidationMetadataProvider()
+                    .getValidationMetadata(beanClass, new ParameterName(getName()));
+            }
+            else {
+                return null;
+            }
+        }
+
+
+        private Object getSingleOverrideValue() {
+            Object unknown = getOverrideValueOrValues();
+            Object returnValue = null;
+
+            if (unknown != null && unknown.getClass().isArray()) {
+                if (Array.getLength(unknown) > 0) {
+                    returnValue = Array.get(unknown, 0);
+                }
+            } else if (unknown != null && unknown instanceof Collection<?>) {
+                Collection<?> collection = (Collection<?>) unknown;
+                if (collection.size() > 0) {
+                    returnValue = collection.iterator().next();
+                }
+            } else {
+                returnValue = unknown;
+            }
+
+            return returnValue;
+        }
+
+        private Object getOverrideValueOrValues() {
+            // Look first for something that the user submitted in the current request
+            Object v = getValuesFromRequest();
+
+            // If that's not there, let's look on the ActionBean
+            if (v == null) {
+                v = getValueFromActionBean();
+            }
+
+            // And if there's no value there, look at the tag's own value
+            if (v == null) {
+                v = value;
+            }
+
+            return v;
+//
+//        return StripesFilter.getConfiguration().getPopulationStrategy().getValue(this);
+        }
+
+        private Object getValueFromActionBean() {
+            ActionBean actionBean = form.getActionBean();
+            Object value = null;
+
+            if (actionBean != null) {
+                try {
+                    value = BeanUtil.getPropertyValue(getName(), actionBean);
+                }
+                catch (ExpressionException ee) {
+                    if (!StripesConstants.SPECIAL_URL_KEYS.contains(getName())) {
+                        log.info("Could not find property [", getName(), "] on ActionBean.", ee);
+                    }
+                }
+            }
+
+            return value;
+        }
+
+        private String[] getValuesFromRequest() {
+            HttpServletRequest request = StripesTags.getRequest();
+            String[] value = request.getParameterValues(getName());
+
+        /*
+         * If the value was pulled from a request parameter and the ActionBean property it would
+         * bind to is flagged as encrypted, then the value needs to be decrypted now.
+         */
+            if (value != null) {
+                // find the action bean class we're dealing with
+                Class<? extends ActionBean> beanClass = form.getBeanClass();
+                if (beanClass != null) {
+                    Configuration config = StripesFilter.getConfiguration();
+                    ValidationMetadata validate = config.getValidationMetadataProvider()
+                        .getValidationMetadata(beanClass, new ParameterName(getName()));
+                    if (validate != null && validate.encrypted()) {
+                        String[] copy = new String[value.length];
+                        for (int i = 0; i < copy.length; i++) {
+                            copy[i] = CryptoUtil.decrypt(value[i]);
+                        }
+                        value = copy;
+                    }
+                }
+            }
+
+            return value;
+        }
+
+        public Form getForm() {
+            return form;
         }
 
         public String getName() {
@@ -238,67 +365,87 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
         public String getFormatPattern() {
             return formatPattern;
         }
+
+        public Attributes computeAttributes(Attributes attributes) {
+            Attributes a = attributes
+                .set("name", name)
+                .set("type", type);
+
+            String formatted = format();
+
+            if (formatted != null) {
+                a = a.set("value", formatted);
+            }
+            if (errorCssClass != null && hasErrors()) {
+                a = a.cat("class", " error"); // space is ugly, we'd need a css class helper...
+            }
+            return a;
+        }
+    }
+
+
+
+    public static abstract class InputWithoutBody extends WithoutBody {
+
+        private final InputDelegate delegate;
+
+        public InputWithoutBody(InputDelegate delegate, Attributes attributes) {
+
+            super(delegate.tag, attributes);
+            this.delegate = delegate;
+            this.attributes = delegate.computeAttributes(this.attributes);
+        }
+
+        public List<ValidationError> getErrors() {
+            return delegate.getErrors();
+        }
+    }
+
+    public static abstract class InputWithBody extends WithBody {
+
+        private final InputDelegate delegate;
+
+        public InputWithBody(Writer out, InputDelegate delegate, Attributes attributes) {
+            super(out, delegate.tag, attributes);
+            this.delegate = delegate;
+            this.attributes = delegate.computeAttributes(this.attributes);
+        }
     }
 
     /**
      * Base class for buttons : handles value attr msg lookup from resources
      *
-     * @param <T> used for chained calls
      */
-    public static abstract class ButtonBase<T extends ButtonBase<T>> extends WithBody<T> {
+    public static abstract class ButtonBase extends WithBody {
 
-        private final Form form;
-        private final String name;
-        private final String type;
-        private String value;
+        protected final Form form;
+        protected final String name;
+        protected final String value;
 
-        public ButtonBase(Writer out, Form form, String tag, String type, String name) {
-            super(out, tag, null);
-            this.name = name;
-            this.type = type;
+        public ButtonBase(Writer out, Form form, String tag, String type, String name, String value, Attributes attributes) {
+            super(out, tag, attributes);
             this.form = form;
-            attr("type", type);
-            attr("name", name);
-            updateAttributes();
+            this.name = name;
+            this.value = value;
+            this.attributes = this.attributes
+                .set("type", type)
+                .set("name", name)
+                .set("value", getLocalizedValue(form, name, value));
         }
 
-        protected void updateAttributes() {
-            String localizedValue = toRtEx(() -> getLocalizedFieldName(name));
-
+        private static String getLocalizedValue(Form form, String name, String value) {
+            String localizedValue = toRtEx(() -> getLocalizedFieldName(form, name));
             // Figure out where to pull the value from
             if (localizedValue != null) {
-                attr("value", localizedValue);
+                return localizedValue;
             }
-            else if (this.value != null) {
-                attr("value", this.value);
+            else {
+                return value;
             }
-
         }
 
-        public String getValue() {
-            return value;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Form getForm() {
-            return form;
-        }
-
-        public T setValue(String value) {
-            this.value = value;
-            updateAttributes();
-            return castThis();
-        }
-
-        protected String getLocalizedFieldName(final String name) throws StripesJspException {
-            Locale locale = getRequest().getLocale();
+        static String getLocalizedFieldName(Form form, final String name) throws StripesJspException {
+            Locale locale = StripesTags.getRequest().getLocale();
 
             String actionPath = null;
             Class<? extends ActionBean> beanClass = null;
@@ -308,7 +455,7 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
                 beanClass = form.getBeanClass();
             }
             else {
-                ActionBean mainBean = (ActionBean)getRequest().getAttribute(StripesConstants.REQ_ATTR_ACTION_BEAN);
+                ActionBean mainBean = (ActionBean)StripesTags.getRequest().getAttribute(StripesConstants.REQ_ATTR_ACTION_BEAN);
                 if (mainBean != null) {
                     beanClass = mainBean.getClass();
                 }

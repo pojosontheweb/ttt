@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Writer;
 import java.util.*;
 
-public class Form extends HtmlTag.WithBody<Form> {
+public class Form extends HtmlTag.WithBody {
 
     private final Class<? extends ActionBean> beanClass;
     private final String actionWithoutContext;
@@ -28,13 +28,13 @@ public class Form extends HtmlTag.WithBody<Form> {
 
 //    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
 
-    public Form(
+    Form(
         Writer out,
         Class<? extends ActionBean> beanClass,
         String actionWithoutContext,
         boolean partial,
         String method,
-        Map<String,String> attributes) {
+        Attributes attributes) {
 
         super(out, "form", attributes);
 
@@ -60,14 +60,16 @@ public class Form extends HtmlTag.WithBody<Form> {
             }
         }
         HttpServletResponse response = getResponse();
-        attr("action", response.encodeURL(action));
-        attr("method", method != null ? method : "POST");
+
+        this.attributes = this.attributes
+            .set("action",  response.encodeURL(action))
+            .set("method", method != null ? method : "POST");
     }
 
     @Override
     public Form open() {
         if (!partial) {
-            return super.open();
+            return (Form)super.open();
         }
         return this;
     }

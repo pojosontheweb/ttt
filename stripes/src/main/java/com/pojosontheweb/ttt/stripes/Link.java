@@ -5,19 +5,25 @@ import net.sourceforge.stripes.util.HtmlUtil;
 import java.io.Writer;
 import java.util.Map;
 
-public class Link extends HtmlTag.WithBody<Link> {
+public class Link extends HtmlTag.WithBody {
 
-    private Url url;
-    private String text;
+    private final Url url;
+    private final String text;
 
-    public Link(Writer out, Url url) {
-        super(out, "a", null);
+    Link(Writer out, Url url, String text, Attributes attributes) {
+        super(out, "a", attributes);
         this.url = url;
-        updateAttributes();
+        this.text = text;
+        this.attributes = computeAttributes();
     }
 
-    private void updateAttributes() {
-        attr("href", url.get());
+    private Attributes computeAttributes() {
+        return attributes.set("href", url.get());
+    }
+
+    @Override
+    public Link open() {
+        return (Link)super.open();
     }
 
     @Override
@@ -30,13 +36,10 @@ public class Link extends HtmlTag.WithBody<Link> {
     }
 
     public Link setText(String text) {
-        this.text = text;
-        return this;
+        return new Link(out, url, text, attributes);
     }
 
     public Link addParameter(String name, Object... value) {
-        url = url.addParameter(name, value);
-        updateAttributes();
-        return this;
+        return new Link(out, url.addParameter(name, value), text, attributes);
     }
 }

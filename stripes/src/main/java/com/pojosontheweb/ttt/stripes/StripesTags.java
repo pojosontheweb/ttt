@@ -32,7 +32,7 @@ public class StripesTags {
     //
 
     public Link link(Url url) {
-        return new Link(out, url);
+        return new Link(out, url, null, null);
     }
 
     public Link link(String url) {
@@ -57,7 +57,7 @@ public class StripesTags {
     //
 
     public Format format(Object value) {
-        return new Format(value);
+        return new Format(value, null, null);
     }
 
     //

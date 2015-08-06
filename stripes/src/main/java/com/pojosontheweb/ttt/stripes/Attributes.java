@@ -2,23 +2,57 @@ package com.pojosontheweb.ttt.stripes;
 
 import net.sourceforge.stripes.util.HtmlUtil;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.stream.Collectors;
 
 public class Attributes {
 
-    protected final LinkedHashMap<String,String> attributes;
+    protected final LinkedHashMap<String, String> attributes;
 
     public Attributes(LinkedHashMap<String, String> attributes) {
-        this.attributes = attributes == null ? new LinkedHashMap<>() : attributes;
+        if (attributes == null) {
+            this.attributes = new LinkedHashMap<>();
+        } else {
+            this.attributes = new LinkedHashMap<>(attributes);
+        }
     }
 
     public Attributes() {
         this(null);
     }
 
-    protected void set(String name, String value) {
-        attributes.put(name, value);
+    public String get(String name) {
+        return attributes.get(name);
+    }
+
+    public Iterable<String> names() {
+        return attributes.keySet();
+    }
+
+    public Attributes set(String name, String value) {
+        LinkedHashMap<String,String> newMap = new LinkedHashMap<>(attributes);
+        newMap.put(name, value);
+        return new Attributes(newMap);
+    }
+
+    public Attributes cat(String name, String value) {
+        String newValue = value;
+        String existingValue = attributes.get(name);
+        if (existingValue != null) {
+            newValue = existingValue + " " + value;
+        }
+        return set(name, newValue);
+    }
+
+    public Attributes replace(String name, String str, String replacement) {
+        String s = attributes.get(name);
+        if (s == null) {
+            // nothing to do
+            return this;
+        }
+        return set(name, s.replace(str, replacement));
     }
 
     public int size() {
@@ -43,5 +77,9 @@ public class Attributes {
             .collect(Collectors.joining(" "));
     }
 
+    public static final Attributes EMPTY_ATTRS = new Attributes();
 
+    public static Attributes emptyAttrs() {
+        return EMPTY_ATTRS;
+    }
 }
