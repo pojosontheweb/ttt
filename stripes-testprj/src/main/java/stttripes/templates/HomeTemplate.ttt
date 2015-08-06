@@ -49,15 +49,12 @@
         <% } %>
     </li>
     <li>
-        <%-- using a custom "decorated" user-defined template --%>
+        <%-- using a custom "decorated" template of our own --%>
         <%= new LinkTemplate(SimpleAction.class, "A decorated", "simple") %>
     </li>
     <li>
         <%-- build the link yourself by using s.url --%>
-        <%
-            String myHref = s.url(SimpleAction.class).get();
-        %>
-        <a href="<%= myHref %>">using url API</a>
+        <a href="<%= s.url(SimpleAction.class) %>">using url API</a>
     </li>
 </ul>
 

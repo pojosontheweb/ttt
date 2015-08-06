@@ -48,4 +48,33 @@ public class Format extends Template implements Supplier<String> {
     public void render(Writer out) throws IOException {
         write(out, get());
     }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public String getFormatType() {
+        return formatType;
+    }
+
+    public String getFormatPattern() {
+        return formatPattern;
+    }
+
+    public String getFormmatted() {
+        return formmatted;
+    }
+
+    public Format setValue(Object value) {
+        return new Format(value, formatType, formatPattern);
+    }
+
+    public Format setFormatType(String formatType) {
+        return new Format(value, formatType, formatPattern);
+    }
+
+    public Format setFormatPattern(String formatPattern) {
+        return new Format(value, formatType, formatPattern);
+    }
+
 }

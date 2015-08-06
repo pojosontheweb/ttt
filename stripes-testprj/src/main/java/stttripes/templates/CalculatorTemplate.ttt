@@ -95,10 +95,14 @@ will come along and teach me how to do other things?
             <td colspan="2">
                 <%--
                     submit buttons that bind to different
-                    events on the action beans
+                    events on the action bean, with a hard-coded
+                    label (value) :
                  --%>
                 <%= f.submit("addition", "Add") %>
-                <%= f.submit("division", "Divide") %>
+                <%--
+                    or using the resource bundle
+                --%>
+                <%= f.submit("division") %>
             </td>
         </tr>
         <tr>
@@ -108,8 +112,15 @@ will come along and teach me how to do other things?
                 as a controller : it passed itself as an argument.
                 Therefore we can use its properties right here in
                 this page...
+                Here we call s:format on it, for demo purposes.
             --%>
-            <td class="result"><%= s.format(actionBean.getResult()) %></td>
+            <td class="result">
+                <%=
+                    s.format(actionBean.getResult())
+                        .setFormatType("number")
+                        .setFormatPattern("#,##0.## brouzoufs")
+                %>
+            </td>
         </tr>
     </table>
 

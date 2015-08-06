@@ -1,24 +1,12 @@
 package com.pojosontheweb.ttt.stripes;
 
+import java.io.Writer;
 import java.util.Map;
 
-public class Submit extends HtmlTag.Input<Submit> {
+public class Submit extends HtmlTag.ButtonBase<Submit> {
 
-    private final String value;
-
-    public Submit(String name, String value, Map<String, String> attributes) {
-        super("submit", name, attributes);
-        this.value = value;
-        if (value != null) {
-            attr("value", value);
-        }
+    public Submit(Writer out, Form form, String name, String value, Map<String, String> attributes) {
+        super(out, form, "input", "submit", name, value, attributes);
     }
 
-    public Submit(String name) {
-        this(name, null, null);
-    }
-
-    public String getValue() {
-        return value;
-    }
 }

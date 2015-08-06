@@ -162,6 +162,10 @@ public class Form extends HtmlTag.WithBody<Form> {
         return bean;
     }
 
+    public String getAction() {
+        return actionWithoutContext;
+    }
+
     protected String getActionBeanUrlBinding() {
         ActionResolver resolver = StripesFilter.getConfiguration().getActionResolver();
         if (beanClass == null) {
@@ -190,8 +194,12 @@ public class Form extends HtmlTag.WithBody<Form> {
     // factory methods for nested inputs
     //
 
+    public Submit submit(String name) {
+        return new Submit(out, this, name, null, null);
+    }
+
     public Submit submit(String name, String value) {
-        return new Submit(name, value, null);
+        return new Submit(out, this, name, value, null);
     }
 
     public Text text(String name) {

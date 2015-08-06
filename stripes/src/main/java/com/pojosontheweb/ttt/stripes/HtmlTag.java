@@ -1,6 +1,11 @@
 package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.Template;
+import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.controller.StripesConstants;
+import net.sourceforge.stripes.exception.StripesJspException;
+import net.sourceforge.stripes.localization.LocalizationUtility;
+import net.sourceforge.stripes.tag.FormTag;
 import net.sourceforge.stripes.util.HtmlUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.pojosontheweb.ttt.Util.toRtEx;
 
 /**
  * Base class for all HTML tags. Handles base tag functionality, such
@@ -197,6 +205,78 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
 
         public String getType() {
             return type;
+        }
+    }
+
+    /**
+     * Base class for buttons : handles value attr msg lookup from resources
+     *
+     * @param <T> used for chained calls
+     */
+    public static abstract class ButtonBase<T extends ButtonBase<T>> extends WithBody<T> {
+
+        private final Form form;
+        private final String name;
+        private final String type;
+        private String value;
+
+        public ButtonBase(Writer out, Form form, String tag, String type, String name, String value, Map<String, String> attributes) {
+            super(out, tag, attributes);
+            this.name = name;
+            this.type = type;
+            this.form = form;
+            attr("type", type);
+            attr("name", name);
+            setValue(value);
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Form getForm() {
+            return form;
+        }
+
+        public T setValue(String value) {
+            this.value = value;
+            String localizedValue = toRtEx(() -> getLocalizedFieldName(name));
+
+            // Figure out where to pull the value from
+            if (localizedValue != null) {
+                attr("value", localizedValue);
+            }
+            else if (this.value != null) {
+                attr("value", this.value);
+            }
+            return castThis();
+        }
+
+        protected String getLocalizedFieldName(final String name) throws StripesJspException {
+            Locale locale = getRequest().getLocale();
+
+            String actionPath = null;
+            Class<? extends ActionBean> beanClass = null;
+
+            if (form != null) {
+                actionPath = form.getAction();
+                beanClass = form.getBeanClass();
+            }
+            else {
+                ActionBean mainBean = (ActionBean)getRequest().getAttribute(StripesConstants.REQ_ATTR_ACTION_BEAN);
+                if (mainBean != null) {
+                    beanClass = mainBean.getClass();
+                }
+            }
+            return LocalizationUtility.getLocalizedFieldName(name, actionPath, beanClass, locale);
         }
     }
 

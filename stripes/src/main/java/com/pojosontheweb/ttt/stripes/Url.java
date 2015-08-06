@@ -1,5 +1,6 @@
 package com.pojosontheweb.ttt.stripes;
 
+import com.pojosontheweb.ttt.Template;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.exception.StripesJspException;
@@ -10,6 +11,8 @@ import net.sourceforge.stripes.util.UrlBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Objects;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;
@@ -18,7 +21,7 @@ import static com.pojosontheweb.ttt.Util.toRtEx;
  * Manages Stripes URLs : Computes the actual URL for an action bean,
  * handling params, event, etc.
  */
-public class Url {
+public class Url extends Template {
 
     private static final Log log = Log.getInstance(Url.class);
 
@@ -172,4 +175,8 @@ public class Url {
         return new Url(beanClass, url, event, anchor, parameters.add(name, value));
     }
 
+    @Override
+    public void render(Writer out) throws IOException {
+        write(out, get());
+    }
 }
