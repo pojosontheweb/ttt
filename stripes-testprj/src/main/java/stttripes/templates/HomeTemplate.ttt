@@ -20,12 +20,11 @@
     use of StripesTags. When using TTT templates with
     Stripes, you cannot use the regular JSP tags : you
     don't need/want JSPs with TTT, that's the whole point...
-    <br/>
-    Therefore, you can use the pure-Java version of those
-    tags, right in your templates.
+    With TTT, you use pure Java code instead of the &lt;s:*/&gt; tags,
+    a.k.a the <code>StripesTags</code> APIs.
 </p>
 
-<h2>s:link</h2>
+<h2>Links (s:link)</h2>
 <ul>
     <li>
         <%= s.link(SimpleAction.class).setText("simple template (beanclass, no param)") %>
@@ -62,7 +61,7 @@
     </li>
 </ul>
 
-<h2>s:form</h2>
+<h2>Forms (s:form, s:text, etc.)</h2>
 <ul>
     <li>
         <% try (Link l = s.link(CalculatorAction.class).open()) { %>

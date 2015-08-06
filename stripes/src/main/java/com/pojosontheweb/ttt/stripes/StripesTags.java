@@ -49,12 +49,20 @@ public class StripesTags {
     //
 
     public Form form(Class<? extends ActionBean> beanClass) {
-        return new Form(out, beanClass, false, null, null);
+        return new Form(out, beanClass, null, false, null, null);
     }
 
+    //
+    // s:format
+    //
+
     public Format format(Object value) {
-        return new Format(value);
+        return new Format(value, null, null);
     }
+
+    //
+    // helpers
+    //
 
     public static HttpServletRequest getRequest() {
         return ExecutionContext.currentContext().getActionBeanContext().getRequest();

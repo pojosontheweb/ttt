@@ -7,34 +7,24 @@ import net.sourceforge.stripes.format.FormatterFactory;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.function.Supplier;
 
-public class Format extends Template {
+public class Format extends Template implements Supplier<String> {
 
     private final Object value;
-    private String formatType;
-    private String formatPattern;
+    private final String formatType;
+    private final String formatPattern;
+    private final String formmatted;
 
-    public Format(Object value) {
+    public Format(Object value, String formatType, String formatPattern) {
         this.value = value;
-    }
-
-    public Format setFormatType(String formatType) {
         this.formatType = formatType;
-        return this;
-    }
-
-    public Format setFormatPattern(String formatPattern) {
         this.formatPattern = formatPattern;
-        return this;
-    }
-
-    @Override
-    public void render(Writer out) throws IOException {
-        write(out, build());
+        formmatted = format();
     }
 
     @SuppressWarnings("unchecked")
-    public String build() {
+    private String format() {
         if (value == null)
             return "";
 
@@ -49,4 +39,13 @@ public class Format extends Template {
             return formatter.format(value);
     }
 
+    @Override
+    public String get() {
+        return formmatted;
+    }
+
+    @Override
+    public void render(Writer out) throws IOException {
+        write(out, get());
+    }
 }

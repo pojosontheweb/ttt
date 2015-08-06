@@ -7,6 +7,7 @@ import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.tag.PageOptionsTag;
 import net.sourceforge.stripes.util.CryptoUtil;
 import net.sourceforge.stripes.util.HtmlUtil;
+import net.sourceforge.stripes.util.StringUtil;
 import net.sourceforge.stripes.util.UrlBuilder;
 import net.sourceforge.stripes.validation.ValidationError;
 import net.sourceforge.stripes.validation.ValidationErrors;
@@ -20,25 +21,28 @@ import java.util.*;
 public class Form extends HtmlTag.WithBody<Form> {
 
     private final Class<? extends ActionBean> beanClass;
-    private final String method;
-    private final String action;
+    private final String actionWithoutContext;
     private final boolean partial;
 
-    // TODO handle url, wizzard...
+    // TODO handle wizzard...
 
 //    private Map<String,Class<?>> fieldsPresent = new HashMap<String,Class<?>>();
 
     public Form(
         Writer out,
         Class<? extends ActionBean> beanClass,
+        String actionWithoutContext,
         boolean partial,
         String method,
         Map<String,String> attributes) {
 
         super(out, "form", attributes);
+
+        assert beanClass != null || actionWithoutContext != null;
+
         this.beanClass = beanClass;
         this.partial = partial;
-        this.method = method;
+        this.actionWithoutContext = actionWithoutContext;
 
         UrlBuilder urlBuilder =
             new UrlBuilder(getRequest().getLocale(), Url.getActionBeanUrl(beanClass), false).setEvent(null);
@@ -56,8 +60,7 @@ public class Form extends HtmlTag.WithBody<Form> {
             }
         }
         HttpServletResponse response = getResponse();
-        this.action = response.encodeURL(action);
-        attr("action", action);
+        attr("action", response.encodeURL(action));
         attr("method", method != null ? method : "POST");
     }
 
@@ -147,18 +150,6 @@ public class Form extends HtmlTag.WithBody<Form> {
         return CryptoUtil.encrypt(getRequest().getServletPath());
     }
 
-//    public Text text(String field) {
-//        return new Text(this, field);
-//    }
-
-    public Submit submit(String name, String value) {
-        return new Submit(name, value, null);
-    }
-
-    public Text text(String name) {
-        return new Text(this, name, null, null, null, null, null);
-    }
-
     public ActionBean getActionBean() {
         String binding = getActionBeanUrlBinding();
         HttpServletRequest request = getRequest();
@@ -173,7 +164,16 @@ public class Form extends HtmlTag.WithBody<Form> {
 
     protected String getActionBeanUrlBinding() {
         ActionResolver resolver = StripesFilter.getConfiguration().getActionResolver();
-        return resolver.getUrlBinding(beanClass);
+        if (beanClass == null) {
+            String path = StringUtil.trimFragment(this.actionWithoutContext);
+            String binding = resolver.getUrlBindingFromPath(path);
+            if (binding == null)
+                binding = path;
+            return binding;
+        }
+        else {
+            return resolver.getUrlBinding(beanClass);
+        }
     }
 
     public List<ValidationError> getErrors(String fieldName) {
@@ -184,6 +184,18 @@ public class Form extends HtmlTag.WithBody<Form> {
 
     public boolean hasErrors(String fieldName) {
         return getErrors(fieldName).size() > 0;
+    }
+
+    //
+    // factory methods for nested inputs
+    //
+
+    public Submit submit(String name, String value) {
+        return new Submit(name, value, null);
+    }
+
+    public Text text(String name) {
+        return new Text(this, name, null, null, null, null, null);
     }
 
 }
