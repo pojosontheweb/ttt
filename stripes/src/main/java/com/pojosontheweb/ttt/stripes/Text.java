@@ -2,7 +2,6 @@ package com.pojosontheweb.ttt.stripes;
 
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.config.Configuration;
-import net.sourceforge.stripes.controller.ExecutionContext;
 import net.sourceforge.stripes.controller.ParameterName;
 import net.sourceforge.stripes.controller.StripesConstants;
 import net.sourceforge.stripes.controller.StripesFilter;
@@ -15,47 +14,54 @@ import net.sourceforge.stripes.util.Log;
 import net.sourceforge.stripes.util.bean.BeanUtil;
 import net.sourceforge.stripes.util.bean.ExpressionException;
 import net.sourceforge.stripes.validation.ValidationError;
-import net.sourceforge.stripes.validation.ValidationErrors;
 import net.sourceforge.stripes.validation.ValidationMetadata;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
-import java.io.IOException;
-import java.io.Writer;
 import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class Text extends HtmlTag.Input<Text> {
 
     private static final Log log = Log.getInstance(Text.class);
 
     private final Form form;
-    private final String value;
-    private final String formatType;
-    private final String formatPattern;
+    private String value;
+    private String errorCssClass;
 
-    public Text(Form form, String fieldName, Map<String, String> attributes, String value, String formatType, String formatPattern, String errorCssClass) {
-        super("text", fieldName, attributes);
+    public Text(Form form, String name) {
+        super("input", "text", name, null);
         this.form = form;
-        this.value = value;
-        this.formatType = formatType;
-        this.formatPattern = formatPattern;
+        updateValueAttr();
+    }
 
+    public Text setValue(String value) {
+        this.value = value;
+        updateValueAttr();
+        return this;
+    }
+
+    public Text setErrorCssClass(String css) {
+        this.errorCssClass = css;
+        if (errorCssClass != null && hasErrors()) {
+            // add the "error" css class to the field
+            attrCat("class", errorCssClass);
+        } else {
+            // remove the "error" css class but preserve
+            // existing other classes
+            attrReplace("class", errorCssClass, "");
+        }
+        return this;
+    }
+
+    private void updateValueAttr() {
         Object v = getSingleOverrideValue();
         if (v != null) {
             attr("value", format(v, true));
         }
-
-        // add the "error" css class to the field
-        if (errorCssClass != null && hasErrors()) {
-            attrCat("class", errorCssClass);
-        }
-
-//        set("maxlength", getEffectiveMaxlength());
     }
+
 
     public boolean hasErrors() {
         return form.hasErrors(getName());
@@ -70,8 +76,8 @@ public class Text extends HtmlTag.Input<Text> {
         FormatterFactory factory = StripesFilter.getConfiguration().getFormatterFactory();
         Formatter formatter = factory.getFormatter(input.getClass(),
             StripesTags.getRequest().getLocale(),
-            this.formatType,
-            this.formatPattern);
+            this.getFormatType(),
+            this.getFormatPattern());
         String formatted = (formatter == null) ? String.valueOf(input) : formatter.format(input);
 
         // encrypt the formatted value if required
@@ -192,5 +198,15 @@ public class Text extends HtmlTag.Input<Text> {
         return form.getErrors(getName());
     }
 
+    public Form getForm() {
+        return form;
+    }
 
+    public String getValue() {
+        return value;
+    }
+
+    public String getErrorCssClass() {
+        return errorCssClass;
+    }
 }

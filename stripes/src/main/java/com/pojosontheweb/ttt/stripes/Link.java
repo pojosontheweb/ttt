@@ -7,17 +7,16 @@ import java.util.Map;
 
 public class Link extends HtmlTag.WithBody<Link> {
 
-    private final Url url;
-    private final String text;
+    private Url url;
+    private String text;
 
-    public Link(Writer out, Url url, Map<String, String> attributes) {
-        this(out, url, attributes, null);
+    public Link(Writer out, Url url) {
+        super(out, "a", null);
+        this.url = url;
+        updateAttributes();
     }
 
-    public Link(Writer out, Url url, Map<String, String> attributes, String text) {
-        super(out, "a", attributes);
-        this.url = url;
-        this.text = text;
+    private void updateAttributes() {
         attr("href", url.get());
     }
 
@@ -31,10 +30,13 @@ public class Link extends HtmlTag.WithBody<Link> {
     }
 
     public Link setText(String text) {
-        return new Link(out, url, attributes, text);
+        this.text = text;
+        return this;
     }
 
     public Link addParameter(String name, Object... value) {
-        return new Link(out, url.addParameter(name, value), attributes, text);
+        url = url.addParameter(name, value);
+        updateAttributes();
+        return this;
     }
 }

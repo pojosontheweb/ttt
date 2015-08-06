@@ -195,15 +195,15 @@ public class Form extends HtmlTag.WithBody<Form> {
     //
 
     public Submit submit(String name) {
-        return new Submit(out, this, name, null, null);
+        return new Submit(out, this, name);
     }
 
     public Submit submit(String name, String value) {
-        return new Submit(out, this, name, value, null);
+        return new Submit(out, this, name).setValue(value);
     }
 
     public Text text(String name) {
-        return new Text(this, name, null, null, null, null, null);
+        return new Text(this, name);
     }
 
 }

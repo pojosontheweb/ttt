@@ -82,7 +82,11 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
      * @return this (updated)
      */
     public T attr(String name, String value) {
-        attributes.put(name, value);
+        if (value==null) {
+            attributes.remove(name);
+            return castThis();
+        }
+        attributes.put(name, value.trim());
         return castThis();
     }
 
@@ -92,8 +96,16 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
         if (existingValue != null) {
             newValue = existingValue + " " + value;
         }
-        attributes.put(name, newValue);
-        return castThis();
+        return attr(name, newValue);
+    }
+
+    public T attrReplace(String name, String str, String replacement) {
+        String s = attributes.get(name);
+        if (s == null) {
+            // nothing to do
+            return castThis();
+        }
+        return attr(name, s.replace(str, replacement));
     }
 
     protected HttpServletRequest getRequest() {
@@ -188,15 +200,27 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
      */
     public static abstract class Input<T extends WithoutBody<T>> extends WithoutBody<T> {
 
-        private final String name;
         private final String type;
+        private final String name;
+        private String formatType;
+        private String formatPattern;
 
-        public Input(String type, String name, Map<String, String> attributes) {
-            super("input", attributes);
-            this.name = name;
+        public Input(String tag, String type, String name, Map<String, String> attributes) {
+            super(tag, attributes);
             this.type = type;
             attr("type", type);
+            this.name = name;
             attr("name", name);
+        }
+
+        public T setFormatType(String formatType) {
+            this.formatType = formatType;
+            return castThis();
+        }
+
+        public T setFormatPattern(String formatPattern) {
+            this.formatPattern = formatPattern;
+            return castThis();
         }
 
         public String getName() {
@@ -205,6 +229,14 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
 
         public String getType() {
             return type;
+        }
+
+        public String getFormatType() {
+            return formatType;
+        }
+
+        public String getFormatPattern() {
+            return formatPattern;
         }
     }
 
@@ -220,14 +252,27 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
         private final String type;
         private String value;
 
-        public ButtonBase(Writer out, Form form, String tag, String type, String name, String value, Map<String, String> attributes) {
-            super(out, tag, attributes);
+        public ButtonBase(Writer out, Form form, String tag, String type, String name) {
+            super(out, tag, null);
             this.name = name;
             this.type = type;
             this.form = form;
             attr("type", type);
             attr("name", name);
-            setValue(value);
+            updateAttributes();
+        }
+
+        protected void updateAttributes() {
+            String localizedValue = toRtEx(() -> getLocalizedFieldName(name));
+
+            // Figure out where to pull the value from
+            if (localizedValue != null) {
+                attr("value", localizedValue);
+            }
+            else if (this.value != null) {
+                attr("value", this.value);
+            }
+
         }
 
         public String getValue() {
@@ -248,15 +293,7 @@ public abstract class HtmlTag<T extends HtmlTag<T>> extends Template {
 
         public T setValue(String value) {
             this.value = value;
-            String localizedValue = toRtEx(() -> getLocalizedFieldName(name));
-
-            // Figure out where to pull the value from
-            if (localizedValue != null) {
-                attr("value", localizedValue);
-            }
-            else if (this.value != null) {
-                attr("value", this.value);
-            }
+            updateAttributes();
             return castThis();
         }
 

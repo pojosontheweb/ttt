@@ -11,37 +11,34 @@ import java.util.function.Supplier;
 
 public class Format extends Template implements Supplier<String> {
 
-    private final Object value;
-    private final String formatType;
-    private final String formatPattern;
-    private final String formmatted;
+    private Object value;
+    private String formatType;
+    private String formatPattern;
+    private String formatted;
 
-    public Format(Object value, String formatType, String formatPattern) {
+    public Format(Object value) {
         this.value = value;
-        this.formatType = formatType;
-        this.formatPattern = formatPattern;
-        formmatted = format();
+        format();
     }
 
     @SuppressWarnings("unchecked")
-    private String format() {
-        if (value == null)
-            return "";
-
-        FormatterFactory factory = StripesFilter.getConfiguration().getFormatterFactory();
-        Formatter formatter = factory.getFormatter(value.getClass(),
-            StripesTags.getRequest().getLocale(),
-            this.formatType,
-            this.formatPattern);
-        if (formatter == null)
-            return String.valueOf(value);
-        else
-            return formatter.format(value);
+    private void format() {
+        if (value == null) {
+            formatted = "";
+        } else {
+            FormatterFactory factory = StripesFilter.getConfiguration().getFormatterFactory();
+            Formatter formatter = factory.getFormatter(value.getClass(),
+                StripesTags.getRequest().getLocale(),
+                this.formatType,
+                this.formatPattern);
+            formatted = formatter == null ? String.valueOf(value) : formatter.format(value);
+        }
     }
 
     @Override
     public String get() {
-        return formmatted;
+        format();
+        return formatted;
     }
 
     @Override
@@ -61,20 +58,19 @@ public class Format extends Template implements Supplier<String> {
         return formatPattern;
     }
 
-    public String getFormmatted() {
-        return formmatted;
-    }
-
     public Format setValue(Object value) {
-        return new Format(value, formatType, formatPattern);
+        this.value = value;
+        return this;
     }
 
     public Format setFormatType(String formatType) {
-        return new Format(value, formatType, formatPattern);
+        this.formatType = formatType;
+        return this;
     }
 
     public Format setFormatPattern(String formatPattern) {
-        return new Format(value, formatType, formatPattern);
+        this.formatPattern = formatPattern;
+        return this;
     }
 
 }
