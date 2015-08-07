@@ -5,7 +5,7 @@ public class Util {
     public static <T> void toRtEx(RunnableEx<T> code) {
         try {
             code.run();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new RuntimeException(e);
         }
     }
@@ -17,7 +17,7 @@ public class Util {
     public static <T> T toRtEx(String msg, SupplierEx<T> code) {
         try {
             return code.get();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (msg == null) {
                 throw new RuntimeException(e);
             } else {
@@ -28,12 +28,12 @@ public class Util {
 
     @FunctionalInterface
     public interface SupplierEx<T> {
-        T get() throws Exception;
+        T get() throws Throwable;
     }
 
     @FunctionalInterface
     public interface RunnableEx<T> {
-        void run() throws Exception;
+        void run() throws Throwable;
     }
 
 }
