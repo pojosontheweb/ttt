@@ -1,0 +1,34 @@
+package ttt.tests;
+
+import java.util.List;
+
+public class Test16 extends com.pojosontheweb.ttt.Template implements java.io.Serializable {
+
+	private final List<? extends Number> foo;
+	private final int bar;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
+	public Test16(List<? extends Number> foo, int bar) {
+		this.foo = foo;
+		this.bar = bar;
+	}
+
+	@Override
+	public String getContentType() {
+		return "text/html";
+	}
+
+	@Override
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
+		write(out, "<div class=\"foo\">\n    <ul>\n    " );
+		for(Number n : foo) { 
+		write(out, "\n        <li>i equals " );
+		write(out,  n  );
+		write(out, " </li>\n    " );
+		} 
+		write(out, "\n    </ul>\n</div>" );
+	}
+}
