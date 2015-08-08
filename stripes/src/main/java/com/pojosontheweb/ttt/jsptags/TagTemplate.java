@@ -9,7 +9,7 @@ import javax.servlet.jsp.tagext.Tag;
 
 public class TagTemplate<T extends Tag, B extends BodyTag> extends Template {
 
-    private final T tag;
+    protected final T tag;
 
     public TagTemplate(PageContext pageContext, T tag, B parent) {
         this.tag = tag;
@@ -25,11 +25,11 @@ public class TagTemplate<T extends Tag, B extends BodyTag> extends Template {
 
     @Override
     protected void doRender(TttWriter tw) throws Exception {
-        try {
+//        try {
             tag.doStartTag();
             tag.doEndTag();
-        } finally {
-            tag.release();
-        }
+//        } finally {
+//            tag.release();
+//        }
     }
 }

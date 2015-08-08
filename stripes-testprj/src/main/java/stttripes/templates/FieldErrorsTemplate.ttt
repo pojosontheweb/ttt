@@ -2,9 +2,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.stream.Collectors" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.HtmlTag" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.InputTagSupportBase" %>
+<%@ page import="com.pojosontheweb.ttt.Util" %>
 <%!
-    HtmlTag.InputWithoutBody input; // base class for inputs without body
+    InputTagSupportBase input;
     Locale locale;
 %>
 <%

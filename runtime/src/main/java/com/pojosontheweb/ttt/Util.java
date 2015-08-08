@@ -1,5 +1,8 @@
 package com.pojosontheweb.ttt;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Util {
 
     public static <T> void toRtEx(String msg, RunnableEx<T> code) {
@@ -42,6 +45,13 @@ public class Util {
     @FunctionalInterface
     public interface RunnableEx<T> {
         void run() throws Throwable;
+    }
+
+    public static  <T> List<T> withEmptyListIfNull(List<T> l) {
+        if (l==null) {
+            return Collections.emptyList();
+        }
+        return l;
     }
 
 }

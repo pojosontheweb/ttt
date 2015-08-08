@@ -36,7 +36,7 @@
 %>
 
 <%
-    try (Form f = s.form(InputsAction.class).open()) {
+    try (Form f = s.form(InputsAction.class)) {
 
         Text text = f.text("text");
         Password password = f.password("password");

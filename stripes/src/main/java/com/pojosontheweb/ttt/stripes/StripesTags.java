@@ -1,75 +1,61 @@
 package com.pojosontheweb.ttt.stripes;
 
+import com.pojosontheweb.ttt.jsptags.TagLib;
 import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.controller.ExecutionContext;
+import net.sourceforge.stripes.tag.FormTag;
+import net.sourceforge.stripes.tag.LinkTag;
+import net.sourceforge.stripes.tag.UrlTag;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.Writer;
 
-public class StripesTags {
+import static com.pojosontheweb.ttt.Util.toRtEx;
 
-    private final Writer out;
+public class StripesTags extends TagLib {
 
     public StripesTags(Writer out) {
-        this.out = out;
+        super(out);
     }
 
-    //
-    // s:url
-    //
-
-    public Url url(Class<? extends ActionBean> beanClass) {
-        return new Url(beanClass);
+    public Form form(FormTag formTag) {
+        Form f = new Form(pageContext, formTag);
+        f.open(out);
+        return f;
     }
 
-    public Url url(String url) {
-        return new Url(url);
+    public Form form(Class<? extends ActionBean> beanClass) {
+        return toRtEx(() -> {
+            FormTag ft = new FormTag();
+            ft.setBeanclass(beanClass);
+            return form(ft);
+        });
     }
 
-    //
-    // s:link
-    //
-
-    public Link link(Url url) {
-        return new Link(out, url, null, null);
-    }
-
-    public Link link(String url) {
-        return link(url(url));
+    public Link link(LinkTag linkTag) {
+        Link l = new Link(pageContext, linkTag);
+        l.open(out);
+        return l;
     }
 
     public Link link(Class<? extends ActionBean> beanClass) {
-        return link(url(beanClass));
+        LinkTag linkTag = new LinkTag();
+        linkTag.setBeanclass(beanClass);
+        return link(linkTag);
     }
 
-
-    //
-    // s:form
-    //
-
-    public Form form(Class<? extends ActionBean> beanClass) {
-        return new Form(out, beanClass, null, false, null, null);
+    public Link link(String url) {
+        LinkTag linkTag = new LinkTag();
+        linkTag.setUrl(url);
+        return link(linkTag);
     }
 
-    //
-    // s:format
-    //
-
-    public Format format(Object value) {
-        return new Format(value, null, null);
+    public Url url(UrlTag urlTag) {
+        return new Url(pageContext, urlTag);
     }
 
-    //
-    // helpers
-    //
-
-    public static HttpServletRequest getRequest() {
-        return ExecutionContext.currentContext().getActionBeanContext().getRequest();
-    }
-
-    public static HttpServletResponse getResponse() {
-        return ExecutionContext.currentContext().getActionBeanContext().getResponse();
+    public Url url(Class<? extends ActionBean> beanClass) {
+        UrlTag urlTag = new UrlTag();
+        urlTag.setBeanclass(beanClass);
+        return url(urlTag);
     }
 
 }

@@ -86,8 +86,8 @@ public class BodyTagSubTemplate<T extends BodyTag> implements SubTemplate {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            bodyTag.release();
+//        } finally {
+//            bodyTag.release();
         }
     }
 

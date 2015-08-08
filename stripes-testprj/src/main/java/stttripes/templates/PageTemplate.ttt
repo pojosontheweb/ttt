@@ -26,7 +26,7 @@
         if (!(actionBean instanceof HomeAction)) {
     %>
 
-        Back to <%= s.link(HomeAction.class).setText("home") %>
+        Back to <a href="<%=s.url(HomeAction.class)%>">home</a>
 
     <%  } %>
 </footer>

@@ -1,8 +1,13 @@
 package com.pojosontheweb.ttt.stripes;
 
-public class Password extends HtmlTag.InputWithoutBody {
+import net.sourceforge.stripes.tag.FormTag;
+import net.sourceforge.stripes.tag.InputPasswordTag;
 
-    public Password(Form form, String name) {
-        super(new InputDelegate("input", form, "password", name), null);
+import javax.servlet.jsp.PageContext;
+
+public class Password extends InputTagSupportBase<InputPasswordTag> {
+
+    public Password(PageContext pageContext, InputPasswordTag tag, FormTag parent) {
+        super(pageContext, tag, parent);
     }
 }

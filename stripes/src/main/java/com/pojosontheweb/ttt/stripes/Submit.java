@@ -1,20 +1,14 @@
 package com.pojosontheweb.ttt.stripes;
 
-import java.io.Writer;
+import com.pojosontheweb.ttt.jsptags.TagTemplate;
+import net.sourceforge.stripes.tag.FormTag;
+import net.sourceforge.stripes.tag.InputSubmitTag;
 
-public class Submit extends HtmlTag.ButtonBase {
+import javax.servlet.jsp.PageContext;
 
-    Submit(Writer out, Form form, String name) {
-        super(out, form, "input", "submit", name, null, null);
+public class Submit extends TagTemplate<InputSubmitTag,FormTag> {
+
+    public Submit(PageContext pageContext, InputSubmitTag tag, FormTag parent) {
+        super(pageContext, tag, parent);
     }
-
-    public Submit(Writer out, Form form, String name, String value, Attributes attributes) {
-        super(out, form, "input", "submit", name, value, attributes);
-
-    }
-
-    public Submit setValue(String value) {
-        return new Submit(out, form, name, value, attributes);
-    }
-
 }

@@ -1,4 +1,5 @@
 <%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
 <%!
     Class beanClass; // wildcards are not supported in generics
     String label;
@@ -9,5 +10,7 @@
 %>
 <span class="my-link">
     <%= label %>
-    <%= s.link(beanClass).setText(text) %>
+    <% try (Link l = s.link(beanClass)) { %>
+        <%= text %>
+    <% } %>
 </span>

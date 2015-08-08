@@ -7,7 +7,6 @@
 <%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
 <%@ page import="stttripes.templates.LinkTemplate" %>
 <%@ page import="stttripes.actions.InputsAction" %>
-<%@ page import="stttripes.actions.InputsAction2" %>
 <%
     // get those tags...
     StripesTags s = new StripesTags(out);
@@ -27,22 +26,24 @@
 <h2>Links (s:link)</h2>
 <ul>
     <li>
-        <%= s.link(SimpleAction.class).setText("simple template (beanclass, no param)") %>
+        <% try (Link l = s.link(SimpleAction.class)) { %>
+            simple template (beanclass, no param)
+        <% } %>
     </li>
     <li>
-        <% try (Link l = s.link(SimpleAction.class).addParameter("myProp", "hello_world").open()) { %>
+        <% try (Link l = s.link(SimpleAction.class).addParameter("myProp", "hello_world")) { %>
             simple template (beanclass, param)
         <% } %>
     </li>
     <li>
-        <% try (Link l = s.link("/simple").open()) { %>
+        <% try (Link l = s.link("/simple")) { %>
             simple template (url, no param)
         <% } %>
     </li>
     <li>
         <% try (Link l = s.link("/simple")
                 .addParameter("myProp", "hello_world")
-                .open()) { %>
+                ) { %>
 
                 simple template (url, param)
 
@@ -61,18 +62,13 @@
 <h2>Forms (s:form, s:text, etc.)</h2>
 <ul>
     <li>
-        <% try (Link l = s.link(CalculatorAction.class).open()) { %>
+        <% try (Link l = s.link(CalculatorAction.class)) { %>
             templated calculator
         <% } %>
     </li>
     <li>
-        <%= s.link(InputsAction.class).setText("various inputs") %>
-    </li>
-</ul>
-
-<h2>New tags</h2>
-<ul>
-    <li>
-        <%= s.link(InputsAction2.class).setText("real tags") %>
+        <% try (Link l = s.link(InputsAction.class)) { %>
+            various inputs
+        <% } %>
     </li>
 </ul>
