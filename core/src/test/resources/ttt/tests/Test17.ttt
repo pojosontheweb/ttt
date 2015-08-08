@@ -1,0 +1,7 @@
+<%@ page contentType="text/html" %>
+<%!
+    int bar;
+%>
+<div class="foo">
+    Salut Rémi
+</div>
