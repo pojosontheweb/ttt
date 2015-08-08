@@ -3,9 +3,8 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.InputTagSupportBase" %>
-<%@ page import="com.pojosontheweb.ttt.Util" %>
 <%!
-    InputTagSupportBase input;
+    InputTagSupportBase<?> input;
     Locale locale;
 %>
 <%

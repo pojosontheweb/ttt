@@ -119,7 +119,7 @@ DEC_ID
 	;
 
 DEC_GENERIC
-	: '<' DEC_ID '>'
+	: '<' TEXT '>'
 	;
 
 DEC_TYPE

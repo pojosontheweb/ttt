@@ -1,0 +1,19 @@
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html" %>
+<%--
+    JSP comment can span
+    appear anywhere
+    and are ignored when template gets compiled
+--%>
+<%@ page extends="java.io.Serializable" %>
+<%!
+    List<? extends Number> foo;
+    int bar;
+%>
+<div class="foo">
+    <ul>
+    <% for(Number n : foo) { %>
+        <li>i equals <%= n %> </li>
+    <% } %>
+    </ul>
+</div>

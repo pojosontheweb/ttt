@@ -1,7 +1,8 @@
 <%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
+<%@ page import="net.sourceforge.stripes.action.ActionBean" %>
 <%!
-    Class beanClass; // wildcards are not supported in generics
+    Class<? extends ActionBean> beanClass; // wildcards are not supported in generics
     String label;
     String text;
 %>
