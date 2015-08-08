@@ -1,6 +1,6 @@
 package com.pojosontheweb.ttt.jsptags;
 
-import com.pojosontheweb.ttt.SubTemplate;
+import com.pojosontheweb.ttt.IBodyTemplate;
 import com.pojosontheweb.ttt.TttWriter;
 
 import javax.servlet.jsp.tagext.BodyTag;
@@ -8,7 +8,7 @@ import javax.servlet.jsp.tagext.Tag;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
-public class BodyTagSubTemplate<T extends BodyTag> implements SubTemplate {
+public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate {
 
     protected final TttPageContext pageContext;
     protected final T bodyTag;
@@ -16,7 +16,7 @@ public class BodyTagSubTemplate<T extends BodyTag> implements SubTemplate {
     protected TttBodyContent bodyContent;
     protected TttWriter out;
 
-    public BodyTagSubTemplate(TttPageContext pageContext, T bodyTag) {
+    public BodyTagTemplate(TttPageContext pageContext, T bodyTag) {
         this.pageContext = pageContext;
         this.bodyTag = bodyTag;
     }

@@ -1,10 +1,10 @@
 package com.pojosontheweb.ttt.stripes;
 
-import com.pojosontheweb.ttt.jsptags.BodyTagSubTemplate;
+import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
 import net.sourceforge.stripes.tag.*;
 
-public class Form extends BodyTagSubTemplate<FormTag> {
+public class Form extends BodyTagTemplate<FormTag> {
 
     public Form(TttPageContext pageContext, FormTag formTag) {
         super(pageContext, formTag);

@@ -3,6 +3,9 @@ package com.pojosontheweb.ttt;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Utilty class (exception trapping and the like)
+ */
 public class Util {
 
     public static <T> void toRtEx(String msg, RunnableEx<T> code) {

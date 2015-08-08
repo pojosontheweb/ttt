@@ -3,7 +3,6 @@ package com.pojosontheweb.ttt;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
 public class TttWriter extends Writer {

@@ -5,24 +5,34 @@ import java.io.Writer;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
+/**
+ * Base template class. Defines the policy for writing
+ * to the output from expressions :
+ * <ul>
+ *     <li>null writes nothing</li>
+ *     <li>objects implementing ITemplate are rendered</li>
+ *     <li>objects implementing IBodyTemplate are opened</li>
+ *     <li>Strings are rendered as is</li>
+ *     <li>other objects are rendered using their toString() method</li>
+ * </ul>
+ */
 public abstract class Template implements ITemplate {
 
     protected void write(Writer out, Object o) {
         try {
-            if (o == null) {
-                out.write("null");
-            } else {
+            if (o != null) {
                 if (o instanceof ITemplate) {
                     ((ITemplate) o).render(out);
                 } else if (o instanceof String) {
                     out.write((String) o);
-                } else if (o instanceof SubTemplate) {
+                } else if (o instanceof IBodyTemplate) {
 
-                    SubTemplate st = (SubTemplate)o;
+                    IBodyTemplate st = (IBodyTemplate)o;
                     // call the open method on the sub template
                     // and let it manage stuff. SubTemplate is an
                     // auto-closable and should be used with
-                    // a try-resource block
+                    // a try-resource block, therefore we do not
+                    // need to call close ourselves...
                     st.open((TttWriter)out);
 
                 } else {
