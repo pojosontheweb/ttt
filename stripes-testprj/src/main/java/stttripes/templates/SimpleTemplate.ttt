@@ -3,6 +3,7 @@
 %>
 <html>
 <body>
+<h1>Simple</h1>
 <p>
 <% if (foo == null) { %>
     Hey, you have not provided no param. Try '?myProp=bar'...

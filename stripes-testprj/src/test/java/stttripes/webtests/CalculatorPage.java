@@ -21,7 +21,7 @@ public class CalculatorPage {
     }
 
     public CalculatorPage assertResult(String s) {
-        findr().elem(cssSelector("td.result")).where(textEquals(s)).eval();
+        findr().elem(cssSelector("td.result")).where(textEquals(s + " brouzoufs")).eval();
         return this;
     }
 

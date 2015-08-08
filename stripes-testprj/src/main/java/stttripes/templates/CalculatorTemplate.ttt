@@ -12,6 +12,9 @@
 <%@ page import="stttripes.templates.FieldErrorsTemplate" %>
 <%@ page import="net.sourceforge.stripes.validation.ValidationError" %>
 <%@ page import="java.util.List" %>
+<%@ page import="net.sourceforge.stripes.tag.FormatTag" %>
+<%@ page import="net.sourceforge.stripes.tag.FormTag" %>
+<%@ page import="com.pojosontheweb.ttt.jsptags.TagTemplate" %>
 <%!
     // template signature : we only need the actionBean here
     // because we want to access some of its props
@@ -20,6 +23,11 @@
      * the calc action bean (used to display result)
      */
     CalculatorAction actionBean;
+%>
+<%
+    Locale locale = actionBean.getContext().getLocale();
+    // init stripes tags
+    StripesTags stripes = new StripesTags(out);
 %>
 <style type="text/css">
     input.error {
@@ -36,13 +44,8 @@ Hi, I'm the Stripes Calculator. I can only do addition. Maybe, some day, a nice 
 will come along and teach me how to do other things?
 
 <%
-    Locale locale = actionBean.getContext().getLocale();
-
-    // init stripes tags
-    StripesTags stripes = new StripesTags(out);
-
     // open form for the action bean
-    try (Form f = stripes.form(CalculatorAction.class).build()) {
+    try ( Form f = stripes.form(CalculatorAction.class) ) {
 
         // create inputs and store refs...
         Text inputNumberOne = f.text("numberOne");
@@ -93,21 +96,42 @@ will come along and teach me how to do other things?
             <td colspan="2">
                 <%--
                     submit buttons that bind to different
-                    events on the action beans
+                    events on the action bean, with a hard-coded
+                    label (value) :
                  --%>
                 <%= f.submit("addition", "Add") %>
-                <%= f.submit("division", "Divide") %>
+                <%--
+                    or using the resource bundle
+                --%>
+                <%= f.submit("division") %>
             </td>
         </tr>
         <tr>
             <td>Result:</td>
             <%--
-                We have a ref to the action bean that was used
-                as a controller : it passed itself as an argument.
-                Therefore we can use its properties right here in
-                this page...
+                We can also manufacture tags fully by code : here
+                we create a FormatTag ourselves, bypassing the api,
+                and use it in the template.
             --%>
-            <td class="result"><%= actionBean.getResult() %></td>
+            <td class="result">
+                <%
+                    // create the tag by API
+                    FormatTag formatTag = new FormatTag();
+                    formatTag.setFormatType("number");
+                    formatTag.setFormatPattern("#,##0.## brouzoufs");
+                    formatTag.setValue(actionBean.getResult());
+
+                    // use the 'wrap(tag)' method to make the JSP Tag
+                    // understandable by TTT, and don't forget to assign
+                    // the parent ourselves...
+                    TagTemplate<FormatTag, FormTag> fmt = stripes.wrap(formatTag, f.getBodyTag());
+                %>
+                <%--
+
+                    tag understan
+                --%>
+                <%= fmt %>
+            </td>
         </tr>
     </table>
 

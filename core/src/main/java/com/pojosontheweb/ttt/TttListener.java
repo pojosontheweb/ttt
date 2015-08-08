@@ -169,7 +169,7 @@ public class TttListener extends TttParserBaseListener {
         }
 
         write("\t@Override\n");
-        write("\tpublic void render(java.io.Writer out) throws java.io.IOException {\n");
+        write("\tpublic void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {\n");
         super.enterParts(ctx);
     }
 

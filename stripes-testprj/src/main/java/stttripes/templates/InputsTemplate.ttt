@@ -1,17 +1,106 @@
-<%@ page import="com.pojosontheweb.ttt.stripes.StripesTags" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.Form" %>
 <%@ page import="stttripes.actions.InputsAction" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="stttripes.templates.FieldErrorsTemplate" %>
+<%@ page import="net.sourceforge.stripes.action.Message" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.pojosontheweb.ttt.stripes.*" %>
 <%!
-
-
+    InputsAction actionBean;
+%>
+<%
+    Locale locale = actionBean.getContext().getLocale();
+    StripesTags s = new StripesTags(out);
 %>
 <h1>FORM Inputs</h1>
+
 <p>
     This page shows how to use the various FORM inputs.
 </p>
-<%
-    StripesTags s = new StripesTags(out);
-%>
-<% try (Form f = s.form(InputsAction.class).build()) { %>
 
-<% } %>
+<%-- while we wait for s:messages... --%>
+<%
+    List<Message> messages = actionBean.getContext().getMessages();
+    if (messages != null && messages.size() > 0) {
+%>
+<div class="messages">
+    <ul>
+        <% for (Message m : messages) { %>
+        <li>
+            <%= m.getMessage(locale) %>
+        </li>
+        <% } %>
+    </ul>
+</div>
+<%
+    }
+%>
+
+<%
+    try (Form f = s.form(InputsAction.class)) {
+
+        Text text = f.text("text");
+        Password password = f.password("password");
+        Checkbox checkbox1 = f.checkbox("checkbox1");
+        Checkbox checkbox2 = f.checkbox("checkbox2").setChecked(true);
+%>
+<table>
+    <%-- s:text--%>
+    <tr>
+        <td>
+            Text
+        </td>
+        <td>
+            <%= text %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(text, locale) %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Password
+        </td>
+        <td>
+            <%= password %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(password, locale) %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Checkbox1
+        </td>
+        <td>
+            <%= checkbox1 %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(checkbox1, locale) %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Checkbox2 (checked by default)
+        </td>
+        <td>
+            <%= checkbox2 %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(checkbox2, locale) %>
+        </td>
+    </tr>
+
+        <tr>
+            <td colspan="3">
+                <%= f.submit("doStuff") %>
+                <%= f.submit("reset", "Reset") %>
+            </td>
+        </tr>
+
+</table>
+<%
+    }
+%>

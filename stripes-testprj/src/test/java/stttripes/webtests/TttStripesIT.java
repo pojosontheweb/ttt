@@ -54,7 +54,7 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             .setNumberOne("11")
             .setNumberTwo("22")
             .clickAdd()
-            .assertResult("33.0");
+            .assertResult("33");
 
         calcPage()
             .setNumberOne(null)
@@ -72,6 +72,11 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             .setNumberTwo("0")
             .clickDivide()
             .assertErrorNumberTwo("Dividing by zero is not allowed.");
+
+        calcPage()
+            .setNumberTwo("456")
+            .clickDivide()
+            .assertResult("0.27");
 
         clickBackToHome();
     }

@@ -19,50 +19,56 @@
     use of StripesTags. When using TTT templates with
     Stripes, you cannot use the regular JSP tags : you
     don't need/want JSPs with TTT, that's the whole point...
-    <br/>
-    Therefore, you can use the pure-Java version of those
-    tags, right in your templates.
+    With TTT, you use pure Java code instead of the &lt;s:*/&gt; tags,
+    a.k.a the <code>StripesTags</code> APIs.
 </p>
 
-<h2>s:link</h2>
+<h2>Links (s:link)</h2>
 <ul>
     <li>
-        <% try (Link l = s.link(SimpleAction.class).build()) { %>
+        <% try (Link l = s.link(SimpleAction.class)) { %>
             simple template (beanclass, no param)
         <% } %>
     </li>
     <li>
-        <% try (Link l = s.link(SimpleAction.class).setParameter("myProp", "hello_world").build()) { %>
+        <% try (Link l = s.link(SimpleAction.class).addParameter("myProp", "hello_world")) { %>
             simple template (beanclass, param)
         <% } %>
     </li>
     <li>
-        <% try (Link l = s.link("/simple").build()) { %>
+        <% try (Link l = s.link("/simple")) { %>
             simple template (url, no param)
         <% } %>
     </li>
     <li>
-        <% try (Link l = s.link("/simple").setParameter("myProp", "hello_world").build()) { %>
-            simple template (url, param)
+        <% try (Link l = s.link("/simple")
+                .addParameter("myProp", "hello_world")
+                ) { %>
+
+                simple template (url, param)
+
         <% } %>
     </li>
     <li>
-        <%-- using a custom "decorated" user-defined template --%>
+        <%-- using a custom "decorated" template of our own --%>
         <%= new LinkTemplate(SimpleAction.class, "A decorated", "simple") %>
+    </li>
+    <li>
+        <%-- build the link yourself by using s.url --%>
+        <a href="<%= s.url(SimpleAction.class) %>">using url API</a>
     </li>
 </ul>
 
-<h2>s:form</h2>
+<h2>Forms (s:form, s:text, etc.)</h2>
 <ul>
     <li>
-        <% try (Link l = s.link(CalculatorAction.class).build()) { %>
+        <% try (Link l = s.link(CalculatorAction.class)) { %>
             templated calculator
         <% } %>
     </li>
     <li>
-        <% try (Link l = s.link(InputsAction.class).build()) { %>
+        <% try (Link l = s.link(InputsAction.class)) { %>
             various inputs
         <% } %>
     </li>
-
 </ul>

@@ -25,10 +25,10 @@
         // display link to home for all actions... but home !
         if (!(actionBean instanceof HomeAction)) {
     %>
-    Back to <% try (Link l = s.link(HomeAction.class).build() ) { %> home <% } %>
-    <%
-        }
-    %>
+
+        Back to <a href="<%=s.url(HomeAction.class)%>">home</a>
+
+    <%  } %>
 </footer>
 </body>
 </html>

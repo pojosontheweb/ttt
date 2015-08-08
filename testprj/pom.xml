@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.pojosontheweb</groupId>
         <artifactId>ttt-parent</artifactId>
-        <version>0.1-beta</version>
+        <version>0.1-beta2</version>
     </parent>
     <artifactId>ttt-testprj</artifactId>
     <packaging>jar</packaging>
@@ -26,7 +26,7 @@
                 <executions>
                     <execution>
                         <id>ttt-compile</id>
-                        <phase>process-resources</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>ttt</goal>
                         </goals>
