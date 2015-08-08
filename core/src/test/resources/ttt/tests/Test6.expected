@@ -17,7 +17,7 @@ public class Test6 extends com.pojosontheweb.ttt.Template implements java.io.Ser
 	}
 
 	@Override
-	public void render(java.io.Writer out) throws java.io.IOException {
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
 		write(out, "<div class=\"foo\">\n    <span>" );
 		write(out,  foo.getBar()  );
 		write(out, "</span>\n    <ul>\n    " );

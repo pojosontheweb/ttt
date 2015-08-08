@@ -94,7 +94,7 @@ public class AntlrTest {
             "\t}\n" +
             "\n" +
             "\t@Override\n" +
-            "\tpublic void render(java.io.Writer out) throws java.io.IOException {\n" +
+            "\tpublic void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {\n" +
             "\t\twrite(out, \"TXT \" );\n" +
             "\t\twrite(out,  EXPR  );\n" +
             "\t\twrite(out, \" TXT 2 \" );\n" +
@@ -134,7 +134,7 @@ public class AntlrTest {
             "\t}\n" +
             "\n" +
             "\t@Override\n" +
-            "\tpublic void render(java.io.Writer out) throws java.io.IOException {\n" +
+            "\tpublic void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {\n" +
             "\t\twrite(out, \"TXT \" );\n" +
             "\t\twrite(out,  EXPR  );\n" +
             "\t\twrite(out, \" TXT 2 \" );\n" +
@@ -172,7 +172,7 @@ public class AntlrTest {
             "\t}\n" +
             "\n" +
             "\t@Override\n" +
-            "\tpublic void render(java.io.Writer out) throws java.io.IOException {\n" +
+            "\tpublic void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {\n" +
             "\t\twrite(out, \"TXT \" );\n" +
             "\t\twrite(out,  EXPR  );\n" +
             "\t\twrite(out, \" TXT 2 \" );\n" +

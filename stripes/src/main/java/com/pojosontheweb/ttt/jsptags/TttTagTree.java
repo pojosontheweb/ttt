@@ -77,9 +77,8 @@ public class TttTagTree {
 
     public static TttPageContext newPageContext(ServletContext servletContext, Writer out) {
         TttPageContext pageContext = new TttPageContext();
-        MockHttpServletRequest request = new MockHttpServletRequest("skunk", "funk");
         pageContext.setServletContext(servletContext);
-        pageContext.setRequest(request);
+        pageContext.setRequest(new MockHttpServletRequest("skunk", "funk"));
         pageContext.setResponse(new MockHttpServletResponse());
         pageContext.setJspWriter(new TttJspWriter(out));
         return pageContext;
@@ -126,16 +125,11 @@ public class TttTagTree {
                         bodyTag.doInitBody();
                         for (Node child : tagNode.children) {
 
-                            //                        log("handleTag handling child " + child.tag + " of " + tagNode.tag + " ...");
-
-                            // initialize nested tag
+                            // set the parent of the child...
                             child.tag.setParent(bodyTag);
 
+                            // recurse in child
                             handleNode(pageContext, child);
-
-                            // pop body content
-
-                            //                        log("handleTag ... done handling child " + child.tag);
                         }
 
                         pageContext.popBody();

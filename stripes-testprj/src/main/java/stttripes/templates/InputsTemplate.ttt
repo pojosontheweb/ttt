@@ -93,12 +93,12 @@
         </td>
     </tr>
 
-    <tr>
-        <td colspan="3">
-            <%= f.submit("doStuff") %>
-            <%= f.submit("reset", "Reset") %>
-        </td>
-    </tr>
+        <tr>
+            <td colspan="3">
+                <%= f.submit("doStuff") %>
+                <%= f.submit("reset", "Reset") %>
+            </td>
+        </tr>
 
 </table>
 <%

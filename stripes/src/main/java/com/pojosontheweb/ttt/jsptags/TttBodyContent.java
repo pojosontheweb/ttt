@@ -2,6 +2,7 @@ package com.pojosontheweb.ttt.jsptags;
 
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
+import javax.servlet.jsp.tagext.BodyTag;
 import java.io.*;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;

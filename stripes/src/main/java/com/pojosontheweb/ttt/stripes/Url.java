@@ -1,6 +1,7 @@
 package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.Template;
+import com.pojosontheweb.ttt.TttWriter;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.exception.StripesJspException;
@@ -176,7 +177,7 @@ public class Url extends Template {
     }
 
     @Override
-    public void render(Writer out) throws IOException {
+    public void doRender(TttWriter out) throws Exception {
         write(out, get());
     }
 }

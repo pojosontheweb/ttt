@@ -1,6 +1,7 @@
 package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.Template;
+import com.pojosontheweb.ttt.TttWriter;
 import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.format.Formatter;
 import net.sourceforge.stripes.format.FormatterFactory;
@@ -44,7 +45,7 @@ public class Format extends Template implements Supplier<String> {
     }
 
     @Override
-    public void render(Writer out) throws IOException {
+    public void doRender(TttWriter out) throws Exception {
         write(out, get());
     }
 

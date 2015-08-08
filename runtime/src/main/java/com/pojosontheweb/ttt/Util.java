@@ -2,12 +2,20 @@ package com.pojosontheweb.ttt;
 
 public class Util {
 
-    public static <T> void toRtEx(RunnableEx<T> code) {
+    public static <T> void toRtEx(String msg, RunnableEx<T> code) {
         try {
             code.run();
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            if (msg != null) {
+                throw new RuntimeException(msg, e);
+            } else {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    public static <T> void toRtEx(RunnableEx<T> code) {
+        toRtEx(null, code);
     }
 
     public static <T> T toRtEx(SupplierEx<T> code) {

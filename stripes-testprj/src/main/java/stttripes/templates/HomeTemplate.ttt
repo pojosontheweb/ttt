@@ -7,7 +7,7 @@
 <%@ page import="com.pojosontheweb.ttt.stripes.Link" %>
 <%@ page import="stttripes.templates.LinkTemplate" %>
 <%@ page import="stttripes.actions.InputsAction" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.Url" %>
+<%@ page import="stttripes.actions.InputsAction2" %>
 <%
     // get those tags...
     StripesTags s = new StripesTags(out);
@@ -67,5 +67,12 @@
     </li>
     <li>
         <%= s.link(InputsAction.class).setText("various inputs") %>
+    </li>
+</ul>
+
+<h2>New tags</h2>
+<ul>
+    <li>
+        <%= s.link(InputsAction2.class).setText("real tags") %>
     </li>
 </ul>

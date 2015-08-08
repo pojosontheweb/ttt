@@ -1,6 +1,7 @@
 package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.Template;
+import com.pojosontheweb.ttt.TttWriter;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.config.Configuration;
 import net.sourceforge.stripes.controller.ParameterName;
@@ -100,7 +101,7 @@ public abstract class HtmlTag extends Template {
         }
 
         @Override
-        public final void render(Writer out) throws IOException {
+        public final void doRender(TttWriter out) throws Exception {
             writeTagStart(out);
             write(out, "/>");
         }
@@ -158,7 +159,7 @@ public abstract class HtmlTag extends Template {
         // as they're templates they can be rendered directly if they have no body, using an expression
         // or with a nested body using try-resource pattern.
         @Override
-        public final void render(Writer out) throws IOException {
+        public final void doRender(TttWriter out) throws Exception {
             open();
             close();
         }

@@ -13,7 +13,7 @@ public class Test1 extends com.pojosontheweb.ttt.Template {
 	}
 
 	@Override
-	public void render(java.io.Writer out) throws java.io.IOException {
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
 		write(out, "this is a " );
 		write(out,  foo.getBar()  );
 		write(out, " template" );
