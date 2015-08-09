@@ -22,6 +22,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
     private Long myObjId;
     private MyEnum myEnum;
     private Integer fromSelectMap;
+    private MyEnum myEnumRadio;
 
     @DefaultHandler
     @DontValidate
@@ -40,6 +41,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         messages.add(new SimpleMessage("myObjId=" + myObjId));
         messages.add(new SimpleMessage("myEnum=" + myEnum));
         messages.add(new SimpleMessage("fromSelectMap=" + fromSelectMap));
+        messages.add(new SimpleMessage("myEnumRadio=" + myEnumRadio));
         return new RedirectResolution(InputsAction.class).flash(this);
     }
 
@@ -139,5 +141,13 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
     public void setFromSelectMap(Integer fromSelectMap) {
         this.fromSelectMap = fromSelectMap;
+    }
+
+    public MyEnum getMyEnumRadio() {
+        return myEnumRadio;
+    }
+
+    public void setMyEnumRadio(MyEnum myEnumRadio) {
+        this.myEnumRadio = myEnumRadio;
     }
 }

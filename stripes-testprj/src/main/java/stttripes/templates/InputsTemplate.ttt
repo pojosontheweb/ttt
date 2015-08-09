@@ -157,6 +157,31 @@
         </td>
     </tr>
 
+    <tr>
+        <td>
+            Radio
+        </td>
+        <td>
+            <%
+                for (MyEnum e : MyEnum.values()) {
+                    String my = s.format(e);
+                    String id = "myEnumRadio-" + my;
+            %>
+                <%=
+                    f.radio("myEnumRadio")
+                            .set("id", id)
+                            .setValue(my)
+                            .setChecked("Good")
+                %>
+                <% try ( Label l = s.label(id) ) { %> <%= my %> <% } %>
+
+            <%  } %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(f.errors("fromSelectMap")) %>
+        </td>
+    </tr>
+
     <%-- submit --%>
     <tr>
         <td colspan="3">

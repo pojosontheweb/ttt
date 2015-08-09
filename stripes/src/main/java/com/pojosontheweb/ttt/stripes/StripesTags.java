@@ -2,9 +2,14 @@ package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.jsptags.TagLib;
 import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.controller.ExecutionContext;
+import net.sourceforge.stripes.controller.StripesFilter;
+import net.sourceforge.stripes.format.Formatter;
+import net.sourceforge.stripes.format.FormatterFactory;
 import net.sourceforge.stripes.tag.*;
 
 import java.io.Writer;
+import java.util.Locale;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
@@ -72,4 +77,41 @@ public class StripesTags extends TagLib {
         return errors(new ErrorsTag());
     }
 
+    @SuppressWarnings("unchecked")
+    public String format(Object value, String formatType, String formatPattern) {
+        if (value == null)
+            return "";
+
+        Locale locale = ExecutionContext.currentContext().getActionBeanContext().getLocale();
+        FormatterFactory factory = StripesFilter.getConfiguration().getFormatterFactory();
+        Formatter formatter = factory.getFormatter(
+            value.getClass(),
+            locale,
+            formatType,
+            formatPattern);
+        if (formatter == null)
+            return String.valueOf(value);
+        else
+            return formatter.format(value);
+    }
+
+    public String format(Object value, String formatType) {
+        return format(value, formatType, null);
+    }
+
+    public String format(Object value) {
+        return format(value, null, null);
+    }
+
+    public Label label(InputLabelTag t) {
+        Label label = new Label(pageContext, t);
+        label.open(out);
+        return label;
+    }
+
+    public Label label(String forId) {
+        InputLabelTag l = new InputLabelTag();
+        l.setFor(forId);
+        return label(l);
+    }
 }

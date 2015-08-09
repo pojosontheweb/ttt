@@ -1,6 +1,5 @@
 package com.pojosontheweb.ttt.stripes;
 
-import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.controller.ExecutionContext;
@@ -97,4 +96,13 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
         return this;
     }
 
+    public Radio radio(InputRadioButtonTag r) {
+        return new Radio(pageContext, r, this.bodyTag);
+    }
+
+    public Radio radio(String name) {
+        InputRadioButtonTag r = new InputRadioButtonTag();
+        r.setName(name);
+        return radio(r);
+    }
 }
