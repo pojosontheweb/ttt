@@ -1,5 +1,4 @@
 <%@ page import="stttripes.actions.InputsAction" %>
-<%@ page import="java.util.Locale" %>
 <%@ page import="stttripes.templates.FieldErrorsTemplate" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.*" %>
 <%@ page import="stttripes.actions.MyEnum" %>
@@ -7,7 +6,6 @@
     InputsAction actionBean;
 %>
 <%
-    Locale locale = actionBean.getContext().getLocale();
     StripesTags s = new StripesTags(out);
 %>
 <h1>FORM Inputs</h1>
@@ -167,13 +165,15 @@
                     String my = s.format(e);
                     String id = "myEnumRadio-" + my;
             %>
+
                 <%=
                     f.radio("myEnumRadio")
                             .set("id", id)
                             .setValue(my)
                             .setChecked("Good")
                 %>
-                <% try ( Label l = s.label(id) ) { %> <%= my %> <% } %>
+
+                <% try ( Label l = s.label(id).set("class", "funky-label") ) { %> <%= my %> <% } %>
 
             <%  } %>
         </td>
