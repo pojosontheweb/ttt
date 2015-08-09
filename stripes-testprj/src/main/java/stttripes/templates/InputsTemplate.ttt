@@ -122,7 +122,13 @@
         </td>
         <td>
             <% try (Select select = f.select("myEnum")) { %>
+
+                <%-- default option --%>
+                <% try ( Option option = select.option().setValue(null) ) { } %>
+
+                <%-- enum options --%>
                 <%= select.options(MyEnum.class) %>
+
             <% } %>
         </td>
         <td>
@@ -136,6 +142,11 @@
         </td>
         <td>
             <% try (Select select = f.select("fromSelectMap")) { %>
+                <%-- default option --%>
+                <% try ( Option option = select.option().setValue(0) ) { %>
+                    -- select value --
+                <% } %>
+                <%-- options from map --%>
                 <%=
                     select.options(actionBean.getMyMap())
                 %>

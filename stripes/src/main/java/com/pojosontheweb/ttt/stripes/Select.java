@@ -2,10 +2,7 @@ package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
-import net.sourceforge.stripes.tag.InputOptionsCollectionTag;
-import net.sourceforge.stripes.tag.InputOptionsEnumerationTag;
-import net.sourceforge.stripes.tag.InputOptionsMapTag;
-import net.sourceforge.stripes.tag.InputSelectTag;
+import net.sourceforge.stripes.tag.*;
 
 import java.util.Collection;
 import java.util.Map;
@@ -44,5 +41,13 @@ public class Select extends BodyTagTemplateAttributed<InputSelectTag,Select> {
         InputOptionsMapTag t = new InputOptionsMapTag();
         t.setMap(map);
         return options(t);
+    }
+
+    public Option option() {
+        InputOptionTag t = new InputOptionTag();
+        t.setParent(bodyTag);
+        Option o = new Option(pageContext, t);
+        o.open(out);
+        return o;
     }
 }
