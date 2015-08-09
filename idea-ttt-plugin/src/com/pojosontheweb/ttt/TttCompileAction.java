@@ -25,7 +25,7 @@ import java.util.List;
 
 public class TttCompileAction extends AnAction {
 
-    private final static Logger LOG = Logger.getInstance(TttApplicationComponent.class.getName());
+    private final static Logger LOG = Logger.getInstance(TttProjectComponent.class.getName());
 
     // If you register the action from Java code, this constructor is used to set the menu item name
     // (optionally, you can specify the menu description and an icon to display next to the menu item).
@@ -42,13 +42,21 @@ public class TttCompileAction extends AnAction {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         if (project!=null) {
             LOG.info("Compiling all templates in project " + project.getName());
-            compileTemplates(project);
+            compileTemplates(this, project);
         } else {
             LOG.info("No project available, nothing done.");
         }
     }
 
-    public static void compileTemplates(Project project) {
+    public static void compileTemplates(Object requestor, Project project) {
+        compile(requestor, project, null);
+    }
+
+    public static void compileTemplate(Object requestor, Project project, VirtualFile templateFile) {
+        compile(requestor, project, templateFile);
+    }
+
+    private static void compile(Object requestor, Project project, VirtualFile templateFile) {
         if (project!=null) {
             Module[] modules = ModuleManager.getInstance(project).getModules();
             for (Module m : modules) {
@@ -67,16 +75,27 @@ public class TttCompileAction extends AnAction {
                     VirtualFile[] srcRoots = ModuleRootManager.getInstance(m).getSourceRoots();
                     List<VirtualFile> rootsToVisit = new ArrayList<VirtualFile>();
                     VirtualFile targetDir = null;
+                    VirtualFile templateSourceRoot = null;
                     for (VirtualFile srcRoot : srcRoots) {
                         if (srcRoot.getPath().equals(fullTarget)) {
-                            // remove all files in target
-                            for (VirtualFile child : srcRoot.getChildren()) {
-                                FileUtil.delete(new File(child.getPath()));
+                            if (templateFile == null) {
+                                // remove all files in target
+                                for (VirtualFile child : srcRoot.getChildren()) {
+                                    FileUtil.delete(new File(child.getPath()));
+                                }
                             }
                             targetDir = srcRoot;
                         } else {
-                            // collect this src root for later...
-                            rootsToVisit.add(srcRoot);
+                            if (templateFile == null) {
+                                // collect this src root for later...
+                                rootsToVisit.add(srcRoot);
+                            } else if (templateSourceRoot == null) {
+                                // check if the template comes from
+                                // this source root, and store it
+                                if (isFileInDir(templateFile, srcRoot)) {
+                                    templateSourceRoot = srcRoot;
+                                }
+                            }
                         }
                     }
 
@@ -96,59 +115,122 @@ public class TttCompileAction extends AnAction {
 
                     } else {
 
-                        // now visit the source roots
-                        List<File> generatedFiles = new ArrayList<>();
-                        for (VirtualFile srcRoot : rootsToVisit) {
-                            final String srcRootPath = srcRoot.getPath();
-                            // find all ".ttt" files under this...
-                            VfsUtilCore.visitChildrenRecursively(srcRoot, new VirtualFileVisitor() {
-                                @Override
-                                public boolean visitFile(@NotNull VirtualFile file) {
-                                    if (file.getName().endsWith(".ttt")) {
-                                        try {
-                                            Reader in = new InputStreamReader(file.getInputStream());
-                                            String targetDir = td.getPath();
-                                            String relPath = file.getPath().substring(srcRootPath.length());
-                                            String absPath = targetDir + relPath;
-                                            absPath = absPath.replace(".ttt", ".java");
-                                            File f = new File(absPath);
-                                            File parent = f.getParentFile();
-                                            if (!parent.exists()) {
-                                                parent.mkdirs();
-                                            }
-                                            Writer out = new FileWriter(f);
-                                            String fqn = relPath
-                                                .substring(1)
-                                                .replace(File.separatorChar, '.')
-                                                .replace(".ttt", "");
+                        if (templateFile == null) {
+                            // no tpl file supplied, compile all templates...
+                            // visit the source roots, find all .ttt files in
+                            // there, and compile'em
+                            List<File> generatedFiles = new ArrayList<>();
+                            for (VirtualFile srcRoot : rootsToVisit) {
+                                final String srcRootPath = srcRoot.getPath();
+                                // find all ".ttt" files under this...
+                                VfsUtilCore.visitChildrenRecursively(srcRoot, new VirtualFileVisitor() {
+                                    @Override
+                                    public boolean visitFile(@NotNull VirtualFile file) {
+                                        if (file.getName().endsWith(".ttt")) {
                                             try {
-                                                TttCompiler.compile(in, out, fqn);
-                                                generatedFiles.add(f);
-                                            } finally {
-                                                out.close();
+                                                Reader in = new InputStreamReader(file.getInputStream());
+                                                String targetDir = td.getPath();
+                                                String relPath = file.getPath().substring(srcRootPath.length());
+                                                String absPath = targetDir + relPath;
+                                                absPath = absPath.replace(".ttt", ".java");
+                                                File f = new File(absPath);
+                                                File parent = f.getParentFile();
+                                                if (!parent.exists()) {
+                                                    parent.mkdirs();
+                                                }
+                                                Writer out = new FileWriter(f);
+                                                String fqn = relPath
+                                                    .substring(1)
+                                                    .replace(File.separatorChar, '.')
+                                                    .replace(".ttt", "");
+                                                try {
+                                                    TttCompiler.compile(in, out, fqn);
+                                                    generatedFiles.add(f);
+                                                } finally {
+                                                    out.close();
+                                                }
+                                            } catch (Exception e) {
+                                                // TODO handle error
+                                                throw new RuntimeException(e);
                                             }
-                                        } catch (Exception e) {
-                                            // TODO handle error
-                                            throw new RuntimeException(e);
+                                        }
+                                        return true;
+                                    }
+                                });
+                            }
+
+                            app.invokeLater(() -> td.refresh(true, true, () -> {
+                                String msg = "TTT : " + generatedFiles.size() + " file(s) generated to " + td.getPath();
+                                final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
+                                if (statusBar != null) {
+                                    statusBar.setInfo(msg);
+                                }
+                            }));
+
+                        } else if (templateSourceRoot != null) {
+
+                            // template file provided, only compile this one
+                            try {
+                                Reader in = new InputStreamReader(templateFile.getInputStream());
+                                String relPath = templateFile.getPath().substring(templateSourceRoot.getPath().length());
+                                String absPath = targetDir + relPath;
+                                absPath = absPath.replace(".ttt", ".java");
+                                File f = new File(absPath);
+                                File parent = f.getParentFile();
+                                if (!parent.exists()) {
+                                    parent.mkdirs();
+                                }
+                                String fqn = relPath
+                                    .substring(1)
+                                    .replace(File.separatorChar, '.')
+                                    .replace(".ttt", "");
+
+                                OutputStream os;
+                                // check to see if we have a gen file already...
+                                VirtualFile existingTargetFile = td.findFileByRelativePath(relPath.replace(".ttt", ".java"));
+                                if (existingTargetFile != null) {
+                                    os = existingTargetFile.getOutputStream(requestor);
+                                } else {
+                                    os = new FileOutputStream(f);
+                                }
+
+                                try (Writer out = new OutputStreamWriter(os)) {
+                                    TttCompiler.compile(in, out, fqn);
+                                }
+
+                                app.invokeLater(() -> td.refresh(true, true, () -> {
+                                    String prjPath = project.getBasePath();
+                                    if (prjPath != null) {
+                                        String genFolder = td.getPath().substring(prjPath.length());
+                                        String msg = relPath + " generated to " + genFolder;
+                                        final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
+                                        if (statusBar != null) {
+                                            statusBar.setInfo(msg);
                                         }
                                     }
-                                    return true;
-                                }
-                            });
-                        }
+                                }));
 
-                        app.invokeLater(() -> td.refresh(true, true, () -> {
-                            String msg = generatedFiles.size() + " file(s) generated to " + td.getPath();
-                            final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
-                            if (statusBar != null) {
-                                statusBar.setInfo(msg);
+                            } catch (Exception e) {
+                                // TODO handle error
+                                throw new RuntimeException(e);
                             }
-                        }));
+
+                        }
 
                     }
 
                 }
             }
+        }
+    }
+
+
+    private static boolean isFileInDir(@NotNull VirtualFile file, @NotNull VirtualFile parent) {
+        VirtualFile fp = file.getParent();
+        if (fp == null) {
+            return false;
+        } else {
+            return fp.equals(parent) || isFileInDir(fp, parent);
         }
     }
 

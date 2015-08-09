@@ -10,10 +10,10 @@ import org.jetbrains.annotations.NotNull;
  */
 class TttCompileOnSaveListener implements VirtualFileListener {
 
-    private final ProjectManager projectManager;
+    private final Project project;
 
-    public TttCompileOnSaveListener() {
-        this.projectManager = ProjectManager.getInstance();
+    public TttCompileOnSaveListener(Project project) {
+        this.project = project;
     }
 
     @Override
@@ -27,10 +27,7 @@ class TttCompileOnSaveListener implements VirtualFileListener {
 
     private void onUpdatingEvent(VirtualFile file) {
         if (file==null || file.getName().endsWith(".ttt")) {
-            Project[] projects = projectManager.getOpenProjects();
-            for (Project p : projects) {
-                TttCompileAction.compileTemplates(p);
-            }
+            TttCompileAction.compileTemplate(this, project, file);
         }
     }
 
