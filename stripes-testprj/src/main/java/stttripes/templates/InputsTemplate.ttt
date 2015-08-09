@@ -167,7 +167,9 @@
                             .setChecked("Good")
                 %>
 
-                <% try ( Label l = s.label(id).set("class", "funky-label") ) { %> <%= my %> <% } %>
+                <% try ( Label l = s.label(id).set("class", "funky-label") ) { %>
+                    <%= my %>
+                <% } %>
 
             <%  } %>
         </td>
