@@ -3,6 +3,9 @@ package com.pojosontheweb.ttt.stripes;
 import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
 import net.sourceforge.stripes.tag.*;
+import net.sourceforge.stripes.validation.ValidationError;
+
+import java.util.List;
 
 public class Form extends BodyTagTemplate<FormTag> {
 
@@ -55,4 +58,18 @@ public class Form extends BodyTagTemplate<FormTag> {
         p.setName(name);
         return password(p);
     }
+
+    public Select select(InputSelectTag selectTag) {
+        Select s = new Select(pageContext, selectTag);
+        s.open(out);
+        return s;
+    }
+
+    public Select select(String name) {
+        InputSelectTag inputSelectTag = new InputSelectTag();
+        inputSelectTag.setName(name);
+        inputSelectTag.setParent(getBodyTag());
+        return select(inputSelectTag);
+    }
+
 }

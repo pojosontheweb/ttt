@@ -71,4 +71,5 @@ public class StripesTags extends TagLib {
     public Errors errors() {
         return errors(new ErrorsTag());
     }
+
 }

@@ -39,7 +39,7 @@
             <%= text %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(text, locale) %>
+            <%= new FieldErrorsTemplate(text.getErrors(), locale) %>
         </td>
     </tr>
 
@@ -52,7 +52,7 @@
             <%= password %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(password, locale) %>
+            <%= new FieldErrorsTemplate(password.getErrors(), locale) %>
         </td>
     </tr>
 
@@ -65,7 +65,7 @@
             <%= checkbox1 %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(checkbox1, locale) %>
+            <%= new FieldErrorsTemplate(checkbox1.getErrors(), locale) %>
         </td>
     </tr>
 
@@ -78,9 +78,41 @@
             <%= checkbox2 %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(checkbox2, locale) %>
+            <%= new FieldErrorsTemplate(checkbox2.getErrors(), locale) %>
         </td>
     </tr>
+
+    <%-- s:select --%>
+    <tr>
+        <td>
+            Select (collection of strings)
+        </td>
+        <td>
+            <%
+                try (Select select = f.select("textFromSelect")) { %>
+                <%= select.options(actionBean.getStrings()) %>
+            <% } %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(actionBean.getContext().getValidationErrors().get("textFromSelect"), locale) %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Select (collection of objects)
+        </td>
+        <td>
+            <%
+                try (Select select = f.select("myObjId")) { %>
+                <%= select.options(actionBean.getMyObjects()).setValue("id").setLabel("text") %>
+            <% } %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(actionBean.getContext().getValidationErrors().get("myObjId"), locale) %>
+        </td>
+    </tr>
+
 
     <%-- submit --%>
     <tr>

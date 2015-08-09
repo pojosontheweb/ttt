@@ -81,7 +81,7 @@ will come along and teach me how to do other things?
             <td>Number 2:</td>
             <td class="number-two">
                 <%= inputNumberTwo %>
-                <%= new FieldErrorsTemplate(inputNumberTwo, locale) %>
+                <%= new FieldErrorsTemplate(inputNumberTwo.getErrors(), locale) %>
             </td>
         </tr>
         <tr>
