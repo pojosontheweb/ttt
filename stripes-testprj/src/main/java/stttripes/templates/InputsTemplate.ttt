@@ -149,6 +149,9 @@
             <%= new FieldErrorsTemplate(f.errors("fromSelectMap")) %>
         </td>
     </tr>
+
+    <%-- s:radio --%>
+
     <tr>
         <td>
             Radio
