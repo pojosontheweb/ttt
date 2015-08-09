@@ -2,18 +2,18 @@ package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
-import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.controller.ExecutionContext;
 import net.sourceforge.stripes.tag.*;
 import net.sourceforge.stripes.validation.ValidationError;
 import net.sourceforge.stripes.validation.ValidationErrors;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Form extends BodyTagTemplate<FormTag> {
+import static com.pojosontheweb.ttt.Util.toRtEx;
+
+public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
 
     public Form(TttPageContext pageContext, FormTag formTag) {
         super(pageContext, formTag);
@@ -89,6 +89,12 @@ public class Form extends BodyTagTemplate<FormTag> {
             }
         }
         return res == null ? Collections.emptyList() : res;
+    }
+
+    @Override
+    public Form set(String name, Object value) {
+        toRtEx(() -> bodyTag.setDynamicAttribute(null, name, value));
+        return this;
     }
 
 }

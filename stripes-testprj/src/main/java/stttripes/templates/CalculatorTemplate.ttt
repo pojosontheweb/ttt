@@ -81,7 +81,7 @@ will come along and teach me how to do other things?
             <td>Number 2:</td>
             <td class="number-two">
                 <%= inputNumberTwo %>
-                <%= new FieldErrorsTemplate(inputNumberTwo.getErrors(), locale) %>
+                <%= new FieldErrorsTemplate(inputNumberTwo.getErrors()) %>
             </td>
         </tr>
         <tr>
@@ -114,14 +114,10 @@ will come along and teach me how to do other things?
                     formatTag.setValue(actionBean.getResult());
 
                     // use the 'wrap(tag)' method to make the JSP Tag
-                    // understandable by TTT, and don't forget to assign
-                    // the parent (the form) ourselves...
+                    // understandable by TTT, and don't forget to pass
+                    // the parent (the form)...
                     TagTemplate<FormatTag, FormTag> fmt = stripes.wrap(formatTag, f.getBodyTag());
                 %>
-                <%--
-
-                    tag understan
-                --%>
                 <%= fmt %>
             </td>
         </tr>

@@ -2,11 +2,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.stream.Collectors" %>
+<%@ page import="net.sourceforge.stripes.controller.ExecutionContext" %>
 <%!
     List<ValidationError> errors;
-    Locale locale;
 %>
 <%
+    Locale locale = ExecutionContext.currentContext().getActionBeanContext().getLocale();
     if (errors != null && errors.size() > 0) {
 %>
 <span class="errors">

@@ -7,7 +7,9 @@ import net.sourceforge.stripes.validation.ValidationErrors;
 import stttripes.templates.InputsTemplate;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
@@ -19,6 +21,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
     private String textFromSelect;
     private Long myObjId;
     private MyEnum myEnum;
+    private Integer fromSelectMap;
 
     @DefaultHandler
     @DontValidate
@@ -35,6 +38,8 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         messages.add(new SimpleMessage("checkbox2=" + checkbox2));
         messages.add(new SimpleMessage("textFromSelect=" + textFromSelect));
         messages.add(new SimpleMessage("myObjId=" + myObjId));
+        messages.add(new SimpleMessage("myEnum=" + myEnum));
+        messages.add(new SimpleMessage("fromSelectMap=" + fromSelectMap));
         return new RedirectResolution(InputsAction.class).flash(this);
     }
 
@@ -95,6 +100,14 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         );
     }
 
+    public Map<Integer,String> getMyMap() {
+        HashMap<Integer,String> m = new HashMap<>();
+        m.put(1, "foo");
+        m.put(2, "bar");
+        m.put(3, "baz");
+        return m;
+    }
+
     public String getTextFromSelect() {
         return textFromSelect;
     }
@@ -118,5 +131,13 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
     public void setMyEnum(MyEnum myEnum) {
         this.myEnum = myEnum;
+    }
+
+    public Integer getFromSelectMap() {
+        return fromSelectMap;
+    }
+
+    public void setFromSelectMap(Integer fromSelectMap) {
+        this.fromSelectMap = fromSelectMap;
     }
 }

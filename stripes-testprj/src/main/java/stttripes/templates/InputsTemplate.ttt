@@ -23,12 +23,12 @@
 <%= s.errors() %>
 
 <%
-    try (Form f = s.form(InputsAction.class)) {
+    try (Form f = s.form(InputsAction.class).set("class", "my-form")) {
 
         Text text = f.text("text");
         Password password = f.password("password");
         Checkbox checkbox1 = f.checkbox("checkbox1");
-        Checkbox checkbox2 = f.checkbox("checkbox2").setChecked(true);
+        Checkbox checkbox2 = f.checkbox("checkbox2").set("class", "my-checkbox").setChecked(true);
 %>
 <table>
     <%-- s:text--%>
@@ -40,7 +40,7 @@
             <%= text %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(text.getErrors(), locale) %>
+            <%= new FieldErrorsTemplate(text.getErrors()) %>
         </td>
     </tr>
 
@@ -53,7 +53,7 @@
             <%= password %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(password.getErrors(), locale) %>
+            <%= new FieldErrorsTemplate(password.getErrors()) %>
         </td>
     </tr>
 
@@ -66,7 +66,7 @@
             <%= checkbox1 %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(checkbox1.getErrors(), locale) %>
+            <%= new FieldErrorsTemplate(checkbox1.getErrors()) %>
         </td>
     </tr>
 
@@ -79,7 +79,7 @@
             <%= checkbox2 %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(checkbox2.getErrors(), locale) %>
+            <%= new FieldErrorsTemplate(checkbox2.getErrors()) %>
         </td>
     </tr>
 
@@ -94,7 +94,7 @@
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("textFromSelect"), locale) %>
+            <%= new FieldErrorsTemplate(f.errors("textFromSelect")) %>
         </td>
     </tr>
 
@@ -112,7 +112,7 @@
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("myObjId"), locale) %>
+            <%= new FieldErrorsTemplate(f.errors("myObjId")) %>
         </td>
     </tr>
 
@@ -126,7 +126,23 @@
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("myEnum"), locale) %>
+            <%= new FieldErrorsTemplate(f.errors("myEnum")) %>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            Select (map)
+        </td>
+        <td>
+            <% try (Select select = f.select("fromSelectMap")) { %>
+                <%=
+                    select.options(actionBean.getMyMap())
+                %>
+            <% } %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(f.errors("fromSelectMap")) %>
         </td>
     </tr>
 

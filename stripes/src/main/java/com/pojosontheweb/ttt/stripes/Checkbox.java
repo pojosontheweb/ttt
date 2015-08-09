@@ -5,7 +5,7 @@ import net.sourceforge.stripes.tag.InputCheckBoxTag;
 
 import javax.servlet.jsp.PageContext;
 
-public class Checkbox extends InputTagSupportBase<InputCheckBoxTag> {
+public class Checkbox extends InputTagSupportBase<InputCheckBoxTag,Checkbox> {
 
     public Checkbox(PageContext pageContext, InputCheckBoxTag tag, FormTag parent) {
         super(pageContext, tag, parent);
