@@ -81,6 +81,21 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
         clickBackToHome();
     }
 
+    @Test
+    public void inputs() {
+        clickLink("various inputs");
+
+        inputsPage()
+            .clickDoStuff()
+            .assertError(0, "Text is a required field")
+            .assertFieldError("text");
+
+        inputsPage()
+            .clickReset()
+            .assertMessage("Reset !");
+
+    }
+
     //
     // helper methods
     //
@@ -88,6 +103,8 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
     private CalculatorPage calcPage() {
         return new CalculatorPage(findr());
     }
+
+    private InputsPage inputsPage() { return new InputsPage(findr()); }
 
     private void clickLinkAndAssertSimpleText(String linkLabel, String expectedSimpleText) {
         clickLink(linkLabel);

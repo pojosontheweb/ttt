@@ -1,19 +1,23 @@
 package stttripes.actions;
 
 import net.sourceforge.stripes.action.*;
+import net.sourceforge.stripes.validation.Validate;
+import net.sourceforge.stripes.validation.ValidationErrorHandler;
+import net.sourceforge.stripes.validation.ValidationErrors;
 import stttripes.templates.InputsTemplate;
 
 import java.util.List;
 
-public class InputsAction extends ActionBase {
+public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
+    @Validate(required = true)
     private String text;
     private String password;
     private boolean checkbox1;
     private boolean checkbox2;
 
     @DefaultHandler
-    @DontBind
+    @DontValidate
     public Resolution display() {
         return resolution("inputs demo", new InputsTemplate(this));
     }
@@ -28,6 +32,7 @@ public class InputsAction extends ActionBase {
         return new RedirectResolution(InputsAction.class).flash(this);
     }
 
+    @DontBind
     public Resolution reset() {
         List<Message> messages = getContext().getMessages();
         messages.add(new SimpleMessage("Reset !"));
@@ -66,4 +71,10 @@ public class InputsAction extends ActionBase {
     public void setCheckbox2(boolean checkbox2) {
         this.checkbox2 = checkbox2;
     }
+
+    @Override
+    public Resolution handleValidationErrors(ValidationErrors errors) throws Exception {
+        return display();
+    }
+
 }

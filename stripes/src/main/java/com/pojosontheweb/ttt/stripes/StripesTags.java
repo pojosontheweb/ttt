@@ -2,9 +2,7 @@ package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.jsptags.TagLib;
 import net.sourceforge.stripes.action.ActionBean;
-import net.sourceforge.stripes.tag.FormTag;
-import net.sourceforge.stripes.tag.LinkTag;
-import net.sourceforge.stripes.tag.UrlTag;
+import net.sourceforge.stripes.tag.*;
 
 import java.io.Writer;
 
@@ -58,4 +56,19 @@ public class StripesTags extends TagLib {
         return url(urlTag);
     }
 
+    public Messages messages(MessagesTag messagesTag) {
+        return new Messages(pageContext, messagesTag);
+    }
+
+    public Messages messages() {
+        return messages(new MessagesTag());
+    }
+
+    public Errors errors(ErrorsTag errorsTag) {
+        return new Errors(pageContext, errorsTag);
+    }
+
+    public Errors errors() {
+        return errors(new ErrorsTag());
+    }
 }

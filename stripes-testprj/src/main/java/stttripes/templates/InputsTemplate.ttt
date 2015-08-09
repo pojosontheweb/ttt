@@ -1,8 +1,6 @@
 <%@ page import="stttripes.actions.InputsAction" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="stttripes.templates.FieldErrorsTemplate" %>
-<%@ page import="net.sourceforge.stripes.action.Message" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.*" %>
 <%!
     InputsAction actionBean;
@@ -17,23 +15,11 @@
     This page shows how to use the various FORM inputs.
 </p>
 
-<%-- while we wait for s:messages... --%>
-<%
-    List<Message> messages = actionBean.getContext().getMessages();
-    if (messages != null && messages.size() > 0) {
-%>
-<div class="messages">
-    <ul>
-        <% for (Message m : messages) { %>
-        <li>
-            <%= m.getMessage(locale) %>
-        </li>
-        <% } %>
-    </ul>
-</div>
-<%
-    }
-%>
+<%-- display messages here --%>
+<%= s.messages() %>
+
+<%-- and errors --%>
+<%= s.errors() %>
 
 <%
     try (Form f = s.form(InputsAction.class)) {
@@ -57,6 +43,7 @@
         </td>
     </tr>
 
+    <%-- s:password --%>
     <tr>
         <td>
             Password
@@ -69,6 +56,7 @@
         </td>
     </tr>
 
+    <%-- s:checkbox --%>
     <tr>
         <td>
             Checkbox1
@@ -81,6 +69,7 @@
         </td>
     </tr>
 
+    <%-- s:checkbox --%>
     <tr>
         <td>
             Checkbox2 (checked by default)
@@ -93,12 +82,13 @@
         </td>
     </tr>
 
-        <tr>
-            <td colspan="3">
-                <%= f.submit("doStuff") %>
-                <%= f.submit("reset", "Reset") %>
-            </td>
-        </tr>
+    <%-- submit --%>
+    <tr>
+        <td colspan="3">
+            <%= f.submit("doStuff") %>
+            <%= f.submit("reset", "Reset") %>
+        </td>
+    </tr>
 
 </table>
 <%

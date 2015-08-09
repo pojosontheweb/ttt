@@ -29,14 +29,6 @@
     // init stripes tags
     StripesTags stripes = new StripesTags(out);
 %>
-<style type="text/css">
-    input.error {
-        background-color: yellow;
-    }
-    .errors {
-        color: brown;
-    }
-</style>
 
 <h1>Stripes Calculator</h1>
 
@@ -123,7 +115,7 @@ will come along and teach me how to do other things?
 
                     // use the 'wrap(tag)' method to make the JSP Tag
                     // understandable by TTT, and don't forget to assign
-                    // the parent ourselves...
+                    // the parent (the form) ourselves...
                     TagTemplate<FormatTag, FormTag> fmt = stripes.wrap(formatTag, f.getBodyTag());
                 %>
                 <%--
