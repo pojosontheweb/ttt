@@ -18,7 +18,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
     private boolean checkbox2;
     private String textFromSelect;
     private Long myObjId;
-    private MyEnum enumeration;
+    private MyEnum myEnum;
 
     @DefaultHandler
     @DontValidate
@@ -95,14 +95,6 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         );
     }
 
-    public MyEnum getEnumeration() {
-        return enumeration;
-    }
-
-    public void setEnumeration(MyEnum enumeration) {
-        this.enumeration = enumeration;
-    }
-
     public String getTextFromSelect() {
         return textFromSelect;
     }
@@ -118,5 +110,13 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
     public void setMyObjId(Long myObjId) {
         this.myObjId = myObjId;
+    }
+
+    public MyEnum getMyEnum() {
+        return myEnum;
+    }
+
+    public void setMyEnum(MyEnum myEnum) {
+        this.myEnum = myEnum;
     }
 }

@@ -2,6 +2,7 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="stttripes.templates.FieldErrorsTemplate" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.*" %>
+<%@ page import="stttripes.actions.MyEnum" %>
 <%!
     InputsAction actionBean;
 %>
@@ -88,13 +89,12 @@
             Select (collection of strings)
         </td>
         <td>
-            <%
-                try (Select select = f.select("textFromSelect")) { %>
+            <% try (Select select = f.select("textFromSelect")) { %>
                 <%= select.options(actionBean.getStrings()) %>
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(actionBean.getContext().getValidationErrors().get("textFromSelect"), locale) %>
+            <%= new FieldErrorsTemplate(f.errors("textFromSelect"), locale) %>
         </td>
     </tr>
 
@@ -103,16 +103,32 @@
             Select (collection of objects)
         </td>
         <td>
-            <%
-                try (Select select = f.select("myObjId")) { %>
-                <%= select.options(actionBean.getMyObjects()).setValue("id").setLabel("text") %>
+            <% try (Select select = f.select("myObjId")) { %>
+                <%=
+                    select.options(actionBean.getMyObjects())
+                        .setValue("id")
+                        .setLabel("text")
+                %>
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(actionBean.getContext().getValidationErrors().get("myObjId"), locale) %>
+            <%= new FieldErrorsTemplate(f.errors("myObjId"), locale) %>
         </td>
     </tr>
 
+    <tr>
+        <td>
+            Select (enum)
+        </td>
+        <td>
+            <% try (Select select = f.select("myEnum")) { %>
+                <%= select.options(MyEnum.class) %>
+            <% } %>
+        </td>
+        <td>
+            <%= new FieldErrorsTemplate(f.errors("myEnum"), locale) %>
+        </td>
+    </tr>
 
     <%-- submit --%>
     <tr>

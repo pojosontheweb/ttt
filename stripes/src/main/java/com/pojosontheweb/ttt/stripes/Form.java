@@ -2,9 +2,15 @@ package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
+import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.action.ActionBeanContext;
+import net.sourceforge.stripes.controller.ExecutionContext;
 import net.sourceforge.stripes.tag.*;
 import net.sourceforge.stripes.validation.ValidationError;
+import net.sourceforge.stripes.validation.ValidationErrors;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Form extends BodyTagTemplate<FormTag> {
@@ -70,6 +76,19 @@ public class Form extends BodyTagTemplate<FormTag> {
         inputSelectTag.setName(name);
         inputSelectTag.setParent(getBodyTag());
         return select(inputSelectTag);
+    }
+
+    public List<ValidationError> errors(String fieldName) {
+        ExecutionContext ec = ExecutionContext.currentContext();
+        ActionBeanContext abc = ec.getActionBeanContext();
+        List<ValidationError> res = null;
+        if (abc != null) {
+            ValidationErrors errors = abc.getValidationErrors();
+            if (errors != null) {
+                res = errors.get(fieldName);
+            }
+        }
+        return res == null ? Collections.emptyList() : res;
     }
 
 }
