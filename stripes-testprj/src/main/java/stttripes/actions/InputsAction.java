@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@UrlBinding("/inputs")
 public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
     @Validate(required = true)

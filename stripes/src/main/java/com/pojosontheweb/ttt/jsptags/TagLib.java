@@ -32,4 +32,8 @@ public class TagLib {
         return new TagTemplate<>(pageContext, tag, parentTag);
     }
 
+    public TttWriter getWriter() {
+        return out;
+    }
+
 }

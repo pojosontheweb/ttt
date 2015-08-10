@@ -5,7 +5,7 @@ import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.action.UrlBinding;
 import stttripes.templates.HomeTemplate;
 
-@UrlBinding("/")
+@UrlBinding("/home")
 public class HomeAction extends ActionBase {
 
     @DefaultHandler

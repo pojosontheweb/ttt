@@ -1,29 +1,33 @@
 <%@ page import="stttripes.actions.InputsAction" %>
-<%@ page import="stttripes.templates.FieldErrorsTemplate" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.*" %>
 <%@ page import="stttripes.actions.MyEnum" %>
 <%@ page import="stttripes.templates.MyFormRow" %>
 <%@ page import="stttripes.templates.MyTags" %>
 <%!
+    /**
+     * action bean for this view (cannot be null)
+     */
     InputsAction actionBean;
 %>
 <%
-    StripesTags s = new StripesTags(out);
+    // init "tag libraries" : we have created a
+    // "MyTags" class to serve as the entry point
+    MyTags tags = new MyTags(out);
+    // and we declare a "stripes" variable for
+    // clarity...
+    StripesTags stripes = tags.stripes;
 %>
+
 <h1>FORM Inputs</h1>
 
-<p>
-    This page shows how to use the various FORM inputs.
-</p>
-
 <%-- display messages here --%>
-<%= s.messages() %>
+<%= stripes.messages() %>
 
 <%-- and errors --%>
-<%= s.errors() %>
+<%= stripes.errors() %>
 
 <%
-    try (Form f = s.form(InputsAction.class).set("class", "my-form")) {
+    try (Form f = stripes.form(InputsAction.class).set("class", "my-form")) {
 
         Text text = f.text("text");
         Password password = f.password("password");
@@ -31,7 +35,7 @@
         Checkbox checkbox2 = f.checkbox("checkbox2").set("class", "my-checkbox").setChecked(true);
 %>
 <table>
-    <%-- s:text--%>
+    <%-- stripes:text--%>
     <tr>
         <td>
             Text
@@ -40,11 +44,11 @@
             <%= text %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(text.getErrors()) %>
+            <%= tags.errorsTemplate(text.getErrors()) %>
         </td>
     </tr>
 
-    <%-- s:password --%>
+    <%-- stripes:password --%>
     <tr>
         <td>
             Password
@@ -53,11 +57,11 @@
             <%= password %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(password.getErrors()) %>
+            <%= tags.errorsTemplate(password.getErrors()) %>
         </td>
     </tr>
 
-    <%-- s:checkbox --%>
+    <%-- stripes:checkbox --%>
     <tr>
         <td>
             Checkbox1
@@ -66,7 +70,7 @@
             <%= checkbox1 %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(checkbox1.getErrors()) %>
+            <%= tags.errorsTemplate(checkbox1.getErrors()) %>
         </td>
     </tr>
     <tr>
@@ -77,11 +81,11 @@
             <%= checkbox2 %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(checkbox2.getErrors()) %>
+            <%= tags.errorsTemplate(checkbox2.getErrors()) %>
         </td>
     </tr>
 
-    <%-- s:select --%>
+    <%-- stripes:select --%>
     <tr>
         <td>
             Select (collection of strings)
@@ -92,7 +96,7 @@
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("textFromSelect")) %>
+            <%= tags.errorsTemplate(f.errors("textFromSelect")) %>
         </td>
     </tr>
     <tr>
@@ -109,7 +113,7 @@
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("myObjId")) %>
+            <%= tags.errorsTemplate(f.errors("myObjId")) %>
         </td>
     </tr>
     <tr>
@@ -128,7 +132,7 @@
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("myEnum")) %>
+            <%= tags.errorsTemplate(f.errors("myEnum")) %>
         </td>
     </tr>
     <tr>
@@ -148,11 +152,11 @@
             <% } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("fromSelectMap")) %>
+            <%= tags.errorsTemplate(f.errors("fromSelectMap")) %>
         </td>
     </tr>
 
-    <%-- s:radio --%>
+    <%-- stripes:radio --%>
     <tr>
         <td>
             Radio
@@ -160,7 +164,7 @@
         <td>
             <%
                 for (MyEnum e : MyEnum.values()) {
-                    String my = s.format(e);
+                    String my = stripes.format(e);
                     String id = "myEnumRadio-" + my;
             %>
 
@@ -171,41 +175,43 @@
                             .setChecked("Good")
                 %>
 
-                <% try ( Label l = s.label(id).set("class", "funky-label") ) { %>
+                <% try ( Label l = stripes.label(id).set("class", "funky-label") ) { %>
                     <%= my %>
                 <% } %>
 
             <%  } %>
         </td>
         <td>
-            <%= new FieldErrorsTemplate(f.errors("fromSelectMap")) %>
+            <%= tags.errorsTemplate(f.errors("fromSelectMap")) %>
         </td>
     </tr>
 
-    <%-- s:button --%>
+    <%-- stripes:button --%>
     <tr>
         <td>
             Buttons
         </td>
         <td>
             <%-- btn with a body --%>
-            <% try ( Button b = s.button("heyHo") ) { %> with body <% } %>
+            <% try ( Button b = stripes.button("heyHo") ) { %> with body <% } %>
 
             <%-- i18n btn, without body, used without try-resource --%>
-            <%= s.button("heyHo2") %>
+            <%= stripes.button("heyHo2") %>
 
         </td>
         <td>
         </td>
     </tr>
 
-    <% try (MyFormRow r = new MyTags(out).formRow("allo", f.errors("fromSelectMap"))) { %>
-
-        zguène fly
-
+    <%--
+        use a "custom tag" of our own for wrapping the FORM row (equivalent
+        more or less to "JSP tag files" : allows to reuse markup
+    --%>
+    <% try (MyFormRow r = tags.formRow("Custom tag", f.errors("fromSelectMap"))) { %>
+        <% try (Button b = stripes.button("heyHo3")) { %> I'm in a custom tag ! <% } %>
     <% } %>
 
-    <%-- s:submit --%>
+    <%-- stripes:submit --%>
     <tr>
         <td colspan="3">
             <%= f.submit("doStuff") %>

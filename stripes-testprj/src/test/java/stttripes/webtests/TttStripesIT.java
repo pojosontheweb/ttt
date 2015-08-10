@@ -3,6 +3,7 @@ package stttripes.webtests;
 import com.pojosontheweb.selenium.ManagedDriverJunit4TestBase;
 import org.junit.Before;
 import org.junit.Test;
+import stttripes.actions.MyEnum;
 
 import static com.pojosontheweb.selenium.Findrs.*;
 import static org.openqa.selenium.By.*;
@@ -98,7 +99,25 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
 
         inputsPage()
             .clickReset()
-            .assertMessage("Reset !");
+            .assertMessage(0, "Reset !");
+
+        inputsPage()
+            .setText("hey there !")
+            .setPassword("secret")
+            .clickCheckbox1()
+            .clickCheckbox2()
+            .selectCollection("bar")
+            .selectCollectionObj("bar")
+            .selectEnum(MyEnum.Good)
+            .selectMap("bar")
+            .clickRadio(MyEnum.Good)
+            .clickButtonWithLabel("with body")
+            .clickButtonWithLabel("I am localized")
+            .clickButtonWithLabel("I'm in a custom tag !")
+            .clickDoStuff();
+
+
+
 
     }
 
