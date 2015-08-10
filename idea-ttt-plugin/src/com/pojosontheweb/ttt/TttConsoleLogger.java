@@ -4,11 +4,14 @@ import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.execution.filters.OpenFileHyperlinkInfo;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
+import com.intellij.ide.DataManager;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.components.AbstractProjectComponent;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
+import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import javax.swing.*;
 
 public class TttConsoleLogger extends AbstractProjectComponent {
 
@@ -44,7 +47,7 @@ public class TttConsoleLogger extends AbstractProjectComponent {
                     nbKo++;
                     for (TttCompileError error : tr.getErrors()) {
                         consoleView.print("[ERROR] ", ConsoleViewContentType.ERROR_OUTPUT);
-                        OpenFileHyperlinkInfo hyperlinkInfo = new OpenFileHyperlinkInfo(myProject, file, error.getLine()-1, error.getCharInLine()-1);
+                        OpenFileHyperlinkInfo hyperlinkInfo = new OpenFileHyperlinkInfo(myProject, file, error.getLine(), error.getCharInLine());
                         consoleView.printHyperlink(tr.getTemplateFileName(), hyperlinkInfo);
                         consoleView.print(
                             " (" + error.getLine() + "," + error.getCharInLine() + ") : " + error.getMessage() + "\n",
@@ -62,6 +65,14 @@ public class TttConsoleLogger extends AbstractProjectComponent {
                 }
             }
             consoleView.print("Compilation finished : " + nbOk + " OK, " + nbKo + " failed (took " + compilationResult.getElapsed() + " ms).\n", nbKo > 0 ? ConsoleViewContentType.ERROR_OUTPUT : ConsoleViewContentType.NORMAL_OUTPUT);
+            consoleView.printHyperlink("Cleanup / compile all\n", project -> {
+                DataContext dataContext = DataManager.getInstance().getDataContextFromFocus().getResultSync();
+                AnAction action = ActionManager.getInstance().getAction("com.pojosontheweb.ttt.TttCompileAction");
+                action.actionPerformed(new AnActionEvent(null, dataContext,
+                    ActionPlaces.UNKNOWN, action.getTemplatePresentation(),
+                    ActionManager.getInstance(), 0));
+            });
+
         }
     }
 
