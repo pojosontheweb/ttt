@@ -140,34 +140,37 @@ public class InputsPage {
         return this;
     }
 
-    private Findr findText() {
-        return findr.elemList(tagName("input"))
+    public InputsPage setText(String text) {
+        Findr fText = findr.elemList(tagName("input"))
             .where(attrEquals("type", "text"))
             .where(attrEquals("name", "text"))
             .whereElemCount(1)
             .at(0);
-    }
 
-
-    public InputsPage setText(String text) {
-        findText().clear();
-        findText().sendKeys(text);
+        fText.clear();
+        fText.sendKeys(text);
         return this;
     }
 
-    private Findr findPassword() {
-        return findr.elemList(tagName("input"))
+    public InputsPage setPassword(String password) {
+        Findr fPass = findr.elemList(tagName("input"))
             .where(attrEquals("type", "password"))
             .where(attrEquals("name", "password"))
             .whereElemCount(1)
             .at(0);
-    }
 
-
-    public InputsPage setPassword(String password) {
-        findPassword().clear();
-        findPassword().sendKeys(password);
+        fPass.clear();
+        fPass.sendKeys(password);
         return this;
     }
 
+    public InputsPage setTextArea(String s) {
+        Findr fTextarea = findr.elemList(tagName("textarea"))
+            .where(attrEquals("name", "myTextArea"))
+            .whereElemCount(1)
+            .at(0);
+        fTextarea.clear();
+        fTextarea.sendKeys(s);
+        return this;
+    }
 }

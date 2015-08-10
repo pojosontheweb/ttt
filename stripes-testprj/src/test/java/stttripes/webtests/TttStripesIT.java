@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import stttripes.actions.MyEnum;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import static com.pojosontheweb.selenium.Findrs.*;
@@ -119,6 +118,7 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             .clickButtonWithLabel("with body")
             .clickButtonWithLabel("I am localized")
             .clickButtonWithLabel("I'm in a custom tag !")
+            .setTextArea("rock'n'roll")
             .clickDoStuff();
 
         String[] expectedMessages = new String[]{
@@ -133,7 +133,8 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             "fromSelectMap=1",
             "myEnumRadio=Excellent",
             "myFile=null",
-            "myHidden=I am hidden"
+            "myHidden=I am hidden",
+            "myTextArea=rock'n'roll"
         };
 
         IntStream.range(0, expectedMessages.length)

@@ -26,6 +26,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
     private MyEnum myEnumRadio;
     private FileBean myFile;
     private String myHidden;
+    private String myTextArea;
 
     @DefaultHandler
     @DontValidate
@@ -48,6 +49,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         messages.add(new SimpleMessage("myEnumRadio=" + myEnumRadio));
         messages.add(new SimpleMessage("myFile=" + (myFile==null ? "null" : myFile.getFileName())));
         messages.add(new SimpleMessage("myHidden=" + myHidden));
+        messages.add(new SimpleMessage("myTextArea=" + myTextArea));
         return new RedirectResolution(InputsAction.class).flash(this);
     }
 
@@ -175,5 +177,13 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
     public void setMyHidden(String myHidden) {
         this.myHidden = myHidden;
+    }
+
+    public String getMyTextArea() {
+        return myTextArea;
+    }
+
+    public void setMyTextArea(String myTextArea) {
+        this.myTextArea = myTextArea;
     }
 }

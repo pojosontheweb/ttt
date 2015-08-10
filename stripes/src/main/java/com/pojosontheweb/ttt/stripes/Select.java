@@ -1,6 +1,5 @@
 package com.pojosontheweb.ttt.stripes;
 
-import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
 import net.sourceforge.stripes.tag.*;
 
@@ -9,8 +8,9 @@ import java.util.Map;
 
 public class Select extends BodyTagTemplateAttributed<InputSelectTag,Select> {
 
-    public Select(TttPageContext pageContext, InputSelectTag bodyTag) {
+    public Select(TttPageContext pageContext, InputSelectTag bodyTag, FormTag formTag) {
         super(pageContext, bodyTag);
+        bodyTag.setParent(formTag);
     }
 
     public OptionsCollection options(InputOptionsCollectionTag ioct) {

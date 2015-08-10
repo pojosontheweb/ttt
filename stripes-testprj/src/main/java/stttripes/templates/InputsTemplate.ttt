@@ -219,6 +219,11 @@
         <%= file %>
     <% } %>
 
+    <%-- stripes:textarea --%>
+    <% try (MyFormRow r = tags.formRow("TextArea", f.errors("myTextArea"))) { %>
+        <%= f.textarea("myTextArea") %>
+    <% } %>
+
     <%-- stripes:hidden --%>
     <%= f.hidden("myHidden") %>
 

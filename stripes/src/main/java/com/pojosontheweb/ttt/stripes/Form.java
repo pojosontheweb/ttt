@@ -65,7 +65,7 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
     }
 
     public Select select(InputSelectTag selectTag) {
-        Select s = new Select(pageContext, selectTag);
+        Select s = new Select(pageContext, selectTag, bodyTag);
         s.open(out);
         return s;
     }
@@ -73,7 +73,6 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
     public Select select(String name) {
         InputSelectTag inputSelectTag = new InputSelectTag();
         inputSelectTag.setName(name);
-        inputSelectTag.setParent(getBodyTag());
         return select(inputSelectTag);
     }
 
@@ -124,5 +123,17 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
         InputHiddenTag t = new InputHiddenTag();
         t.setName(name);
         return hidden(t);
+    }
+
+    public TextArea textarea(String name) {
+        InputTextAreaTag t = new InputTextAreaTag();
+        t.setName(name);
+        return textarea(t);
+    }
+
+    public TextArea textarea(InputTextAreaTag t) {
+        TextArea ta = new TextArea(pageContext, t, bodyTag);
+        ta.open(out);
+        return ta;
     }
 }
