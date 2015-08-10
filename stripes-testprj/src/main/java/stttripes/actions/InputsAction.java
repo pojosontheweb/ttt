@@ -23,6 +23,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
     private MyEnum myEnum;
     private Integer fromSelectMap;
     private MyEnum myEnumRadio;
+    private FileBean myFile;
 
     @DefaultHandler
     @DontValidate
@@ -149,5 +150,13 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
     public void setMyEnumRadio(MyEnum myEnumRadio) {
         this.myEnumRadio = myEnumRadio;
+    }
+
+    public FileBean getMyFile() {
+        return myFile;
+    }
+
+    public void setMyFile(FileBean myFile) {
+        this.myFile = myFile;
     }
 }

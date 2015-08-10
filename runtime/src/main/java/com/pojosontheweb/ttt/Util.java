@@ -1,5 +1,6 @@
 package com.pojosontheweb.ttt;
 
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,6 +56,16 @@ public class Util {
             return Collections.emptyList();
         }
         return l;
+    }
+
+    public static <T> T elvis(T t, T defaultValue) {
+        return t == null ? defaultValue : t;
+    }
+
+    public static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");
+
+    public static Charset getCharsetWithDefault(Charset charset) {
+        return elvis(charset, CHARSET_UTF8);
     }
 
 }

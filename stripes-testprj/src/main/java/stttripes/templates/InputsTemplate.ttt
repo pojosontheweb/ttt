@@ -2,6 +2,8 @@
 <%@ page import="stttripes.templates.FieldErrorsTemplate" %>
 <%@ page import="com.pojosontheweb.ttt.stripes.*" %>
 <%@ page import="stttripes.actions.MyEnum" %>
+<%@ page import="stttripes.templates.MyFormRow" %>
+<%@ page import="stttripes.templates.MyTags" %>
 <%!
     InputsAction actionBean;
 %>
@@ -194,9 +196,14 @@
 
         </td>
         <td>
-
         </td>
     </tr>
+
+    <% try (MyFormRow r = new MyTags(out).formRow("allo", f.errors("fromSelectMap"))) { %>
+
+        zguène fly
+
+    <% } %>
 
     <%-- s:submit --%>
     <tr>

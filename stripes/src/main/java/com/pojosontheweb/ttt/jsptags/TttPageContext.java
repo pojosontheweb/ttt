@@ -15,22 +15,25 @@ import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.tagext.BodyContent;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.Stack;
 
+import static com.pojosontheweb.ttt.Util.getCharsetWithDefault;
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
 public class TttPageContext extends MockPageContext {
 
     private ServletResponse response;
-
-    public TttPageContext() {
-    }
+    private final Charset encoding;
 
     public TttPageContext(
+        Charset encoding,
         Writer out,
         ServletContext servletContext,
         HttpServletRequest request,
         HttpServletResponse response) {
+
+        this.encoding = getCharsetWithDefault(encoding);
         setServletContext(servletContext);
         setRequest(request);
         setResponse(response);
@@ -70,7 +73,7 @@ public class TttPageContext extends MockPageContext {
 
     @Override
     public TttBodyContent pushBody() {
-        TttBodyContent bodyContent = new TttBodyContent(getOut());
+        TttBodyContent bodyContent = new TttBodyContent(getOut(), encoding);
         bodyStack.push(bodyContent);
         setJspWriter(bodyContent);
         return bodyContent;

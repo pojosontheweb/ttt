@@ -54,11 +54,6 @@ public abstract class Template implements ITemplate {
     }
 
     @Override
-    public String getContentType() {
-        return null;
-    }
-
-    @Override
     public final void render(Writer out) {
         // wrap the supplied writer into a TttWriter
         // if not already done...

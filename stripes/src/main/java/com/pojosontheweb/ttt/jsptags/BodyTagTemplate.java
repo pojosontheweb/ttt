@@ -1,6 +1,7 @@
 package com.pojosontheweb.ttt.jsptags;
 
 import com.pojosontheweb.ttt.IBodyTemplate;
+import com.pojosontheweb.ttt.ITemplate;
 import com.pojosontheweb.ttt.TttWriter;
 
 import javax.servlet.jsp.tagext.BodyTag;
@@ -10,7 +11,7 @@ import java.io.Writer;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
-public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate {
+public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate, ITemplate {
 
     protected final TttPageContext pageContext;
     protected final T bodyTag;

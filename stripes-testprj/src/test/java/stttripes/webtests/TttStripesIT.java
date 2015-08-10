@@ -45,6 +45,12 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             "simple",
             "Hey, you have not provided no param. Try '?myProp=bar'..."
         );
+
+        // encoding test
+        clickLink("simple");
+        findr().elem(cssSelector("p.encoding-test"))
+            .where(textEquals("être ou ne pas être encodé, là est la question..."))
+            .eval();
     }
 
     @Test
