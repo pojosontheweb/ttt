@@ -178,7 +178,11 @@ public class TttCompileAction extends AnAction {
                                 res.setElapsed(elapsed);
                                 consoleLogger.log(res);
 //                                res.toLines().forEach(LOG::info);
-                                String msg = "TTT template(s) generated to " + td.getPath();
+                                String msg = "TTT template(s) generated ";
+                                if (res.hasErrors()) {
+                                    msg += "with errors ";
+                                }
+                                msg += "to " + td.getPath();
                                 final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
                                 if (statusBar != null) {
                                     statusBar.setInfo(msg);
@@ -229,7 +233,11 @@ public class TttCompileAction extends AnAction {
                                     res.setElapsed(elapsed);
 //                                    res.toLines().forEach(LOG::info);
                                     consoleLogger.log(res);
-                                    String msg = "TTT template(s) generated to " + td.getPath();
+                                    String msg = "TTT template(s) generated ";
+                                    if (res.hasErrors()) {
+                                        msg += "with errors ";
+                                    }
+                                    msg += "to " + td.getPath();
                                     final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
                                     if (statusBar != null) {
                                         statusBar.setInfo(msg);
