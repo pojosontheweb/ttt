@@ -5,6 +5,9 @@ import org.junit.Before;
 import org.junit.Test;
 import stttripes.actions.MyEnum;
 
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 import static com.pojosontheweb.selenium.Findrs.*;
 import static org.openqa.selenium.By.*;
 
@@ -90,35 +93,49 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
 
     @Test
     public void inputs() {
-        clickLink("various inputs");
 
-        inputsPage()
+        clickLink("various inputs");
+        InputsPage inputsPage = new InputsPage(findr());
+
+        inputsPage
             .clickDoStuff()
             .assertError(0, "Text is a required field")
             .assertFieldError("text");
 
-        inputsPage()
+        inputsPage
             .clickReset()
             .assertMessage(0, "Reset !");
 
-        inputsPage()
+        inputsPage
             .setText("hey there !")
             .setPassword("secret")
             .clickCheckbox1()
             .clickCheckbox2()
             .selectCollection("bar")
-            .selectCollectionObj("bar")
+            .selectCollectionObj("baz")
             .selectEnum(MyEnum.Good)
-            .selectMap("bar")
-            .clickRadio(MyEnum.Good)
+            .selectMap("foo")
+            .clickRadio(MyEnum.Excellent)
             .clickButtonWithLabel("with body")
             .clickButtonWithLabel("I am localized")
             .clickButtonWithLabel("I'm in a custom tag !")
             .clickDoStuff();
 
+        String[] expectedMessages = new String[]{
+            "Stuff's been done.",
+            "text=hey there !",
+            "password=secret",
+            "checkbox1=true",
+            "checkbox2=true",
+            "textFromSelect=bar",
+            "myObjId=3",
+            "myEnum=Good",
+            "fromSelectMap=1",
+            "myEnumRadio=Excellent"
+        };
 
-
-
+        IntStream.range(0, expectedMessages.length)
+            .forEach(i -> inputsPage.assertMessage(i, expectedMessages[i]));
     }
 
     //
@@ -128,8 +145,6 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
     private CalculatorPage calcPage() {
         return new CalculatorPage(findr());
     }
-
-    private InputsPage inputsPage() { return new InputsPage(findr()); }
 
     private void clickLinkAndAssertSimpleText(String linkLabel, String expectedSimpleText) {
         clickLink(linkLabel);
