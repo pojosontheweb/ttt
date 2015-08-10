@@ -131,7 +131,9 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             "myObjId=3",
             "myEnum=Good",
             "fromSelectMap=1",
-            "myEnumRadio=Excellent"
+            "myEnumRadio=Excellent",
+            "myFile=null",
+            "myHidden=I am hidden"
         };
 
         IntStream.range(0, expectedMessages.length)

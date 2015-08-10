@@ -219,6 +219,9 @@
         <%= file %>
     <% } %>
 
+    <%-- stripes:hidden --%>
+    <%= f.hidden("myHidden") %>
+
     <%-- stripes:submit --%>
     <tr>
         <td colspan="3">

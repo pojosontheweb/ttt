@@ -116,4 +116,13 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
         return file(t);
     }
 
+    public Hidden hidden(InputHiddenTag t) {
+        return new Hidden(pageContext, t, bodyTag);
+    }
+
+    public Hidden hidden(String name) {
+        InputHiddenTag t = new InputHiddenTag();
+        t.setName(name);
+        return hidden(t);
+    }
 }

@@ -25,10 +25,12 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
     private Integer fromSelectMap;
     private MyEnum myEnumRadio;
     private FileBean myFile;
+    private String myHidden;
 
     @DefaultHandler
     @DontValidate
     public Resolution display() {
+        myHidden = "I am hidden";
         return resolution("inputs demo", new InputsTemplate(this));
     }
 
@@ -44,7 +46,8 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         messages.add(new SimpleMessage("myEnum=" + myEnum));
         messages.add(new SimpleMessage("fromSelectMap=" + fromSelectMap));
         messages.add(new SimpleMessage("myEnumRadio=" + myEnumRadio));
-        messages.add(new SimpleMessage("myFile=" + myFile.getFileName()));
+        messages.add(new SimpleMessage("myFile=" + (myFile==null ? "null" : myFile.getFileName())));
+        messages.add(new SimpleMessage("myHidden=" + myHidden));
         return new RedirectResolution(InputsAction.class).flash(this);
     }
 
@@ -88,6 +91,10 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         this.checkbox2 = checkbox2;
     }
 
+    // IMPORTANT !!
+    // All beans are required to implement ValidationErrorHandler when using TTT.
+    // We have no "source page" here, so we must tell
+    // Stripes what Resolution should be used in case of validation errors.
     @Override
     public Resolution handleValidationErrors(ValidationErrors errors) throws Exception {
         return display();
@@ -160,5 +167,13 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
 
     public void setMyFile(FileBean myFile) {
         this.myFile = myFile;
+    }
+
+    public String getMyHidden() {
+        return myHidden;
+    }
+
+    public void setMyHidden(String myHidden) {
+        this.myHidden = myHidden;
     }
 }
