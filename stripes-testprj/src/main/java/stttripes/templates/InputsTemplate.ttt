@@ -151,7 +151,6 @@
     </tr>
 
     <%-- s:radio --%>
-
     <tr>
         <td>
             Radio
@@ -181,7 +180,25 @@
         </td>
     </tr>
 
-    <%-- submit --%>
+    <%-- s:button --%>
+    <tr>
+        <td>
+            Buttons
+        </td>
+        <td>
+            <%-- btn with a body --%>
+            <% try ( Button b = s.button("heyHo") ) { %> with body <% } %>
+
+            <%-- i18n btn, without body, used without try-resource --%>
+            <%= s.button("heyHo2") %>
+
+        </td>
+        <td>
+
+        </td>
+    </tr>
+
+    <%-- s:submit --%>
     <tr>
         <td colspan="3">
             <%= f.submit("doStuff") %>

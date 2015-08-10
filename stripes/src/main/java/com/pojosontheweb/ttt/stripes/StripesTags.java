@@ -114,4 +114,18 @@ public class StripesTags extends TagLib {
         l.setFor(forId);
         return label(l);
     }
+
+    public Button button(InputButtonTag t) {
+        Button b = new Button(pageContext, t);
+        b.open(out);
+        return b;
+    }
+
+    public Button button(String name) {
+        InputButtonTag t = new InputButtonTag();
+        t.setName(name);
+        return button(t);
+    }
+
+
 }

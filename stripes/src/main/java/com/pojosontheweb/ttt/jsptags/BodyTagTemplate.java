@@ -6,6 +6,8 @@ import com.pojosontheweb.ttt.TttWriter;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
 
+import java.io.Writer;
+
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
 public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate {
@@ -16,6 +18,9 @@ public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate {
     protected TttBodyContent bodyContent;
     protected TttWriter out;
 
+    private boolean opened = false;
+    private boolean closed = false;
+
     public BodyTagTemplate(TttPageContext pageContext, T bodyTag) {
         this.pageContext = pageContext;
         this.bodyTag = bodyTag;
@@ -23,6 +28,11 @@ public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate {
 
     @Override
     public void open(TttWriter out) {
+        if (opened) {
+            // already opened, do nothing...
+            return;
+        }
+        opened = true;
         this.out = out;
         toRtEx(() -> {
             bodyTag.setPageContext(pageContext);
@@ -67,6 +77,12 @@ public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate {
 
     @Override
     public void close() {
+        if (closed) {
+            // already closed, do nothing...
+            return;
+        }
+        closed = true;
+
         try {
             if (bodyContent != null) {
                 pageContext.popBody();
@@ -93,5 +109,16 @@ public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate {
 
     public T getBodyTag() {
         return bodyTag;
+    }
+
+    @Override
+    public String getContentType() {
+        return null;
+    }
+
+    @Override
+    public void render(Writer out) {
+        open((TttWriter)out);
+        close();
     }
 }
