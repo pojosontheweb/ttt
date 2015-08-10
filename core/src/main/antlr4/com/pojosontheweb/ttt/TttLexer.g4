@@ -103,7 +103,7 @@ TYPE
 mode DECLARATION;
 
 DEC_WS
-	: [ \t\r\n]
+	: [ \t\r\n] -> skip
 	;
 
 DEC_GENERIC_SUPER

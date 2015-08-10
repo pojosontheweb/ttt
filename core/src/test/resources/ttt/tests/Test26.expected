@@ -1,0 +1,20 @@
+package ttt.tests;
+
+public class Test26 extends com.pojosontheweb.ttt.Template {
+
+	private final int foo;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 * @param foo  the calc action bean (used to display result)
+	 */
+	public Test26(int foo) {
+		this.foo = foo;
+	}
+
+	@Override
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
+		write(out, "comments again...\n" );
+	}
+}

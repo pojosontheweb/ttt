@@ -63,7 +63,7 @@ decMultilineCommentText
 	;
 
 arg
-	: argJavaDoc? DEC_WS* argType DEC_WS* argName DEC_EOL DEC_WS*
+	: argJavaDoc? argType argName DEC_EOL
 	;
 
 argJavaDoc
@@ -75,15 +75,23 @@ jdocText
 	;
 
 argType
-	: (DEC_FQN | DEC_ID) (genericType)? (DEC_ARRAY_OPEN DEC_ARRAY_CLOSE)*
+	: rawType (genericType)? arrayMarker*
+	;
+
+arrayMarker
+	: DEC_ARRAY_OPEN DEC_ARRAY_CLOSE
+	;
+
+rawType
+	: DEC_FQN | DEC_ID
 	;
 
 genericType
-	: DEC_GENERIC_START DEC_WS* genericBody DEC_WS* DEC_GENERIC_END
+	: DEC_GENERIC_START genericBody DEC_GENERIC_END
 	;
 
 genericBody
-	: DEC_GENERIC_WILD DEC_WS* ( (DEC_GENERIC_EXTENDS | DEC_GENERIC_SUPER) DEC_WS* argType )?
+	: DEC_GENERIC_WILD ( (DEC_GENERIC_EXTENDS | DEC_GENERIC_SUPER) argType )?
 	| argType
 	;
 

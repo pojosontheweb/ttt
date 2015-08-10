@@ -57,11 +57,37 @@ public class TttListener extends TttParserBaseListener {
         }
     }
 
+    private String toString(TttParser.ArgTypeContext a) {
+        String res = a.rawType().getText();
+        TttParser.GenericTypeContext genericType = a.genericType();
+        if (genericType != null) {
+            TttParser.GenericBodyContext genericBody = genericType.genericBody();
+            res += "<";
+            if (genericBody.DEC_GENERIC_WILD() != null) {
+                res += "?";
+                if (genericBody.DEC_GENERIC_EXTENDS() != null) {
+                    res += " extends " + toString(genericBody.argType());
+                } else if (genericBody.DEC_GENERIC_SUPER() != null) {
+                    res += " super " + toString(genericBody.argType());
+                }
+            } else {
+                res += toString(genericBody.argType());
+            }
+            res += ">";
+        }
+        List<TttParser.ArrayMarkerContext> markerContexts = a.arrayMarker();
+        for (TttParser.ArrayMarkerContext c : markerContexts) {
+            res += "[]";
+        }
+        return res;
+    }
+
     // collect arguments
     @Override
     public void exitArg(TttParser.ArgContext ctx) {
         String name = ctx.argName().getText();
-        String className = ctx.argType().getText();
+//        String className = ctx.argType().getText();
+        String className = toString(ctx.argType());
         TttParser.ArgJavaDocContext javaDocContext = ctx.argJavaDoc();
         String javadoc = null;
         if (javaDocContext != null) {
