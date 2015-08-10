@@ -19,7 +19,7 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
     }
 
     public Text text(InputTextTag textTag) {
-        return new Text(pageContext, textTag, this.bodyTag);
+        return new Text(pageContext, textTag, bodyTag);
     }
 
     public Text text(String name) {
@@ -29,7 +29,7 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
     }
 
     public Checkbox checkbox(InputCheckBoxTag checkBoxTag) {
-        return new Checkbox(pageContext, checkBoxTag, this.bodyTag);
+        return new Checkbox(pageContext, checkBoxTag, bodyTag);
     }
 
     public Checkbox checkbox(String name) {
@@ -39,7 +39,7 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
     }
 
     public Submit submit(InputSubmitTag submitTag) {
-        return new Submit(pageContext, submitTag, this.bodyTag);
+        return new Submit(pageContext, submitTag, bodyTag);
     }
 
     public Submit submit(String name) {
@@ -55,7 +55,7 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
     }
 
     public Password password(InputPasswordTag inputPasswordTag) {
-        return new Password(pageContext, inputPasswordTag, this.bodyTag);
+        return new Password(pageContext, inputPasswordTag, bodyTag);
     }
 
     public Password password(String name) {
@@ -97,7 +97,7 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
     }
 
     public Radio radio(InputRadioButtonTag r) {
-        return new Radio(pageContext, r, this.bodyTag);
+        return new Radio(pageContext, r, bodyTag);
     }
 
     public Radio radio(String name) {
@@ -105,4 +105,15 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
         r.setName(name);
         return radio(r);
     }
+
+    public File file(InputFileTag t) {
+        return new File(pageContext, t, bodyTag);
+    }
+
+    public File file(String name) {
+        InputFileTag t = new InputFileTag();
+        t.setName(name);
+        return file(t);
+    }
+
 }

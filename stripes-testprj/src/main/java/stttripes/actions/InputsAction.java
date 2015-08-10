@@ -44,6 +44,7 @@ public class InputsAction extends ActionBase implements ValidationErrorHandler {
         messages.add(new SimpleMessage("myEnum=" + myEnum));
         messages.add(new SimpleMessage("fromSelectMap=" + fromSelectMap));
         messages.add(new SimpleMessage("myEnumRadio=" + myEnumRadio));
+        messages.add(new SimpleMessage("myFile=" + myFile.getFileName()));
         return new RedirectResolution(InputsAction.class).flash(this);
     }
 

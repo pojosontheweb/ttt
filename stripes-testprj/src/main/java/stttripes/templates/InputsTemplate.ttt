@@ -211,6 +211,14 @@
         <% try (Button b = stripes.button("heyHo3")) { %> I'm in a custom tag ! <% } %>
     <% } %>
 
+    <%-- stripes:file --%>
+    <%
+        File file = f.file("myFile").set("accept", "image/*");
+    %>
+    <% try (MyFormRow r = tags.formRow("File", file.getErrors())) { %>
+        <%= file %>
+    <% } %>
+
     <%-- stripes:submit --%>
     <tr>
         <td colspan="3">
