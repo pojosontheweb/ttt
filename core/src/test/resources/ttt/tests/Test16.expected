@@ -4,14 +4,14 @@ import java.util.List;
 
 public class Test16 extends com.pojosontheweb.ttt.Template implements java.io.Serializable {
 
-	private final List<? extends Number> foo;
+	private final List<Number> foo;
 	private final int bar;
 
 	/**
 	 * Creates an instance of this template.
 	 *
 	 */
-	public Test16(List<? extends Number> foo, int bar) {
+	public Test16(List<Number> foo, int bar) {
 		this.foo = foo;
 		this.bar = bar;
 	}

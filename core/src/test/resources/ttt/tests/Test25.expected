@@ -1,0 +1,21 @@
+package ttt.tests;
+
+import java.util.List;
+
+public class Test25 extends com.pojosontheweb.ttt.Template {
+
+	private final List<String[]> arr;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
+	public Test25(List<String[]> arr) {
+		this.arr = arr;
+	}
+
+	@Override
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
+		write(out, "this is arrays" );
+	}
+}

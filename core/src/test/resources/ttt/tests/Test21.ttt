@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
 <%!
-    List<?> numberClasses;
+    List<List<Number>> l;
 %>
 this is generic...

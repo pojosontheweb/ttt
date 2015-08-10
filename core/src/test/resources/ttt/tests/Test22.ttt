@@ -1,0 +1,6 @@
+<%@ page import="java.util.List" %>
+<%!
+    List<? extends List<? super Number>> l;
+    List<Class<? extends Number>> numberClasses;
+%>
+this is generic...

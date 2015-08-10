@@ -101,10 +101,44 @@ public class TemplateTest {
         doTest("Test17");
     }
 
-    @Ignore
     @Test
     public void test18() throws Exception {
         doTest("Test18");
+    }
+
+    @Test
+    public void test19() throws Exception {
+        doTest("Test19");
+    }
+
+    @Test
+    public void test20() throws Exception {
+        doTest("Test20");
+    }
+
+    @Test
+    public void test21() throws Exception {
+        doTest("Test21");
+    }
+
+    @Test
+    public void test22() throws Exception {
+        doTest("Test22");
+    }
+
+    @Test
+    public void test23() throws Exception {
+        doTest("Test23");
+    }
+
+    @Test
+    public void test24() throws Exception {
+        doTest("Test24");
+    }
+
+    @Test
+    public void test25() throws Exception {
+        doTest("Test25");
     }
 
     private static String toString(InputStream is) throws Exception {

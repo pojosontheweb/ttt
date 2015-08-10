@@ -1,0 +1,23 @@
+package ttt.tests;
+
+import java.util.List;
+
+public class Test22 extends com.pojosontheweb.ttt.Template {
+
+	private final List<? extends List<? super Number>> l;
+	private final List<Class<? extends Number>> numberClasses;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
+	public Test22(List<? extends List<? super Number>> l, List<Class<? extends Number>> numberClasses) {
+		this.l = l;
+		this.numberClasses = numberClasses;
+	}
+
+	@Override
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
+		write(out, "this is generic..." );
+	}
+}

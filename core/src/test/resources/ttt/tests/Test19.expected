@@ -2,16 +2,16 @@ package ttt.tests;
 
 import java.util.List;
 
-public class Test18 extends com.pojosontheweb.ttt.Template {
+public class Test19 extends com.pojosontheweb.ttt.Template {
 
-	private final List<?> numberClasses;
+	private final List<Number> numbers;
 
 	/**
 	 * Creates an instance of this template.
 	 *
 	 */
-	public Test18(List<?> numberClasses) {
-		this.numberClasses = numberClasses;
+	public Test19(List<Number> numbers) {
+		this.numbers = numbers;
 	}
 
 	@Override
