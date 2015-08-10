@@ -1,0 +1,10 @@
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html" %>
+<%!
+    List<Class<? extends Number>> numberClasses;
+%>
+<div class="foo">
+    <% for (Class<? extends Number> numberClass : numberClasses) { %>
+        <span><%=numberClass%></span>
+    <% } %>
+</div>

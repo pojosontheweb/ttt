@@ -40,6 +40,8 @@
                                        <!--implementationClass="com.pojosontheweb.ttt.TttSyntaxHighlighterFactory"/>-->
         <!--<colorSettingsPage implementation="com.pojosontheweb.ttt.TttColorSettingsPage"/>-->
         <!--<lang.psiStructureViewFactory language="Ttt" implementationClass="com.pojosontheweb.ttt.TttStructureViewFactory"/>-->
+        <toolWindow id="TTT" icon="/com/pojosontheweb/ttt/jar-gray.png" anchor="bottom" factoryClass="com.pojosontheweb.ttt.TttToolWindow">
+        </toolWindow>
     </extensions>
 
     <application-components>
@@ -50,6 +52,9 @@
         <!-- Add your project components here -->
         <component>
             <implementation-class>com.pojosontheweb.ttt.TttProjectComponent</implementation-class>
+        </component>
+        <component>
+            <implementation-class>com.pojosontheweb.ttt.TttConsoleLogger</implementation-class>
         </component>
     </project-components>
 

@@ -6,10 +6,12 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.components.ComponentManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -21,7 +23,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TttCompileAction extends AnAction {
 
@@ -58,8 +62,12 @@ public class TttCompileAction extends AnAction {
 
     private static void compile(Object requestor, Project project, VirtualFile templateFile) {
         if (project!=null) {
+            final long start = System.currentTimeMillis();
+            TttConsoleLogger consoleLogger = project.getComponent(TttConsoleLogger.class);
             Module[] modules = ModuleManager.getInstance(project).getModules();
             for (Module m : modules) {
+                List<TttCompilationResult.TttTemplateResult> results = new ArrayList<>();
+
                 TttModuleComponent tttModuleComponent = m.getComponent(TttModuleComponent.class);
                 LOG.info("Compiling templates in module " + m.getName());
                 if (tttModuleComponent != null && tttModuleComponent.isEnabled()) {
@@ -119,7 +127,6 @@ public class TttCompileAction extends AnAction {
                             // no tpl file supplied, compile all templates...
                             // visit the source roots, find all .ttt files in
                             // there, and compile'em
-                            List<File> generatedFiles = new ArrayList<>();
                             for (VirtualFile srcRoot : rootsToVisit) {
                                 final String srcRootPath = srcRoot.getPath();
                                 // find all ".ttt" files under this...
@@ -144,8 +151,14 @@ public class TttCompileAction extends AnAction {
                                                     .replace(File.separatorChar, '.')
                                                     .replace(".ttt", "");
                                                 try {
-                                                    TttCompiler.compile(in, out, fqn);
-                                                    generatedFiles.add(f);
+                                                    List<TttCompileError> compileErrors = TttCompiler.compile(in, out, fqn);
+                                                    results.add(
+                                                        new TttCompilationResult.TttTemplateResult(
+                                                            file.getPath(),
+                                                            f.getAbsolutePath(),
+                                                            compileErrors
+                                                        )
+                                                    );
                                                 } finally {
                                                     out.close();
                                                 }
@@ -159,8 +172,13 @@ public class TttCompileAction extends AnAction {
                                 });
                             }
 
+                            long elapsed = System.currentTimeMillis() - start;
                             app.invokeLater(() -> td.refresh(true, true, () -> {
-                                String msg = "TTT : " + generatedFiles.size() + " file(s) generated to " + td.getPath();
+                                TttCompilationResult res = new TttCompilationResult(results);
+                                res.setElapsed(elapsed);
+                                consoleLogger.log(res);
+//                                res.toLines().forEach(LOG::info);
+                                String msg = "TTT template(s) generated to " + td.getPath();
                                 final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
                                 if (statusBar != null) {
                                     statusBar.setInfo(msg);
@@ -195,18 +213,26 @@ public class TttCompileAction extends AnAction {
                                 }
 
                                 try (Writer out = new OutputStreamWriter(os)) {
-                                    TttCompiler.compile(in, out, fqn);
+                                    List<TttCompileError> compileErrors = TttCompiler.compile(in, out, fqn);
+                                    results.add(
+                                        new TttCompilationResult.TttTemplateResult(
+                                            templateFile.getPath(),
+                                            f.getAbsolutePath(),
+                                            compileErrors
+                                        )
+                                    );
                                 }
 
+                                long elapsed = System.currentTimeMillis() - start;
                                 app.invokeLater(() -> td.refresh(true, true, () -> {
-                                    String prjPath = project.getBasePath();
-                                    if (prjPath != null) {
-                                        String genFolder = td.getPath().substring(prjPath.length());
-                                        String msg = relPath + " generated to " + genFolder;
-                                        final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
-                                        if (statusBar != null) {
-                                            statusBar.setInfo(msg);
-                                        }
+                                    TttCompilationResult res = new TttCompilationResult(results);
+                                    res.setElapsed(elapsed);
+//                                    res.toLines().forEach(LOG::info);
+                                    consoleLogger.log(res);
+                                    String msg = "TTT template(s) generated to " + td.getPath();
+                                    final StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
+                                    if (statusBar != null) {
+                                        statusBar.setInfo(msg);
                                     }
                                 }));
 

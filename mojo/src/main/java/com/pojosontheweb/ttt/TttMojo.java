@@ -37,12 +37,14 @@ public class TttMojo extends AbstractMojo {
         log.info("Ttt compiler starting :\n\t- src\t : " + sourceDirectory.getAbsolutePath() +
             "\n\t- dest : " + outputDirectory.getAbsolutePath() + "\n");
 
-        List<File> files;
+
         try {
-            files = TttCompiler.compile(sourceDirectory.toPath(), outputDirectory.toPath(), true);
-            for (File f : files) {
-                log.info(f.getAbsolutePath());
+            TttCompilationResult result = TttCompiler.compile(sourceDirectory.toPath(), outputDirectory.toPath(), true);
+            if (result.hasErrors()) {
+                throw new MojoFailureException("TTT Compilation error(s)");
             }
+            result.toLines().forEach(log::info);
+
         } catch (Exception e) {
             throw new MojoExecutionException("unable to compile ttt", e);
         }
@@ -51,6 +53,6 @@ public class TttMojo extends AbstractMojo {
             project.addCompileSourceRoot(outputDirectory.getPath());
         }
 
-        log.info(files.size() + " Ttt template(s) compiled");
+        log.info("template(s) compiled");
     }
 }
