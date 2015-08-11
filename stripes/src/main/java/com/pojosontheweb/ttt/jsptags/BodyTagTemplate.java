@@ -110,6 +110,7 @@ public class BodyTagTemplate<T extends BodyTag> implements IBodyTemplate, ITempl
 					}
 				} else {
 					bodyTag.doAfterBody();
+					bodyTag.doEndTag();
 				}
 			} finally {
 				out.flush();
