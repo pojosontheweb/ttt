@@ -1,14 +1,10 @@
 package stttripes.templates;
 
 import com.pojosontheweb.ttt.IBodyTemplate;
-import com.pojosontheweb.ttt.ITemplate;
 import com.pojosontheweb.ttt.Template;
 import com.pojosontheweb.ttt.TttWriter;
-import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
-import com.pojosontheweb.ttt.jsptags.TttBodyContent;
 
 import java.io.StringWriter;
-import java.io.Writer;
 
 import static com.pojosontheweb.ttt.Util.toRtEx;
 

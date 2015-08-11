@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.Path;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
-import static com.pojosontheweb.ttt.Util.toRtEx;
 
 public class Main {
 

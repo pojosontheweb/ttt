@@ -2,6 +2,7 @@ package com.pojosontheweb.ttt.stripes;
 
 import com.pojosontheweb.ttt.jsptags.TagLib;
 import net.sourceforge.stripes.action.ActionBean;
+import net.sourceforge.stripes.action.LocalizableMessage;
 import net.sourceforge.stripes.controller.ExecutionContext;
 import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.format.Formatter;
@@ -59,6 +60,12 @@ public class StripesTags extends TagLib {
         UrlTag urlTag = new UrlTag();
         urlTag.setBeanclass(beanClass);
         return url(urlTag);
+    }
+
+    public Url url(String s) {
+        UrlTag urlTag = new UrlTag();
+		urlTag.setValue(s);
+		return url(urlTag);
     }
 
     public Messages messages(MessagesTag messagesTag) {
@@ -126,5 +133,10 @@ public class StripesTags extends TagLib {
         t.setName(name);
         return button(t);
     }
+
+	public String message(String key, Object... params) {
+		LocalizableMessage msg = new LocalizableMessage(key, params);
+		return msg.getMessage(ExecutionContext.currentContext().getActionBeanContext().getLocale());
+	}
 
 }

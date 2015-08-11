@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Util {
 
-    public static <T> void toRtEx(String msg, RunnableEx<T> code) {
+    public static <T> void toRtExNoResult(String msg, RunnableEx<T> code) {
         try {
             code.run();
         } catch (Throwable e) {
@@ -21,8 +21,8 @@ public class Util {
         }
     }
 
-    public static <T> void toRtEx(RunnableEx<T> code) {
-        toRtEx(null, code);
+    public static <T> void toRtExNoResult(RunnableEx<T> code) {
+        toRtExNoResult(null, code);
     }
 
     public static <T> T toRtEx(SupplierEx<T> code) {

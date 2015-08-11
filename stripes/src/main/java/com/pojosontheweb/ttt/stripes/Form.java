@@ -1,5 +1,6 @@
 package com.pojosontheweb.ttt.stripes;
 
+import com.pojosontheweb.ttt.Util;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
 import net.sourceforge.stripes.action.ActionBeanContext;
 import net.sourceforge.stripes.controller.ExecutionContext;
@@ -91,7 +92,7 @@ public class Form extends BodyTagTemplateAttributed<FormTag,Form> {
 
     @Override
     public Form set(String name, Object value) {
-        toRtEx(() -> bodyTag.setDynamicAttribute(null, name, value));
+        Util.toRtExNoResult(() -> bodyTag.setDynamicAttribute(null, name, value));
         return this;
     }
 

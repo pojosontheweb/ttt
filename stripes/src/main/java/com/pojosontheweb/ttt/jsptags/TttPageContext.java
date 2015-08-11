@@ -1,8 +1,7 @@
 package com.pojosontheweb.ttt.jsptags;
 
 import com.mockobjects.servlet.MockPageContext;
-import net.sourceforge.stripes.mock.MockHttpServletRequest;
-import net.sourceforge.stripes.mock.MockHttpServletResponse;
+import com.pojosontheweb.ttt.Util;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -82,7 +81,7 @@ public class TttPageContext extends MockPageContext {
     @Override
     public JspWriter popBody() {
         BodyContent c = bodyStack.pop();
-        toRtEx(c::close);
+        Util.toRtExNoResult(c::close);
         setJspWriter(c.getEnclosingWriter());
         return c.getEnclosingWriter();
     }

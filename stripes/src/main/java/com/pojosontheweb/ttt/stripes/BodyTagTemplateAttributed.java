@@ -1,5 +1,6 @@
 package com.pojosontheweb.ttt.stripes;
 
+import com.pojosontheweb.ttt.Util;
 import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
 import net.sourceforge.stripes.tag.HtmlTagSupport;
@@ -18,7 +19,7 @@ public abstract class BodyTagTemplateAttributed<T extends BodyTag, V extends Bod
     @Override
     public V set(String name, Object value) {
         HtmlTagSupport hts = (HtmlTagSupport)bodyTag;
-        toRtEx(() -> hts.setDynamicAttribute(null, name, value));
+        Util.toRtExNoResult(() -> hts.setDynamicAttribute(null, name, value));
         @SuppressWarnings("unchecked") V v = (V)this;
         return v;
     }

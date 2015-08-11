@@ -1,5 +1,6 @@
 package com.pojosontheweb.ttt.stripes;
 
+import com.pojosontheweb.ttt.Util;
 import com.pojosontheweb.ttt.jsptags.TagTemplate;
 import net.sourceforge.stripes.tag.FormTag;
 import net.sourceforge.stripes.tag.InputTagSupport;
@@ -23,7 +24,7 @@ public abstract class InputTagSupportBase<T extends InputTagSupport, V extends I
 
     @Override
     public V set(String name, Object value) {
-        toRtEx(() -> tag.setDynamicAttribute(null, name, value));
+        Util.toRtExNoResult(() -> tag.setDynamicAttribute(null, name, value));
         @SuppressWarnings("unchecked") V v = (V)this;
         return v;
     }
