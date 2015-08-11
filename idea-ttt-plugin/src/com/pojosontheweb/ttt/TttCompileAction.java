@@ -195,7 +195,7 @@ public class TttCompileAction extends AnAction {
                             try {
                                 Reader in = new InputStreamReader(templateFile.getInputStream());
                                 String relPath = templateFile.getPath().substring(templateSourceRoot.getPath().length());
-                                String absPath = targetDir + relPath;
+                                String absPath = targetDir.getPath() + relPath;
                                 absPath = absPath.replace(".ttt", ".java");
                                 File f = new File(absPath);
                                 File parent = f.getParentFile();
@@ -221,7 +221,7 @@ public class TttCompileAction extends AnAction {
                                     results.add(
                                         new TttCompilationResult.TttTemplateResult(
                                             templateFile.getPath(),
-                                            f.getAbsolutePath(),
+                                            absPath,
                                             compileErrors
                                         )
                                     );

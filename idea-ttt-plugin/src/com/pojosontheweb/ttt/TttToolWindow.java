@@ -22,6 +22,6 @@ public class TttToolWindow implements ToolWindowFactory {
         if (logHandler != null) {
             logHandler.setConsoleView(consoleView);
         }
-        toolWindow.setTitle("TTT Compiler output");
+        toolWindow.setTitle("Template Compiler output");
     }
 }
