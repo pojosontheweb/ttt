@@ -3,6 +3,9 @@ package stttripes.webtests;
 import com.pojosontheweb.selenium.ManagedDriverJunit4TestBase;
 import org.junit.Before;
 import org.junit.Test;
+import stttripes.actions.MyEnum;
+
+import java.util.stream.IntStream;
 
 import static com.pojosontheweb.selenium.Findrs.*;
 import static org.openqa.selenium.By.*;
@@ -45,6 +48,12 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             "simple",
             "Hey, you have not provided no param. Try '?myProp=bar'..."
         );
+
+        // encoding test
+        clickLink("simple");
+        findr().elem(cssSelector("p.encoding-test"))
+            .where(textEquals("être ou ne pas être encodé, là est la question..."))
+            .eval();
     }
 
     @Test
@@ -79,6 +88,57 @@ public class TttStripesIT extends ManagedDriverJunit4TestBase {
             .assertResult("0.27");
 
         clickBackToHome();
+    }
+
+    @Test
+    public void inputs() {
+
+        clickLink("various inputs");
+        InputsPage inputsPage = new InputsPage(findr());
+
+        inputsPage
+            .clickDoStuff()
+            .assertError(0, "Text is a required field")
+            .assertFieldError("text");
+
+        inputsPage
+            .clickReset()
+            .assertMessage(0, "Reset !");
+
+        inputsPage
+            .setText("hey there !")
+            .setPassword("secret")
+            .clickCheckbox1()
+            .clickCheckbox2()
+            .selectCollection("bar")
+            .selectCollectionObj("baz")
+            .selectEnum(MyEnum.Good)
+            .selectMap("foo")
+            .clickRadio(MyEnum.Excellent)
+            .clickButtonWithLabel("with body")
+            .clickButtonWithLabel("I am localized")
+            .clickButtonWithLabel("I'm in a custom tag !")
+            .setTextArea("rock'n'roll")
+            .clickDoStuff();
+
+        String[] expectedMessages = new String[]{
+            "Stuff's been done.",
+            "text=hey there !",
+            "password=secret",
+            "checkbox1=true",
+            "checkbox2=true",
+            "textFromSelect=bar",
+            "myObjId=3",
+            "myEnum=Good",
+            "fromSelectMap=1",
+            "myEnumRadio=Excellent",
+            "myFile=null",
+            "myHidden=I am hidden",
+            "myTextArea=rock'n'roll"
+        };
+
+        IntStream.range(0, expectedMessages.length)
+            .forEach(i -> inputsPage.assertMessage(i, expectedMessages[i]));
     }
 
     //

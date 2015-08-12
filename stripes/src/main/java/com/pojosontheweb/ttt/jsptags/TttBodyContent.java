@@ -2,20 +2,23 @@ package com.pojosontheweb.ttt.jsptags;
 
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.tagext.BodyTag;
 import java.io.*;
+import java.nio.charset.Charset;
 
+import static com.pojosontheweb.ttt.Util.getCharsetWithDefault;
 import static com.pojosontheweb.ttt.Util.toRtEx;
 
 public class TttBodyContent extends BodyContent {
 
     private final ByteArrayOutputStream bos;
     private final PrintWriter out;
+    private final Charset charset;
 
-    public TttBodyContent(JspWriter enclosingWriter) {
+    public TttBodyContent(JspWriter enclosingWriter, Charset charset) {
         super(enclosingWriter);
         bos = new ByteArrayOutputStream();
-        out = new PrintWriter(bos);
+        this.charset = getCharsetWithDefault(charset);
+        out = new PrintWriter(new OutputStreamWriter(bos, this.charset));
     }
 
     @Override
@@ -25,14 +28,13 @@ public class TttBodyContent extends BodyContent {
 
     @Override
     public String getString() {
-        return toRtEx(() -> new String(bos.toByteArray(), "utf-8"));
+        return toRtEx(() -> new String(bos.toByteArray(), this.charset));
     }
 
     @Override
     public void writeOut(Writer out) throws IOException {
         out.write(getString());
     }
-
 
     @Override
     public void newLine() throws IOException {

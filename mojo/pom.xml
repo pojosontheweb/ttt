@@ -4,7 +4,7 @@
     <parent>
         <artifactId>ttt-parent</artifactId>
         <groupId>com.pojosontheweb</groupId>
-        <version>0.1-beta3</version>
+        <version>0.1-beta4</version>
     </parent>
     <artifactId>ttt-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
@@ -30,12 +30,6 @@
             <groupId>com.pojosontheweb</groupId>
             <artifactId>ttt-core</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>

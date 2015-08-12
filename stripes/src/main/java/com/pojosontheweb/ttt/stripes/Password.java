@@ -5,7 +5,7 @@ import net.sourceforge.stripes.tag.InputPasswordTag;
 
 import javax.servlet.jsp.PageContext;
 
-public class Password extends InputTagSupportBase<InputPasswordTag> {
+public class Password extends InputTagSupportBase<InputPasswordTag,Password> {
 
     public Password(PageContext pageContext, InputPasswordTag tag, FormTag parent) {
         super(pageContext, tag, parent);

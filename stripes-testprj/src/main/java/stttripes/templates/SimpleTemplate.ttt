@@ -11,5 +11,8 @@
     Cool ! this was bound : <%= foo %>
 <% } %>
 </p>
+<p class="encoding-test">
+    être ou ne pas être encodé, là est la question...
+</p>
 </body>
 </html>

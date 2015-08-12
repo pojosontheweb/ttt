@@ -1,0 +1,24 @@
+package ttt.tests;
+
+public class Test17 extends com.pojosontheweb.ttt.Template {
+
+	private final int bar;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
+	public Test17(int bar) {
+		this.bar = bar;
+	}
+
+	@Override
+	public String getContentType() {
+		return "text/html";
+	}
+
+	@Override
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
+		write(out, "<div class=\"foo\">\n    Salut Rémi\n</div>" );
+	}
+}

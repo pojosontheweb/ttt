@@ -1,10 +1,9 @@
 package com.pojosontheweb.ttt.stripes;
 
-import com.pojosontheweb.ttt.jsptags.BodyTagTemplate;
 import com.pojosontheweb.ttt.jsptags.TttPageContext;
 import net.sourceforge.stripes.tag.LinkTag;
 
-public class Link extends BodyTagTemplate<LinkTag> {
+public class Link extends BodyTagTemplateAttributed<LinkTag,Link> {
 
     public Link(TttPageContext pageContext, LinkTag bodyTag) {
         super(pageContext, bodyTag);

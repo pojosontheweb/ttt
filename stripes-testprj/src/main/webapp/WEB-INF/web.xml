@@ -39,6 +39,11 @@
             <param-name>Stripes.EncryptionKey</param-name>
             <param-value>Don't Copy/Paste Me! Make up your own encryption key and keep it secret!</param-value>
         </init-param>
+
+        <init-param>
+            <param-name>MultipartWrapper.Class</param-name>
+            <param-value>net.sourceforge.stripes.controller.multipart.CommonsMultipartWrapper</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>

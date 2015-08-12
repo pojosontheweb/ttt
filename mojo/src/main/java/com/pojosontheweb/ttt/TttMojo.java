@@ -34,15 +34,31 @@ public class TttMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         Log log = getLog();
 
-        log.info("Ttt compiler starting :\n\t- src\t : " + sourceDirectory.getAbsolutePath() +
+        log.info("\"TTT : compiler starting :\n\t- src\t : " + sourceDirectory.getAbsolutePath() +
             "\n\t- dest : " + outputDirectory.getAbsolutePath() + "\n");
 
-        List<File> files;
+
         try {
-            files = TttCompiler.compile(sourceDirectory.toPath(), outputDirectory.toPath(), true);
-            for (File f : files) {
-                log.info(f.getAbsolutePath());
+            TttCompilationResult result = TttCompiler.compile(sourceDirectory.toPath(), outputDirectory.toPath(), true);
+            int nbOk = 0, nbKo = 0;
+            for (TttCompilationResult.TttTemplateResult r : result.getResults()) {
+                if (r.hasErrors()) {
+                    for (TttCompileError err : r.getErrors()) {
+                        log.error("TTT : " + r.getTemplateFileName() + " (" + err.getLine() + "," + err.getCharInLine() + ") : " + err.getMessage());
+                    }
+                    nbKo++;
+                } else {
+                    nbOk++;
+                    log.info("TTT : " + r.getTemplateFileName() + " -> " + r.getGeneratedFileName());
+                }
             }
+            if (result.hasErrors()) {
+                log.error("TTT : " + nbOk + " OK, " + nbKo + " failed, took " + result.getElapsed() + "ms");
+                throw new MojoFailureException("TTT Compilation error(s)");
+            } else {
+                log.info("TTT : " + nbOk + " templates compiled, took " + result.getElapsed() + "ms");
+            }
+
         } catch (Exception e) {
             throw new MojoExecutionException("unable to compile ttt", e);
         }
@@ -51,6 +67,6 @@ public class TttMojo extends AbstractMojo {
             project.addCompileSourceRoot(outputDirectory.getPath());
         }
 
-        log.info(files.size() + " Ttt template(s) compiled");
+        log.info("template(s) compiled");
     }
 }

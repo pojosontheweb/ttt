@@ -1,5 +1,6 @@
 package com.pojosontheweb.ttt;
 
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  */
 public class Util {
 
-    public static <T> void toRtEx(String msg, RunnableEx<T> code) {
+    public static <T> void toRtExNoResult(String msg, RunnableEx<T> code) {
         try {
             code.run();
         } catch (Throwable e) {
@@ -20,8 +21,8 @@ public class Util {
         }
     }
 
-    public static <T> void toRtEx(RunnableEx<T> code) {
-        toRtEx(null, code);
+    public static <T> void toRtExNoResult(RunnableEx<T> code) {
+        toRtExNoResult(null, code);
     }
 
     public static <T> T toRtEx(SupplierEx<T> code) {
@@ -55,6 +56,16 @@ public class Util {
             return Collections.emptyList();
         }
         return l;
+    }
+
+    public static <T> T elvis(T t, T defaultValue) {
+        return t == null ? defaultValue : t;
+    }
+
+    public static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");
+
+    public static Charset getCharsetWithDefault(Charset charset) {
+        return elvis(charset, CHARSET_UTF8);
     }
 
 }

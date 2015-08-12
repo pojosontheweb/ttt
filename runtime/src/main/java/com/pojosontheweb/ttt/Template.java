@@ -3,7 +3,7 @@ package com.pojosontheweb.ttt;
 import java.io.IOException;
 import java.io.Writer;
 
-import static com.pojosontheweb.ttt.Util.toRtEx;
+import static com.pojosontheweb.ttt.Util.toRtExNoResult;
 
 /**
  * Base template class. Defines the policy for writing
@@ -19,29 +19,27 @@ import static com.pojosontheweb.ttt.Util.toRtEx;
 public abstract class Template implements ITemplate {
 
     protected void write(Writer out, Object o) {
-        try {
-            if (o != null) {
-                if (o instanceof ITemplate) {
-                    ((ITemplate) o).render(out);
-                } else if (o instanceof String) {
-                    out.write((String) o);
-                } else if (o instanceof IBodyTemplate) {
+        toRtExNoResult(() -> {
+			if (o != null) {
+				if (o instanceof ITemplate) {
+					((ITemplate) o).render(out);
+				} else if (o instanceof String) {
+					out.write((String) o);
+				} else if (o instanceof IBodyTemplate) {
 
-                    IBodyTemplate st = (IBodyTemplate)o;
-                    // call the open method on the sub template
-                    // and let it manage stuff. SubTemplate is an
-                    // auto-closable and should be used with
-                    // a try-resource block, therefore we do not
-                    // need to call close ourselves...
-                    st.open((TttWriter)out);
+					IBodyTemplate st = (IBodyTemplate)o;
+					// call the open method on the sub template
+					// and let it manage stuff. SubTemplate is an
+					// auto-closable and should be used with
+					// a try-resource block, therefore we do not
+					// need to call close ourselves...
+					st.open((TttWriter)out);
 
-                } else {
-                    out.write(o.toString());
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+				} else {
+					out.write(o.toString());
+				}
+			}
+        });
     }
 
     protected void write(Writer out, Object first, Object... rest) {
@@ -54,11 +52,6 @@ public abstract class Template implements ITemplate {
     }
 
     @Override
-    public String getContentType() {
-        return null;
-    }
-
-    @Override
     public final void render(Writer out) {
         // wrap the supplied writer into a TttWriter
         // if not already done...
@@ -68,7 +61,7 @@ public abstract class Template implements ITemplate {
         } else {
             tw = new TttWriter(out);
         }
-        toRtEx("error while rendering the template", () -> doRender(tw));
+        toRtExNoResult("error while rendering the template", () -> doRender(tw));
     }
 
     protected abstract void doRender(TttWriter tw) throws Exception;

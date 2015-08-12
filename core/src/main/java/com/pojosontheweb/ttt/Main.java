@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -36,10 +37,15 @@ public class Main {
             log.write("Ttt compiler starting :\n\t- src\t : " + srcDir +
                 "\n\t- target : " + targetDir + "\n");
 
-            TttCompiler.compile(srcDir, targetDir, options.has("clean"));
+            TttCompilationResult result = TttCompiler.compile(srcDir, targetDir, options.has("clean"));
+            log.write(result.toLines().collect(Collectors.joining("\n")));
 
-            log.write("Templates compiled.\n");
-
+            if (result.hasErrors()) {
+                log.write("Compilation failed (took " + result.getElapsed() + "ms)\n");
+            } else {
+                log.write("Templates compiled (took " + result.getElapsed() + "ms)\n");
+            }
         }
     }
+
 }

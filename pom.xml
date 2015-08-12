@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pojosontheweb</groupId>
     <artifactId>ttt-parent</artifactId>
-    <version>0.1-beta3</version>
+    <version>0.1-beta4</version>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
@@ -61,13 +61,24 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.4</version>
+            </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
     <profiles>
         <profile>

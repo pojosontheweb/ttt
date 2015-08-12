@@ -1,0 +1,21 @@
+package ttt.tests;
+
+import java.util.List;
+
+public class Test19 extends com.pojosontheweb.ttt.Template {
+
+	private final List<Number> numbers;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
+	public Test19(List<Number> numbers) {
+		this.numbers = numbers;
+	}
+
+	@Override
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
+		write(out, "this is generic..." );
+	}
+}

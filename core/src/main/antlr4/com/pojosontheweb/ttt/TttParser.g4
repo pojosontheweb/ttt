@@ -39,7 +39,7 @@ contentTypeValue
 	;
 
 declaration
-	: DECLARATION_START args DECLARATION_END WS?
+	: DECLARATION_START DEC_WS* args DEC_WS* DECLARATION_END WS?
 	;
 
 args
@@ -75,7 +75,24 @@ jdocText
 	;
 
 argType
-	: DEC_TYPE | DEC_ID
+	: rawType (genericType)? arrayMarker*
+	;
+
+arrayMarker
+	: DEC_ARRAY_OPEN DEC_ARRAY_CLOSE
+	;
+
+rawType
+	: DEC_FQN | DEC_ID
+	;
+
+genericType
+	: DEC_GENERIC_START genericBody DEC_GENERIC_END
+	;
+
+genericBody
+	: DEC_GENERIC_WILD ( (DEC_GENERIC_EXTENDS | DEC_GENERIC_SUPER) argType )?
+	| argType
 	;
 
 argName

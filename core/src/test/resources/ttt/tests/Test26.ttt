@@ -1,0 +1,10 @@
+<%!
+    // foo bar
+    // baz
+
+    /**
+     * the calc action bean (used to display result)
+     */
+    int foo;
+%>
+comments again...

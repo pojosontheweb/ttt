@@ -2,14 +2,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.stream.Collectors" %>
-<%@ page import="com.pojosontheweb.ttt.stripes.InputTagSupportBase" %>
+<%@ page import="net.sourceforge.stripes.controller.ExecutionContext" %>
 <%!
-    InputTagSupportBase<?> input;
-    Locale locale;
+    List<ValidationError> errors;
 %>
 <%
-    List<ValidationError> errors = input.getErrors();
-    if (errors.size() > 0) {
+    Locale locale = ExecutionContext.currentContext().getActionBeanContext().getLocale();
+    if (errors != null && errors.size() > 0) {
 %>
 <span class="errors">
     <%= errors.stream().map( e -> e.getMessage(locale) ).collect(Collectors.joining(", ")) %>

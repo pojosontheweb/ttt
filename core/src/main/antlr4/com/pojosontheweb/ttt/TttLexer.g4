@@ -106,6 +106,14 @@ DEC_WS
 	: [ \t\r\n] -> skip
 	;
 
+DEC_GENERIC_SUPER
+	: 'super'
+	;
+
+DEC_GENERIC_EXTENDS
+	: 'extends'
+	;
+
 DEC_LETTER
 	: [a-zA-Z]
 	;
@@ -114,17 +122,38 @@ DEC_DIGIT
 	: [0-9]
 	;
 
+DEC_ARRAY_OPEN
+	: '['
+	;
+
+DEC_ARRAY_CLOSE
+	: ']'
+	;
+
 DEC_ID
 	: DEC_LETTER ( DEC_LETTER | DEC_DIGIT )*
 	;
 
-DEC_GENERIC
-	: '<' TEXT '>'
+DEC_FQN
+	: DEC_ID ('.' DEC_ID)+
 	;
 
-DEC_TYPE
-	: (DEC_ID '.')* DEC_ID DEC_GENERIC?
+DEC_GENERIC_START
+	: '<'
 	;
+
+DEC_GENERIC_WILD
+	: '?'
+	;
+
+DEC_GENERIC_COMMA
+	: ','
+	;
+
+DEC_GENERIC_END
+	: '>'
+	;
+
 
 DEC_EOL
 	: ';'
@@ -195,54 +224,3 @@ SCRIPTLET_TEXT
 SCRIPTLET_END
 	: '%>' -> popMode
 	;
-
-
-//TEXT
-//	: .+?
-//	;
-//
-//EXPRESSION_START
-//	: '<%='
-//	;
-//
-//SCRIPTLET_START
-//	: '<%' ~[=(]
-//	;
-//
-//CLOSER
-//	: '%>'
-//	;
-//
-//mode SIGNATURE;
-//
-//WS
-//	: [ \t\r\n] -> skip
-//	;
-//
-//SIGNATURE_CLOSE
-//	: ')%>' WS* -> popMode
-//	;
-//
-//ID
-//	: LETTER ( LETTER | DIGIT )*
-//	;
-//
-//GENERIC
-//	: '<' ID '>'
-//	;
-//
-//TYPE
-//	: (ID '.')* ID GENERIC?
-//	;
-//
-//LETTER
-//	: [a-zA-Z]
-//	;
-//
-//DIGIT
-//	: [0-9]
-//	;
-//
-//COMMA
-//	: ','
-//	;

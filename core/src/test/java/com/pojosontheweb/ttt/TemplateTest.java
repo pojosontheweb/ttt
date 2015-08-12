@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -11,9 +12,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class TemplateTest {
 
@@ -97,6 +96,56 @@ public class TemplateTest {
         doTest("Test16");
     }
 
+    @Test
+    public void test17() throws Exception {
+        doTest("Test17");
+    }
+
+    @Test
+    public void test18() throws Exception {
+        doTest("Test18");
+    }
+
+    @Test
+    public void test19() throws Exception {
+        doTest("Test19");
+    }
+
+    @Test
+    public void test20() throws Exception {
+        doTest("Test20");
+    }
+
+    @Test
+    public void test21() throws Exception {
+        doTest("Test21");
+    }
+
+    @Test
+    public void test22() throws Exception {
+        doTest("Test22");
+    }
+
+    @Test
+    public void test23() throws Exception {
+        doTest("Test23");
+    }
+
+    @Test
+    public void test24() throws Exception {
+        doTest("Test24");
+    }
+
+    @Test
+    public void test25() throws Exception {
+        doTest("Test25");
+    }
+
+    @Test
+    public void test26() throws Exception {
+        doTest("Test26");
+    }
+
     private static String toString(InputStream is) throws Exception {
         int nRead;
         byte[] data = new byte[2048];
@@ -135,15 +184,19 @@ public class TemplateTest {
     }
 
     private static void walk(String s, TttListener l) throws Exception {
+        TttParserErrorListener parserErrorListener = new TttParserErrorListener();
         ANTLRInputStream input = new ANTLRInputStream(new StringReader(s)); // create a lexer that feeds off of input CharStream
         TttLexer lexer = new TttLexer(input); // create a buffer of tokens pulled from the lexer
+        lexer.addErrorListener(parserErrorListener);
         CommonTokenStream tokens = new CommonTokenStream(lexer); // create a parser that feeds off the tokens buffer
         TttParser parser = new TttParser(tokens);
+        parser.addErrorListener(parserErrorListener);
         ParseTree tree = parser.r(); // begin parsing at init rule
         System.out.println(tree.toStringTree(parser));
         assertEquals(0, parser.getNumberOfSyntaxErrors());
         ParseTreeWalker w = new ParseTreeWalker();
         w.walk(l, tree);
+        assertTrue("parsing errors found !", parserErrorListener.getErrors().isEmpty());
     }
 
 }

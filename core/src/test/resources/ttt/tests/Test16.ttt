@@ -7,7 +7,7 @@
 --%>
 <%@ page extends="java.io.Serializable" %>
 <%!
-    List<? extends Number> foo;
+    List<Number> foo;
     int bar;
 %>
 <div class="foo">
