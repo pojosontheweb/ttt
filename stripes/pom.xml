@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.pojosontheweb</groupId>
         <artifactId>ttt-parent</artifactId>
-        <version>LATEST-SNAPSHOT</version>
+        <version>0.1-beta4</version>
     </parent>
     <artifactId>ttt-stripes</artifactId>
     <packaging>jar</packaging>
@@ -47,25 +47,4 @@
             <version>2.2</version>
         </dependency>
     </dependencies>
-    <build>
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<groupId>com.pojosontheweb</groupId>-->
-                <!--<artifactId>ttt-maven-plugin</artifactId>-->
-                <!--<version>${project.version}</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>ttt-compile</id>-->
-                        <!--<phase>process-resources</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>ttt</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<sourceDirectory>${project.basedir}/src/test/ttt</sourceDirectory>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
-    </build>
 </project>
