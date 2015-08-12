@@ -38,22 +38,24 @@ when rendering the template.
 
 Here's a simple template example from file `Foo.ttt` :
 
-	<%!
-		String foo;
-		int bar;
-	%>
-	<ul class="foo">
-	<% for (int i = 0 ; i < bar ; i++) { %>
-		<div class="blah">
-			hey, <%= foo %>
-		</div>
-		<li>
-			<span>
-				<%= i %>
-			</span>
-		</li>
-	<% } %>
-	</ul>
+```jsp
+<%!
+	String foo;
+	int bar;
+%>
+<ul class="foo">
+<% for (int i = 0 ; i < bar ; i++) { %>
+	<div class="blah">
+		hey, <%= foo %>
+	</div>
+	<li>
+		<span>
+			<%= i %>
+		</span>
+	</li>
+<% } %>
+</ul>
+```
 	
 First declaration block is the template's signature, between `<%!` 
 and `%>`. Arguments are declared like you declare local variables 
@@ -72,15 +74,17 @@ You may add a javadoc to the arguments of your template, it will be used in
 the generated classes. The TTT compiler will use the javadocs just 
 before the arguments :
 
-	<%!
-		/**
-		 * the foo for this template 
-		 * multi-line if you want
-		 */
-		Foo foo;
-		
-		...
-	%>
+```jsp
+<%!
+	/**
+	 * the foo for this template 
+	 * multi-line if you want
+	 */
+	Foo foo;
+	
+	...
+%>
+```
 	
 Apart from this, you can use JSP-like comments (enclosed in `<%--` and `--%>`) in the text, 
 and code comments (`// ...` or `/* ... */`) in scriptlets or expressions.
@@ -91,27 +95,29 @@ You can nest templates easily by defining arguments that are templates themselve
 
 For example, here's an outer page template that "includes" a nested template (`Wrapper.ttt`):
 
-	<%!
-		/**
-		 * the page title (header)
-		 */
-		String title;
-		
-		/**
-		 * the body of the page, rendered in body tag
-		 */
-		com.pojosontheweb.ttt.ITemplate nested;
-	%>
-	<html>
-		<head>
-			<%-- title arg used here --%>
-			<title><%= title %></title>
-		</head>
-		<body>
-			<%-- body is another template --%>
-			<%= nested %>
-		</body>
-	</html>
+```jsp
+<%!
+	/**
+	 * the page title (header)
+	 */
+	String title;
+	
+	/**
+	 * the body of the page, rendered in body tag
+	 */
+	com.pojosontheweb.ttt.ITemplate nested;
+%>
+<html>
+	<head>
+		<%-- title arg used here --%>
+		<title><%= title %></title>
+	</head>
+	<body>
+		<%-- body is another template --%>
+		<%= nested %>
+	</body>
+</html>
+```
 
 As you see, the `nested` arg of this template is of type 
 `com.pojosontheweb.ttt.ITemplate`. This is the base type 
@@ -123,8 +129,9 @@ is evaluated and spit out int the output, transparently.
 You can now pass any other template to 
 this "wrapper", and render the whole thing :
 
-	new Wrapper("My Title", new MyOtherTemplate1(...)).render(out);
-	new Wrapper("My Title", new MyOtherTemplate2(...)).render(out);	
+```java
+Wrapper w = new Wrapper("My Title", new MyTemplate(foo, bar, baz));
+```
 
 ### Polymorphism
 
@@ -135,32 +142,38 @@ want to allow only certain templates as the body.
 In order to do so, first define an empty interface for the 
 template, right in your sources, that extends `ITemplate` :
 
-	public interface BodyTemplate extends ITemplate { 
-	}
+```java
+public interface BodyTemplate extends ITemplate { 
+}
+```
 	
 Then, you can change the signature of the `Wrapper.ttt` template so that 
 it accepts only `BodyTemplate` instances :
 
-	<%!
-        ...
-		
-		/**
-		 * the body of the page, rendered in body tag 
-		 * (must be a BodyTemplate !)
-		 */
-		com.myco.myapp.BodyTemplate nested;
-	%>
+```jsp
+<%!
+	...
+	
+	/**
+	 * the body of the page, rendered in body tag 
+	 * (must be a BodyTemplate !)
+	 */
+	com.myco.myapp.BodyTemplate nested;
+%>
+```
 	
 Then, you may choose to implement this interface in 
 any template by using the `extends` page directive (`MyBodyTemplate.ttt`) :
 
-	<%@ page extends="com.myco.myapp.BodyTemplate" %>
-	<%!
-		// template args here
-		...
-	%>
-	Template text...
-	
+```jsp
+<%@ page extends="com.myco.myapp.BodyTemplate" %>
+<%!
+	// template args here
+	...
+%>
+Template text...
+```
+
 The generated template class (`com.myco.myapp.MyBodyTemplate`) will implement 
 your `BodyTemplate` interface.
 
@@ -189,14 +202,16 @@ The generated Java class is an immutable class with :
 
 Compiled templates are regular Java classes with a constructor and a `render`method. :
 	
-	// create a template instance by passing all required 
-	// args to the constructor
-	MyTemplate t = new MyTemplate(arg1, arg2, ..., argN);
-	
-	Writer out = ... ;
+```java
+// create a template instance by passing all required 
+// args to the constructor
+MyTemplate t = new MyTemplate(arg1, arg2, ..., argN);
 
-	// spit out the text into a writer 
-	t.render(out);
+Writer out = ... ;
+
+// spit out the text into a writer 
+t.render(out);
+```
 
 Very easy, and again, fully static typed.
 
@@ -209,7 +224,9 @@ build tools described below.
 
 TTT Compiler provides a main class that can be used for CLI integration :
 
-	java -jar ttt-core-<version>-jar-with-dependencies.jar -src <srd_dir> -target <code_gen_dir> -clean
+```
+java -jar ttt-core-<version>-jar-with-dependencies.jar -src <srd_dir> -target <code_gen_dir> -clean
+```
  
 ### Maven plugin
 
@@ -217,21 +234,23 @@ The `ttt-compiler-plugin` can be used to compile templates as part of your maven
 
 Put your templates under `src/main/ttt`, and add this plugin def to your `pom.xml` :
 
-	<plugin>
-		<groupId>com.pojosontheweb</groupId>
-		<artifactId>ttt-maven-plugin</artifactId>
-		<version>VERSION GOES HERE</version>
-		<executions>
-			<execution>
-				<id>ttt-compile</id>
-				<phase>process-resources</phase>
-				<goals>
-					<goal>ttt</goal>
-				</goals>
-			</execution>
-		</executions>
-	</plugin>
- 
+```xml
+<plugin>
+	<groupId>com.pojosontheweb</groupId>
+	<artifactId>ttt-maven-plugin</artifactId>
+	<version>VERSION GOES HERE</version>
+	<executions>
+		<execution>
+			<id>ttt-compile</id>
+			<phase>process-resources</phase>
+			<goals>
+				<goal>ttt</goal>
+			</goals>
+		</execution>
+	</executions>
+</plugin>
+```
+
 ### IntelliJ IDEA Plugin
 
 The ttt-idea plugin compiles your `.ttt` files, with a pretty useful "compile-on-save" feature.
