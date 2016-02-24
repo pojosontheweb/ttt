@@ -146,6 +146,11 @@ public class TemplateTest {
         doTest("Test26");
     }
 
+    @Test
+    public void test27() throws Exception {
+        doTest("Test27");
+    }
+
     private static String toString(InputStream is) throws Exception {
         int nRead;
         byte[] data = new byte[2048];
@@ -154,7 +159,7 @@ public class TemplateTest {
             buffer.write(data, 0, nRead);
         }
         buffer.flush();
-        return new String(buffer.toByteArray(), "utf-8");
+        return crlfToLf(new String(buffer.toByteArray(), "utf-8"));
     }
 
     private static void doTest(String name) throws Exception {
@@ -173,6 +178,9 @@ public class TemplateTest {
             sw.close();
         }
         String compiled = sw.toString();
+        System.out.println("---begin-compiled");
+        System.out.println(compiled);
+        System.out.println("---end-compiled");
         String expected = null;
         try {
             expected = toString(TemplateTest.class.getResourceAsStream("/ttt/tests/" + name + ".expected"));
@@ -181,6 +189,10 @@ public class TemplateTest {
         }
         assertNotNull("Ref is null : " + "/ttt/tests/" + name + ".expected", expected);
         assertEquals("Unexpected result for template :\n" + templateText + "\n", expected, compiled);
+    }
+    
+    private static String crlfToLf(String s) {
+        return s.replaceAll("\r\n", "\n");
     }
 
     private static void walk(String s, TttListener l) throws Exception {

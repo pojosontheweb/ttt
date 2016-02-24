@@ -1,0 +1,49 @@
+package ttt.tests;
+
+import com.xyz.myapp.Dependency;
+
+public class Test27 extends com.pojosontheweb.ttt.Template {
+
+	private final String groupId;
+	private final String artifactId;
+	private final String version;
+	private final Iterable<Dependency> dependencies;
+
+	/**
+	 * Creates an instance of this template.
+	 *
+	 */
+	public Test27(String groupId, String artifactId, String version, Iterable<Dependency> dependencies) {
+		this.groupId = groupId;
+		this.artifactId = artifactId;
+		this.version = version;
+		this.dependencies = dependencies;
+	}
+
+	@Override
+	public void doRender(com.pojosontheweb.ttt.TttWriter out) throws Exception {
+		write(out, "<ivy-module version=\"2.0\">\n    <info organisation=\"" );
+		write(out,  groupId  );
+		write(out, "\" module=\"" );
+		write(out,  artifactId  );
+		write(out, "\" revision=\"" );
+		write(out,  version  );
+		write(out, "\" status=\"integration\" />\n    <publications>\n        <artifact name=\"" );
+		write(out,  artifactId  );
+		write(out, "\" type=\"customartifact\" ext=\"zip\" />\n    </publications>\n    " );
+		if (dependencies != null && dependencies.iterator().hasNext()) { 
+		write(out, "\n    <dependencies>\n        " );
+		for (Dependency d : dependencies) { 
+		write(out, "\n        <dependency org=\"" );
+		write(out,  d.getGroupId()  );
+		write(out, "\" name=\"" );
+		write(out,  d.getArtifactId()  );
+		write(out, "\" rev=\"" );
+		write(out,  d.getVersion()  );
+		write(out, "\" />\n        " );
+		} 
+		write(out, "\n    </dependencies>\n    " );
+		} 
+		write(out, "\n</ivy-module>\n" );
+	}
+}
