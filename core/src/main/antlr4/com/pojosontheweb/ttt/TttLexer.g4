@@ -1,7 +1,7 @@
 lexer grammar TttLexer;
 
 WS
-	: [ \t\r\n]
+	: ' ' | '\t' | '\r'? '\n' | '\r'
 	;
 
 TEXT

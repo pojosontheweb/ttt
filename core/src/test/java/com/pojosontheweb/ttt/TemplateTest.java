@@ -159,7 +159,7 @@ public class TemplateTest {
             buffer.write(data, 0, nRead);
         }
         buffer.flush();
-        return new String(buffer.toByteArray(), "utf-8");
+        return crlfToLf(new String(buffer.toByteArray(), "utf-8"));
     }
 
     private static void doTest(String name) throws Exception {
@@ -189,6 +189,10 @@ public class TemplateTest {
         }
         assertNotNull("Ref is null : " + "/ttt/tests/" + name + ".expected", expected);
         assertEquals("Unexpected result for template :\n" + templateText + "\n", expected, compiled);
+    }
+    
+    private static String crlfToLf(String s) {
+        return s.replaceAll("\r\n", "\n");
     }
 
     private static void walk(String s, TttListener l) throws Exception {
