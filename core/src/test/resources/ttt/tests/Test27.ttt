@@ -1,0 +1,20 @@
+<%@ page import="com.xyz.myapp.Dependency" %>
+<%!
+    String groupId;
+    String artifactId;
+    String version;
+    Iterable<Dependency> dependencies;
+%>
+<ivy-module version="2.0">
+    <info organisation="<%= groupId %>" module="<%= artifactId %>" revision="<%= version %>" status="integration" />
+    <publications>
+        <artifact name="<%= artifactId %>" type="customartifact" ext="zip" />
+    </publications>
+    <% if (dependencies != null && dependencies.iterator().hasNext()) { %>
+    <dependencies>
+        <% for (Dependency d : dependencies) { %>
+        <dependency org="<%= d.getGroupId() %>" name="<%= d.getArtifactId() %>" rev="<%= d.getVersion() %>" />
+        <% } %>
+    </dependencies>
+    <% } %>
+</ivy-module>

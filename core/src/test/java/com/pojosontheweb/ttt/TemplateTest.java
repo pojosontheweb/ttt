@@ -146,6 +146,11 @@ public class TemplateTest {
         doTest("Test26");
     }
 
+    @Test
+    public void test27() throws Exception {
+        doTest("Test27");
+    }
+
     private static String toString(InputStream is) throws Exception {
         int nRead;
         byte[] data = new byte[2048];
@@ -173,6 +178,9 @@ public class TemplateTest {
             sw.close();
         }
         String compiled = sw.toString();
+        System.out.println("---begin-compiled");
+        System.out.println(compiled);
+        System.out.println("---end-compiled");
         String expected = null;
         try {
             expected = toString(TemplateTest.class.getResourceAsStream("/ttt/tests/" + name + ".expected"));
